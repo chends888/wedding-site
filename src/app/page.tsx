@@ -1,35 +1,104 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function LanguagePage() {
+const texts = {
+  pt: {
+    title: 'Bem-vindo',
+    subtitle: 'Digite seu telefone com código do país e DDD',
+    placeholder: '5511999999999',
+    button: 'Entrar',
+    loading: 'Verificando...',
+    error: 'Número não encontrado. Verifique e tente novamente.',
+  },
+  en: {
+    title: 'Welcome',
+    subtitle: 'Enter your phone number with country code and area code',
+    placeholder: '5511999999999',
+    button: 'Continue',
+    loading: 'Verifying...',
+    error: 'Number not found. Please check and try again.',
+  },
+}
+
+export default function LoginPage() {
+  const [lang, setLang] = useState<'pt' | 'en'>('pt')
+  const [phone, setPhone] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  function selectLanguage(lang: 'pt' | 'en') {
-    sessionStorage.setItem('language', lang)
-    router.push('/signin')
+  const text = texts[lang]
+
+  async function handleSubmit() {
+    setLoading(true)
+    setError('')
+
+    const digits = phone.replace(/\D/g, '')
+
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: digits }),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      setError(text.error)
+      setLoading(false)
+      return
+    }
+
+    const detectedLang = (data.guest.language as 'pt' | 'en') || lang
+    setLang(detectedLang)
+    sessionStorage.setItem('guest', JSON.stringify({ ...data.guest, language: detectedLang }))
+
+    await fetch('/api/auth/language', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ guestId: data.guest.id, language: detectedLang }),
+    })
+
+    router.push('/home')
   }
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-sm space-y-6">
-        <h1 className="text-2xl font-semibold text-center">Escolha o idioma</h1>
-        <p className="text-center text-gray-500">Choose your language</p>
 
-        <div className="flex flex-col gap-3">
-          <button
-            onClick={() => selectLanguage('pt')}
-            className="w-full border-2 rounded-lg px-4 py-4 text-lg hover:bg-gray-50"
-          >
-            🇧🇷 Português
-          </button>
-          <button
-            onClick={() => selectLanguage('en')}
-            className="w-full border-2 rounded-lg px-4 py-4 text-lg hover:bg-gray-50"
-          >
-            🇺🇸 English
-          </button>
-        </div>
+      {/* Language switcher */}
+      <div className="absolute top-4 right-4">
+        <button
+          onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
+          className="text-sm border rounded-lg px-3 py-1 hover:bg-gray-50"
+        >
+          {lang === 'pt' ? '🇺🇸 EN' : '🇧🇷 PT'}
+        </button>
+      </div>
+
+      <div className="w-full max-w-sm space-y-4">
+        <h1 className="text-2xl font-semibold text-center">{text.title}</h1>
+        <p className="text-center text-gray-500">{text.subtitle}</p>
+
+        <input
+          type="tel"
+          placeholder={text.placeholder}
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && !loading && !!phone && handleSubmit()}
+          className="w-full border rounded-lg px-4 py-3 text-lg"
+        />
+
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
+        <button
+          onClick={handleSubmit}
+          disabled={loading || !phone}
+          className="w-full bg-black text-white rounded-lg px-4 py-3 text-lg disabled:opacity-50"
+        >
+          {loading ? text.loading : text.button}
+        </button>
       </div>
     </main>
   )

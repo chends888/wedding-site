@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 type Guest = {
   id: string
   name: string
   phone: string | null
-  parent_id: string | null
-  language: string | null
+  family_id: string | null
 }
 
 type Rsvp = {
@@ -19,8 +18,7 @@ type Rsvp = {
 type Row = {
   name: string
   phone: string
-  leader: string
-  language: string
+  family: string
   confirmed: string
   updated_at: string
 }
@@ -31,9 +29,9 @@ export default function AdminPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded] = useState(false)
-
   const [sortCol, setSortCol] = useState<keyof Row>('name')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
+  const passwordRef = useRef<HTMLInputElement>(null)
 
   function toggleSort(col: keyof Row) {
     if (sortCol === col) {
@@ -56,30 +54,31 @@ export default function AdminPage() {
     setLoading(true)
     setError('')
 
-    const res = await fetch(`/api/admin?password=${encodeURIComponent(password)}`)
+    const actualPassword = passwordRef.current?.value || password
+    const res = await fetch(`/api/admin?password=${encodeURIComponent(actualPassword)}`)
     const data = await res.json()
 
     if (!res.ok) {
-      setError('Senha incorreta')
+      setError('Wrong password')
       setLoading(false)
       return
     }
 
     const guests: Guest[] = data.guests
     const rsvps: Rsvp[] = data.rsvps
+    const families: { id: string; name: string }[] = data.families
 
-    const leaderMap: Record<string, string> = {}
-    for (const g of guests) {
-      if (!g.parent_id) leaderMap[g.id] = g.name
+    const familyMap: Record<string, string> = {}
+    for (const f of families) {
+      familyMap[f.id] = f.name
     }
 
-    const processed: Row[] = guests.map((g) => {
-      const rsvp = rsvps.find((r) => r.guest_id === g.id)
+    const processed: Row[] = guests.map((g: Guest) => {
+      const rsvp = rsvps.find((r: Rsvp) => r.guest_id === g.id)
       return {
         name: g.name,
         phone: g.phone || '-',
-        leader: g.parent_id ? (leaderMap[g.parent_id] || '-') : '-',
-        language: g.language || '-',
+        family: g.family_id ? (familyMap[g.family_id] || '-') : '-',
         confirmed: rsvp === undefined ? 'Pending' : rsvp.confirmed ? 'Yes' : 'No',
         updated_at: rsvp?.updated_at ? new Date(rsvp.updated_at).toLocaleDateString() : '-',
       }
@@ -91,8 +90,8 @@ export default function AdminPage() {
   }
 
   function exportCsv() {
-    const headers = ['Name', 'Phone', 'Leader', 'Language', 'Confirmed', 'Updated at']
-    const csvRows = [headers, ...rows.map((r) => [r.name, r.phone, r.leader, r.language, r.confirmed, r.updated_at])]
+    const headers = ['Name', 'Phone', 'Family', 'Confirmed', 'Updated at']
+    const csvRows = [headers, ...rows.map((r) => [r.name, r.phone, r.family, r.confirmed, r.updated_at])]
     const csv = csvRows.map((r) => r.join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
@@ -113,6 +112,7 @@ export default function AdminPage() {
       {!loaded ? (
         <div className="space-y-3 max-w-sm">
           <input
+            ref={passwordRef}
             type="password"
             placeholder="Password"
             value={password}
@@ -123,7 +123,7 @@ export default function AdminPage() {
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             onClick={handleLoad}
-            disabled={loading || !password}
+            disabled={loading || (!password && !passwordRef.current?.value)}
             className="w-full bg-black text-white rounded-lg px-4 py-3 disabled:opacity-50"
           >
             {loading ? 'Loading...' : 'Enter'}
@@ -148,7 +148,7 @@ export default function AdminPage() {
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="border-b">
-                  {(['name', 'phone', 'leader', 'language', 'confirmed', 'updated_at'] as (keyof Row)[]).map((col) => (
+                  {(['name', 'phone', 'family', 'confirmed', 'updated_at'] as (keyof Row)[]).map((col) => (
                     <th
                       key={col}
                       className="text-left py-2 pr-4 cursor-pointer hover:text-gray-400 select-none whitespace-nowrap"
@@ -167,8 +167,7 @@ export default function AdminPage() {
                   <tr key={i} className="border-b hover:bg-gray-50">
                     <td className="py-2 pr-4">{row.name}</td>
                     <td className="py-2 pr-4">{row.phone}</td>
-                    <td className="py-2 pr-4">{row.leader}</td>
-                    <td className="py-2 pr-4">{row.language}</td>
+                    <td className="py-2 pr-4">{row.family}</td>
                     <td className="py-2 pr-4">
                       <span className={
                         row.confirmed === 'Yes' ? 'text-green-600' :

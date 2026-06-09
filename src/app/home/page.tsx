@@ -7,7 +7,7 @@ type Guest = {
   id: string
   name: string
   language: 'pt' | 'en'
-  dependents: { id: string; name: string }[]
+  members: { id: string; name: string }[]
 }
 
 type RsvpStatus = Record<string, boolean | null>
@@ -74,7 +74,7 @@ export default function HomePage() {
   }, [router])
 
   async function fetchRsvp(g: Guest) {
-    const ids = [g.id, ...g.dependents.map((d) => d.id)]
+    const ids = g.members.map((m) => m.id)
     const res = await fetch(`/api/rsvp?ids=${ids.join(',')}`)
     const data = await res.json()
     const status: RsvpStatus = {}
@@ -105,8 +105,7 @@ export default function HomePage() {
   if (!guest) return null
 
   const t = texts[guest.language]
-  const allMembers = [{ id: guest.id, name: guest.name }, ...guest.dependents]
-
+  const allMembers = guest.members
   return (
     <main className="min-h-screen p-6 max-w-lg mx-auto space-y-12">
 

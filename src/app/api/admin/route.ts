@@ -10,9 +10,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const { data: families, error: familiesError } = await supabaseAdmin
+    .from('families')
+    .select('id, name')
+
+  if (familiesError) {
+    return NextResponse.json({ error: familiesError.message }, { status: 500 })
+  }
+
   const { data: guests, error: guestsError } = await supabaseAdmin
     .from('guests')
-    .select('id, name, phone, parent_id, language')
+    .select('id, name, phone, family_id, language')
     .order('name')
 
   if (guestsError) {
@@ -27,5 +35,5 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: rsvpsError.message }, { status: 500 })
   }
 
-  return NextResponse.json({ guests, rsvps })
+  return NextResponse.json({ guests, rsvps, families })
 }
