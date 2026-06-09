@@ -2,6 +2,10 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Prerequisites:
+
+npm install @supabase/supabase-js
+
 First, run the development server:
 
 ```bash
