@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
+
 
 const texts = {
   pt: {
@@ -68,14 +70,7 @@ export default function LoginPage() {
     <main className="min-h-screen flex items-center justify-center p-4">
 
       {/* Language switcher */}
-      <div className="absolute top-4 right-4">
-        <button
-          onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
-          className="text-sm border rounded-lg px-3 py-1 hover:bg-gray-50"
-        >
-          {lang === 'pt' ? '🇺🇸 EN' : '🇧🇷 PT'}
-        </button>
-      </div>
+      <LanguageSwitcher lang={lang} onSwitch={setLang} /> 
 
       <div className="w-full max-w-sm space-y-4">
         <h1 className="text-2xl font-semibold text-center">{text.title}</h1>
