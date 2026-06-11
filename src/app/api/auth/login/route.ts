@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   // Find guest by phone
   const { data: guest, error: guestError } = await supabaseAdmin
     .from('guests')
-    .select('id, name, language, family_id')
+    .select('id, name, family_id')
     .eq('phone', digits)
     .single()
 

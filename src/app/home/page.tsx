@@ -21,40 +21,59 @@ type MemberRsvp = {
 type RsvpState = Record<string, MemberRsvp>
 
 const ADULT_SIZES = [
-  { label: 'BR 33 / EU 33 / CN 33 / AU 2 / 21cm', value: 'BR33' },
-  { label: 'BR 34 / EU 34 / CN 34 / AU 3 / 21.5cm', value: 'BR34' },
-  { label: 'BR 35 / EU 35 / CN 35 / AU 4 / 22cm', value: 'BR35' },
-  { label: 'BR 36 / EU 36 / CN 36 / AU 5 / 23cm', value: 'BR36' },
-  { label: 'BR 37 / EU 37 / CN 37 / AU 5.5 / 23.5cm', value: 'BR37' },
-  { label: 'BR 38 / EU 38 / CN 38 / AU 6 / 24cm', value: 'BR38' },
-  { label: 'BR 39 / EU 39 / CN 39 / AU 7 / 25cm', value: 'BR39' },
-  { label: 'BR 40 / EU 40 / CN 40 / AU 7.5 / 25.5cm', value: 'BR40' },
-  { label: 'BR 41 / EU 41 / CN 41 / AU 8 / 26cm', value: 'BR41' },
-  { label: 'BR 42 / EU 42 / CN 42 / AU 9 / 27cm', value: 'BR42' },
-  { label: 'BR 43 / EU 43 / CN 43 / AU 10 / 28cm', value: 'BR43' },
-  { label: 'BR 44 / EU 44 / CN 44 / AU 11 / 29cm', value: 'BR44' },
-  { label: 'BR 45 / EU 45 / CN 45 / AU 12 / 30cm', value: 'BR45' },
+  { label: 'BR 33 - EU 33 - CN 33 - AU 2 - 21cm', value: 'BR33' },
+  { label: 'BR 34 - EU 34 - CN 34 - AU 3 - 21.5cm', value: 'BR34' },
+  { label: 'BR 35 - EU 35 - CN 35 - AU 4 - 22cm', value: 'BR35' },
+  { label: 'BR 36 - EU 36 - CN 36 - AU 5 - 23cm', value: 'BR36' },
+  { label: 'BR 37 - EU 37 - CN 37 - AU 5.5 - 23.5cm', value: 'BR37' },
+  { label: 'BR 38 - EU 38 - CN 38 - AU 6 - 24cm', value: 'BR38' },
+  { label: 'BR 39 - EU 39 - CN 39 - AU 7 - 25cm', value: 'BR39' },
+  { label: 'BR 40 - EU 40 - CN 40 - AU 7.5 - 25.5cm', value: 'BR40' },
+  { label: 'BR 41 - EU 41 - CN 41 - AU 8 - 26cm', value: 'BR41' },
+  { label: 'BR 42 - EU 42 - CN 42 - AU 9 - 27cm', value: 'BR42' },
+  { label: 'BR 43 - EU 43 - CN 43 - AU 10 - 28cm', value: 'BR43' },
+  { label: 'BR 44 - EU 44 - CN 44 - AU 11 - 29cm', value: 'BR44' },
+  { label: 'BR 45 - EU 45 - CN 45 - AU 12 - 30cm', value: 'BR45' },
 ]
 
-const CHILDREN_SIZES = [
-  { label: 'EU 17 / CN 17 / 10.5cm (~12-18 months)', value: 'EU17' },
-  { label: 'EU 18 / CN 18 / 11cm (~18-24 months)', value: 'EU18' },
-  { label: 'EU 19 / CN 19 / 11.5cm (~2 years)', value: 'EU19' },
-  { label: 'EU 20 / CN 20 / 12cm (~2-3 years)', value: 'EU20' },
-  { label: 'EU 21 / CN 21 / 13cm (~3 years)', value: 'EU21' },
-  { label: 'EU 22 / CN 22 / 13.5cm (~3-4 years)', value: 'EU22' },
-  { label: 'EU 23 / CN 23 / 14cm (~4 years)', value: 'EU23' },
-  { label: 'EU 24 / CN 24 / 15cm (~4-5 years)', value: 'EU24' },
-  { label: 'EU 25 / CN 25 / 15.5cm (~5 years)', value: 'EU25' },
-  { label: 'EU 26 / CN 26 / 16cm (~5-6 years)', value: 'EU26' },
-  { label: 'EU 27 / CN 27 / 17cm (~6 years)', value: 'EU27' },
-  { label: 'EU 28 / CN 28 / 17.5cm (~6-7 years)', value: 'EU28' },
-  { label: 'EU 29 / CN 29 / 18cm (~7 years)', value: 'EU29' },
-  { label: 'EU 30 / CN 30 / 18.5cm (~7-8 years)', value: 'EU30' },
-  { label: 'EU 31 / CN 31 / 19cm (~8 years)', value: 'EU31' },
-  { label: 'EU 32 / CN 32 / 20cm (~9-10 years)', value: 'EU32' },
-]
-
+const CHILDREN_SIZES = {
+  pt: [
+    { label: 'EU/BR/AU 17 - CN 17 - 10.5cm (~12-18 meses)', value: 'EU17' },
+    { label: 'EU/BR/AU 18 - CN 18 - 11cm (~18-24 meses)', value: 'EU18' },
+    { label: 'EU/BR/AU 19 - CN 19 - 11.5cm (~2 anos)', value: 'EU19' },
+    { label: 'EU/BR/AU 20 - CN 20 - 12cm (~2-3 anos)', value: 'EU20' },
+    { label: 'EU/BR/AU 21 - CN 21 - 13cm (~3 anos)', value: 'EU21' },
+    { label: 'EU/BR/AU 22 - CN 22 - 13.5cm (~3-4 anos)', value: 'EU22' },
+    { label: 'EU/BR/AU 23 - CN 23 - 14cm (~4 anos)', value: 'EU23' },
+    { label: 'EU/BR/AU 24 - CN 24 - 15cm (~4-5 anos)', value: 'EU24' },
+    { label: 'EU/BR/AU 25 - CN 25 - 15.5cm (~5 anos)', value: 'EU25' },
+    { label: 'EU/BR/AU 26 - CN 26 - 16cm (~5-6 anos)', value: 'EU26' },
+    { label: 'EU/BR/AU 27 - CN 27 - 17cm (~6 anos)', value: 'EU27' },
+    { label: 'EU/BR/AU 28 - CN 28 - 17.5cm (~6-7 anos)', value: 'EU28' },
+    { label: 'EU/BR/AU 29 - CN 29 - 18cm (~7 anos)', value: 'EU29' },
+    { label: 'EU/BR/AU 30 - CN 30 - 18.5cm (~7-8 anos)', value: 'EU30' },
+    { label: 'EU/BR/AU 31 - CN 31 - 19cm (~8 anos)', value: 'EU31' },
+    { label: 'EU/BR/AU 32 - CN 32 - 20cm (~9-10 anos)', value: 'EU32' },
+  ],
+  en: [
+    { label: 'EU/BR/AU 17 - CN 17 - 10.5cm (~12-18 months)', value: 'EU17' },
+    { label: 'EU/BR/AU 18 - CN 18 - 11cm (~18-24 months)', value: 'EU18' },
+    { label: 'EU/BR/AU 19 - CN 19 - 11.5cm (~2 years)', value: 'EU19' },
+    { label: 'EU/BR/AU 20 - CN 20 - 12cm (~2-3 years)', value: 'EU20' },
+    { label: 'EU/BR/AU 21 - CN 21 - 13cm (~3 years)', value: 'EU21' },
+    { label: 'EU/BR/AU 22 - CN 22 - 13.5cm (~3-4 years)', value: 'EU22' },
+    { label: 'EU/BR/AU 23 - CN 23 - 14cm (~4 years)', value: 'EU23' },
+    { label: 'EU/BR/AU 24 - CN 24 - 15cm (~4-5 years)', value: 'EU24' },
+    { label: 'EU/BR/AU 25 - CN 25 - 15.5cm (~5 years)', value: 'EU25' },
+    { label: 'EU/BR/AU 26 - CN 26 - 16cm (~5-6 years)', value: 'EU26' },
+    { label: 'EU/BR/AU 27 - CN 27 - 17cm (~6 years)', value: 'EU27' },
+    { label: 'EU/BR/AU 28 - CN 28 - 17.5cm (~6-7 years)', value: 'EU28' },
+    { label: 'EU/BR/AU 29 - CN 29 - 18cm (~7 years)', value: 'EU29' },
+    { label: 'EU/BR/AU 30 - CN 30 - 18.5cm (~7-8 years)', value: 'EU30' },
+    { label: 'EU/BR/AU 31 - CN 31 - 19cm (~8 years)', value: 'EU31' },
+    { label: 'EU/BR/AU 32 - CN 32 - 20cm (~9-10 years)', value: 'EU32' },
+  ],
+}
 const texts = {
   pt: {
     welcome: (name: string) => `Olá, ${name}!`,
@@ -67,7 +86,7 @@ const texts = {
     isChild: 'É criança?',
     ageRange: 'Faixa etária',
     age1: '7 anos ou menos',
-    age2: '8–10 anos',
+    age2: '8 a 10 anos',
     age3: '11 anos ou mais',
     save: 'Salvar',
     saving: 'Salvando...',
@@ -89,9 +108,9 @@ const texts = {
     shoeSizePlaceholder: 'Select your size',
     isChild: 'Is a child?',
     ageRange: 'Age range',
-    age1: '7 or under',
-    age2: '8–10',
-    age3: '11 or older',
+    age1: '7 years old or under',
+    age2: '8 to 10 years old',
+    age3: '11 years old or older',
     save: 'Save',
     saving: 'Saving...',
     saved: 'Saved!',
@@ -260,7 +279,7 @@ export default function HomePage() {
           if (!r) return null
 
           const useChildSizes = r.is_child && r.age_range !== '11+'
-          const sizeOptions = useChildSizes ? CHILDREN_SIZES : ADULT_SIZES
+          const sizeOptions = useChildSizes ? CHILDREN_SIZES[guest.language] : ADULT_SIZES
 
           return (
             <div key={member.id} className="border rounded-lg p-4 space-y-3">
@@ -331,7 +350,7 @@ export default function HomePage() {
                       <select
                         value={r.shoe_size}
                         onChange={(e) => updateMember(member.id, { shoe_size: e.target.value })}
-                        className="w-full border rounded-lg px-3 py-2 mt-1"
+                        className="w-full border rounded-lg px-3 py-2 mt-1 bg-white text-black"
                       >
                         <option value="">{t.shoeSizePlaceholder}</option>
                         {sizeOptions.map((s) => (

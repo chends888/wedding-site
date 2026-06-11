@@ -27,15 +27,15 @@ const texts = {
 export default function LoginPage() {
   const [lang, setLang] = useState<'pt' | 'en'>('pt')
   const [phone, setPhone] = useState('')
-  const [error, setError] = useState('')
+  const [hasError, setHasError] = useState(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const text = texts[lang]
 
   async function handleSubmit() {
+    setHasError(false)
     setLoading(true)
-    setError('')
 
     const digits = phone.replace(/\D/g, '')
 
@@ -48,7 +48,7 @@ export default function LoginPage() {
     const data = await res.json()
 
     if (!res.ok) {
-      setError(text.error)
+      setHasError(true)
       setLoading(false)
       return
     }
@@ -85,7 +85,7 @@ export default function LoginPage() {
           className="w-full border rounded-lg px-4 py-3 text-lg"
         />
 
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+        {hasError && <p className="text-red-500 text-sm text-center">{text.error}</p>}
 
         <button
           onClick={handleSubmit}
