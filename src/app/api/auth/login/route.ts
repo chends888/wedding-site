@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   // Load all family members
   const { data: members } = await supabaseAdmin
     .from('guests')
-    .select('id, name')
+    .select('id, name, is_child')
     .eq('family_id', guest.family_id)
 
   return NextResponse.json({

@@ -8,32 +8,31 @@ type Guest = {
   id: string
   name: string
   language: 'pt' | 'en'
-  members: { id: string; name: string }[]
+  members: { id: string; name: string; is_child: boolean }[]
 }
 
 type MemberRsvp = {
   confirmed: boolean | null
   shoe_size: string
   age_range: string
-  is_child: boolean
 }
 
 type RsvpState = Record<string, MemberRsvp>
 
 const ADULT_SIZES = [
-  { label: 'BR 33 - EU 33 - CN 33 - AU 2 - 21cm', value: 'BR33' },
-  { label: 'BR 34 - EU 34 - CN 34 - AU 3 - 21.5cm', value: 'BR34' },
-  { label: 'BR 35 - EU 35 - CN 35 - AU 4 - 22cm', value: 'BR35' },
-  { label: 'BR 36 - EU 36 - CN 36 - AU 5 - 23cm', value: 'BR36' },
-  { label: 'BR 37 - EU 37 - CN 37 - AU 5.5 - 23.5cm', value: 'BR37' },
-  { label: 'BR 38 - EU 38 - CN 38 - AU 6 - 24cm', value: 'BR38' },
-  { label: 'BR 39 - EU 39 - CN 39 - AU 7 - 25cm', value: 'BR39' },
-  { label: 'BR 40 - EU 40 - CN 40 - AU 7.5 - 25.5cm', value: 'BR40' },
-  { label: 'BR 41 - EU 41 - CN 41 - AU 8 - 26cm', value: 'BR41' },
-  { label: 'BR 42 - EU 42 - CN 42 - AU 9 - 27cm', value: 'BR42' },
-  { label: 'BR 43 - EU 43 - CN 43 - AU 10 - 28cm', value: 'BR43' },
-  { label: 'BR 44 - EU 44 - CN 44 - AU 11 - 29cm', value: 'BR44' },
-  { label: 'BR 45 - EU 45 - CN 45 - AU 12 - 30cm', value: 'BR45' },
+  { label: 'BR/EU 33 - CN 33 - AU 2 - 21cm', value: 'BR33' },
+  { label: 'BR/EU 34 - CN 34 - AU 3 - 21.5cm', value: 'BR34' },
+  { label: 'BR/EU 35 - CN 35 - AU 4 - 22cm', value: 'BR35' },
+  { label: 'BR/EU 36 - CN 36 - AU 5 - 23cm', value: 'BR36' },
+  { label: 'BR/EU 37 - CN 37 - AU 5.5 - 23.5cm', value: 'BR37' },
+  { label: 'BR/EU 38 - CN 38 - AU 6 - 24cm', value: 'BR38' },
+  { label: 'BR/EU 39 - CN 39 - AU 7 - 25cm', value: 'BR39' },
+  { label: 'BR/EU 40 - CN 40 - AU 7.5 - 25.5cm', value: 'BR40' },
+  { label: 'BR/EU 41 - CN 41 - AU 8 - 26cm', value: 'BR41' },
+  { label: 'BR/EU 42 - CN 42 - AU 9 - 27cm', value: 'BR42' },
+  { label: 'BR/EU 43 - CN 43 - AU 10 - 28cm', value: 'BR43' },
+  { label: 'BR/EU 44 - CN 44 - AU 11 - 29cm', value: 'BR44' },
+  { label: 'BR/EU 45 - CN 45 - AU 12 - 30cm', value: 'BR45' },
 ]
 
 const CHILDREN_SIZES = {
@@ -74,6 +73,7 @@ const CHILDREN_SIZES = {
     { label: 'EU/BR/AU 32 - CN 32 - 20cm (~9-10 years)', value: 'EU32' },
   ],
 }
+
 const texts = {
   pt: {
     welcome: (name: string) => `Olá, ${name}!`,
@@ -83,15 +83,11 @@ const texts = {
     decline: 'Não vou',
     shoeSize: 'Número do sapato',
     shoeSizePlaceholder: 'Selecione o número',
-    isChild: 'É criança?',
     ageRange: 'Faixa etária',
     age1: '7 anos ou menos',
     age2: '8 a 10 anos',
     age3: '11 anos ou mais',
-    save: 'Salvar',
-    saving: 'Salvando...',
-    saved: 'Salvo!',
-    missingShoeSize: (names: string) => `Falta o número do sapato de: ${names}`,
+    missingShoeSizeError: 'Por favor, selecione o número do sapato.',
     giftsTitle: 'Lista de presentes',
     giftsSubtitle: 'Sua presença é o melhor presente. Mas se quiser nos presentear, aqui estão algumas sugestões:',
     pixKey: 'Chave PIX',
@@ -106,15 +102,11 @@ const texts = {
     decline: 'Decline',
     shoeSize: 'Shoe size',
     shoeSizePlaceholder: 'Select your size',
-    isChild: 'Is a child?',
     ageRange: 'Age range',
     age1: '7 years old or under',
     age2: '8 to 10 years old',
     age3: '11 years old or older',
-    save: 'Save',
-    saving: 'Saving...',
-    saved: 'Saved!',
-    missingShoeSize: (names: string) => `Missing shoe size for: ${names}`,
+    missingShoeSizeError: 'Please select a shoe size.',
     giftsTitle: 'Gift list',
     giftsSubtitle: 'Your presence is the best gift. But if you would like to give us something, here are some suggestions:',
     pixKey: 'PIX key',
@@ -134,9 +126,6 @@ const PIX_KEY = 'seu-pix@email.com'
 export default function HomePage() {
   const [guest, setGuest] = useState<Guest | null>(null)
   const [rsvp, setRsvp] = useState<RsvpState>({})
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
-  const [missingSizes, setMissingSizes] = useState<string[]>([])
   const [copied, setCopied] = useState(false)
   const router = useRouter()
   const autoSaveTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({})
@@ -171,7 +160,6 @@ export default function HomePage() {
         confirmed: found ? found.confirmed : null,
         shoe_size: found?.shoe_size || '',
         age_range: found?.age_range || '',
-        is_child: !!found?.age_range,
       }
     }
     setRsvp(state)
@@ -186,13 +174,12 @@ export default function HomePage() {
         guestId,
         confirmed: data.confirmed,
         shoe_size: data.shoe_size || null,
-        age_range: data.is_child ? data.age_range || null : null,
+        age_range: data.age_range || null,
       }),
     })
   }
 
   function autoSaveAll() {
-    if (!rsvp) return
     for (const [id, data] of Object.entries(rsvp)) {
       saveMember(id, data)
     }
@@ -213,30 +200,6 @@ export default function HomePage() {
       scheduleAutoSave(guestId, updated)
       return { ...prev, [guestId]: updated }
     })
-    setSaved(false)
-  }
-
-  async function handleSave() {
-    if (!guest) return
-
-    const missing = guest.members.filter((m) => {
-      const r = rsvp[m.id]
-      return r?.confirmed === true && !r?.shoe_size
-    })
-
-    if (missing.length > 0) {
-      setMissingSizes(missing.map((m) => m.name))
-      return
-    }
-
-    setSaving(true)
-    setMissingSizes([])
-
-    await Promise.all(guest.members.map((m) => saveMember(m.id, rsvp[m.id])))
-
-    setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 3000)
   }
 
   function copyPix() {
@@ -278,8 +241,11 @@ export default function HomePage() {
           const r = rsvp[member.id]
           if (!r) return null
 
-          const useChildSizes = r.is_child && r.age_range !== '11+'
-          const sizeOptions = useChildSizes ? CHILDREN_SIZES[guest.language] : ADULT_SIZES
+          const sizeOptions = member.is_child && r.age_range !== '11+'
+            ? CHILDREN_SIZES[currentLang]
+            : ADULT_SIZES
+
+          const showShoeSizeError = r.confirmed === true && !r.shoe_size
 
           return (
             <div key={member.id} className="border rounded-lg p-4 space-y-3">
@@ -307,21 +273,7 @@ export default function HomePage() {
 
               {r.confirmed === true && (
                 <div className="space-y-3 pt-1">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id={`child-${member.id}`}
-                      checked={r.is_child}
-                      onChange={(e) => updateMember(member.id, {
-                        is_child: e.target.checked,
-                        age_range: '',
-                        shoe_size: '',
-                      })}
-                    />
-                    <label htmlFor={`child-${member.id}`} className="text-sm">{t.isChild}</label>
-                  </div>
-
-                  {r.is_child && (
+                  {member.is_child && (
                     <div>
                       <label className="text-sm text-gray-500">{t.ageRange}</label>
                       <div className="flex flex-col gap-2 mt-1">
@@ -344,7 +296,7 @@ export default function HomePage() {
                     </div>
                   )}
 
-                  {(!r.is_child || r.age_range) && (
+                  {(!member.is_child || r.age_range) && (
                     <div>
                       <label className="text-sm text-gray-500">{t.shoeSize}</label>
                       <select
@@ -359,6 +311,9 @@ export default function HomePage() {
                           </option>
                         ))}
                       </select>
+                      {showShoeSizeError && (
+                        <p className="text-red-500 text-sm mt-1">{t.missingShoeSizeError}</p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -366,18 +321,6 @@ export default function HomePage() {
             </div>
           )
         })}
-
-        {missingSizes.length > 0 && (
-          <p className="text-red-500 text-sm">{t.missingShoeSize(missingSizes.join(', '))}</p>
-        )}
-
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="w-full bg-black text-white rounded-lg px-4 py-3 text-lg disabled:opacity-50"
-        >
-          {saving ? t.saving : saved ? t.saved : t.save}
-        </button>
       </section>
 
       {/* Gifts */}
