@@ -79,9 +79,23 @@ export default function GlitterCursor() {
       })
     }
 
-    function onTouchEnd(e: TouchEvent) {
+    function onTouchMove(e: TouchEvent) {
       Array.from(e.changedTouches).forEach((touch) => {
-        delete lastPos[touch.identifier]
+        const id = touch.identifier
+        // Use pageX/pageY and subtract scrollY for fixed positioning
+        const x = touch.clientX
+        const y = touch.clientY - (window.visualViewport?.offsetTop ?? 0)
+        const last = lastPos[id]
+        if (last) {
+          const dx = x - last.x
+          const dy = y - last.y
+          if (Math.sqrt(dx * dx + dy * dy) > 6) {
+            createSparkle(x, y)
+            lastPos[id] = { x, y }
+          }
+        } else {
+          lastPos[id] = { x, y }
+        }
       })
     }
 
