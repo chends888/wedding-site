@@ -46,13 +46,25 @@ export default function GlitterCursor() {
     `
     document.head.appendChild(style)
 
-    // Per-touch tracking
     const lastPos: Record<number, { x: number; y: number }> = {}
-
     let lastMouseX = 0
     let lastMouseY = 0
+    let viewportResizing = false
+    let resizeTimer: ReturnType<typeof setTimeout>
+
+    // Pause sparkles during viewport resize (address bar show/hide)
+    function onViewportResize() {
+      viewportResizing = true
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(() => {
+        viewportResizing = false
+        // Clear stale touch positions after resize
+        Object.keys(lastPos).forEach((k) => delete lastPos[Number(k)])
+      }, 300)
+    }
 
     function onMouseMove(e: MouseEvent) {
+      if (viewportResizing) return
       const dx = e.clientX - lastMouseX
       const dy = e.clientY - lastMouseY
       if (Math.sqrt(dx * dx + dy * dy) > 8) {
@@ -63,21 +75,19 @@ export default function GlitterCursor() {
     }
 
     function onTouchMove(e: TouchEvent) {
+      if (viewportResizing) return
       Array.from(e.changedTouches).forEach((touch) => {
         const id = touch.identifier
-        // Use pageX/pageY and subtract scrollY for fixed positioning
-        const x = touch.clientX
-        const y = touch.clientY - (window.visualViewport?.offsetTop ?? 0)
         const last = lastPos[id]
         if (last) {
-          const dx = x - last.x
-          const dy = y - last.y
+          const dx = touch.clientX - last.x
+          const dy = touch.clientY - last.y
           if (Math.sqrt(dx * dx + dy * dy) > 6) {
-            createSparkle(x, y)
-            lastPos[id] = { x, y }
+            createSparkle(touch.clientX, touch.clientY)
+            lastPos[id] = { x: touch.clientX, y: touch.clientY }
           }
         } else {
-          lastPos[id] = { x, y }
+          lastPos[id] = { x: touch.clientX, y: touch.clientY }
         }
       })
     }
@@ -88,16 +98,19 @@ export default function GlitterCursor() {
       })
     }
 
+    window.visualViewport?.addEventListener('resize', onViewportResize)
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('touchmove', onTouchMove, { passive: true })
     document.addEventListener('touchend', onTouchEnd)
     document.addEventListener('touchcancel', onTouchEnd)
 
     return () => {
+      window.visualViewport?.removeEventListener('resize', onViewportResize)
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('touchmove', onTouchMove)
       document.removeEventListener('touchend', onTouchEnd)
       document.removeEventListener('touchcancel', onTouchEnd)
+      clearTimeout(resizeTimer)
       style.remove()
     }
   }, [])
