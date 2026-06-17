@@ -79,7 +79,6 @@ export default function GlitterCursor() {
     return () => {
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('touchmove', onTouchMove)
-      cancelAnimationFrame(frameId)
       style.remove()
     }
   }, [])
