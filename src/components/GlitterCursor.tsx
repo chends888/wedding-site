@@ -46,39 +46,55 @@ export default function GlitterCursor() {
     `
     document.head.appendChild(style)
 
-    let lastX = 0
-    let lastY = 0
+    // Per-touch tracking
+    const lastPos: Record<number, { x: number; y: number }> = {}
+
+    let lastMouseX = 0
+    let lastMouseY = 0
 
     function onMouseMove(e: MouseEvent) {
-      const dx = e.clientX - lastX
-      const dy = e.clientY - lastY
-      const dist = Math.sqrt(dx * dx + dy * dy)
-      if (dist > 8) {
+      const dx = e.clientX - lastMouseX
+      const dy = e.clientY - lastMouseY
+      if (Math.sqrt(dx * dx + dy * dy) > 8) {
         createSparkle(e.clientX, e.clientY)
-        lastX = e.clientX
-        lastY = e.clientY
+        lastMouseX = e.clientX
+        lastMouseY = e.clientY
       }
     }
 
     function onTouchMove(e: TouchEvent) {
-      Array.from(e.touches).forEach((touch) => {
-        const dx = touch.clientX - lastX
-        const dy = touch.clientY - lastY
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist > 6) {
-          createSparkle(touch.clientX, touch.clientY)
-          lastX = touch.clientX
-          lastY = touch.clientY
+      Array.from(e.changedTouches).forEach((touch) => {
+        const id = touch.identifier
+        const last = lastPos[id]
+        if (last) {
+          const dx = touch.clientX - last.x
+          const dy = touch.clientY - last.y
+          if (Math.sqrt(dx * dx + dy * dy) > 6) {
+            createSparkle(touch.clientX, touch.clientY)
+            lastPos[id] = { x: touch.clientX, y: touch.clientY }
+          }
+        } else {
+          lastPos[id] = { x: touch.clientX, y: touch.clientY }
         }
       })
     }
 
-    window.addEventListener('mousemove', onMouseMove)
-    window.addEventListener('touchmove', onTouchMove, { passive: true })
+    function onTouchEnd(e: TouchEvent) {
+      Array.from(e.changedTouches).forEach((touch) => {
+        delete lastPos[touch.identifier]
+      })
+    }
+
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('touchmove', onTouchMove, { passive: true })
+    document.addEventListener('touchend', onTouchEnd)
+    document.addEventListener('touchcancel', onTouchEnd)
 
     return () => {
-      window.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('touchmove', onTouchMove)
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('touchmove', onTouchMove)
+      document.removeEventListener('touchend', onTouchEnd)
+      document.removeEventListener('touchcancel', onTouchEnd)
       style.remove()
     }
   }, [])
