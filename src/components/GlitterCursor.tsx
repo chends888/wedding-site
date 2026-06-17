@@ -9,7 +9,7 @@ function createSparkle(x: number, y: number) {
   const size = Math.random() * 8 + 4
   const color = COLORS[Math.floor(Math.random() * COLORS.length)]
   const angle = Math.random() * 360
-  const distance = Math.random() * 40 + 10
+  const distance = Math.random() * 60 + 20
   const duration = Math.random() * 600 + 400
 
   sparkle.style.cssText = `
@@ -17,7 +17,7 @@ function createSparkle(x: number, y: number) {
     pointer-events: none;
     z-index: 9999;
     left: ${x}px;
-    top: ${y}px;
+    top: ${y - 30}px;
     width: ${size}px;
     height: ${size}px;
     background: ${color};
@@ -48,7 +48,6 @@ export default function GlitterCursor() {
 
     let lastX = 0
     let lastY = 0
-    let frameId: number
 
     function onMouseMove(e: MouseEvent) {
       const dx = e.clientX - lastX
@@ -62,15 +61,16 @@ export default function GlitterCursor() {
     }
 
     function onTouchMove(e: TouchEvent) {
-      const touch = e.touches[0]
-      const dx = touch.clientX - lastX
-      const dy = touch.clientY - lastY
-      const dist = Math.sqrt(dx * dx + dy * dy)
-      if (dist > 8) {
-        createSparkle(touch.clientX, touch.clientY)
-        lastX = touch.clientX
-        lastY = touch.clientY
-      }
+      Array.from(e.touches).forEach((touch) => {
+        const dx = touch.clientX - lastX
+        const dy = touch.clientY - lastY
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist > 6) {
+          createSparkle(touch.clientX, touch.clientY)
+          lastX = touch.clientX
+          lastY = touch.clientY
+        }
+      })
     }
 
     window.addEventListener('mousemove', onMouseMove)
