@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 
   const { data: guests, error: guestsError } = await supabaseAdmin
     .from('guests')
-    .select('id, name, phone, family_id, language')
+    .select('id, name, phone, family_id')
     .order('name')
 
   if (guestsError) {
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 
   const { data: rsvps, error: rsvpsError } = await supabaseAdmin
     .from('rsvp')
-    .select('guest_id, confirmed, updated_at')
+    .select('guest_id, confirmed, shoe_size, updated_at')
 
   if (rsvpsError) {
     return NextResponse.json({ error: rsvpsError.message }, { status: 500 })

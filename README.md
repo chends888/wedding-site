@@ -18,6 +18,9 @@ pnpm dev
 bun dev
 ```
 
+Glitter cursor from:
+https://reactbits.dev/animations/splash-cursor
+
 
 ## Learn More
 

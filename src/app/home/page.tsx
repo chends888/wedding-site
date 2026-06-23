@@ -93,6 +93,11 @@ const texts = {
     pixKey: 'Chave PIX',
     copy: 'Copiar',
     copied: 'Copiado!',
+    countdown: 'Contagem regressiva',
+    days: 'dias',
+    hours: 'horas',
+    minutes: 'minutos',
+    seconds: 'segundos',
   },
   en: {
     welcome: (name: string) => `Hi, ${name}!`,
@@ -101,7 +106,7 @@ const texts = {
     confirm: 'Confirm',
     decline: 'Decline',
     shoeSize: 'Shoe size',
-    shoeSizePlaceholder: 'Select your size',
+    shoeSizePlaceholder: 'Select size',
     ageRange: 'Age range',
     age1: '7 years old or under',
     age2: '8 to 10 years old',
@@ -112,6 +117,11 @@ const texts = {
     pixKey: 'PIX key',
     copy: 'Copy',
     copied: 'Copied!',
+    countdown: 'Countdown',
+    days: 'days',
+    hours: 'hours',
+    minutes: 'minutes',
+    seconds: 'seconds',
   },
 }
 
@@ -122,6 +132,7 @@ const gifts = [
 ]
 
 const PIX_KEY = 'seu-pix@email.com'
+
 
 export default function HomePage() {
   const [guest, setGuest] = useState<Guest | null>(null)
@@ -148,6 +159,33 @@ export default function HomePage() {
     window.addEventListener('beforeunload', handleBeforeUnload)
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [guest, rsvp])
+
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+
+  useEffect(() => {
+    const weddingDate = new Date('2027-06-19T22:00:00Z') // 7PM UTC-3 = 22:00 UTC
+
+    function update() {
+      const now = new Date()
+      const diff = weddingDate.getTime() - now.getTime()
+
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+        return
+      }
+
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      })
+    }
+
+    update()
+    const interval = setInterval(update, 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   async function fetchRsvp(g: Guest) {
     const ids = g.members.map((m) => m.id)
@@ -231,6 +269,24 @@ export default function HomePage() {
       <section className="text-center space-y-2 pt-8">
         <h1 className="text-2xl font-semibold">{t.welcome(guest.name)}</h1>
         <p className="text-gray-500">{t.subtitle}</p>
+      </section>
+
+      {/* Countdown */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold text-center">{t.countdown}</h2>
+        <div className="flex justify-center gap-4 text-center">
+          {[
+            { value: timeLeft.days, label: t.days },
+            { value: timeLeft.hours, label: t.hours },
+            { value: timeLeft.minutes, label: t.minutes },
+            { value: timeLeft.seconds, label: t.seconds },
+          ].map(({ value, label }) => (
+            <div key={label} className="flex flex-col items-center">
+              <span className="text-3xl font-bold">{String(value).padStart(2, '0')}</span>
+              <span className="text-xs text-gray-500">{label}</span>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* RSVP */}
