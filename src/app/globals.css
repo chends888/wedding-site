@@ -24,3 +24,60 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes button-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.93); }
+  100% { transform: scale(1); }
+}
+
+.btn-pop:active {
+  animation: button-pop 0.15s ease-out;
+}
+
+@keyframes fade-in-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.2s ease-out;
+}
+
+@keyframes fade-switch {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-fade-switch {
+  animation: fade-switch 0.3s ease-out;
+}
+
+@keyframes modal-pop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-modal-pop {
+  animation: modal-pop 0.2s ease-out;
+}
+
+@keyframes fade-out-up {
+  from { opacity: 1; transform: translateY(0); max-height: 500px; }
+  to { opacity: 0; transform: translateY(-8px); max-height: 0; }
+}
+
+.animate-fade-out-up {
+  animation: fade-out-up 0.2s ease-out forwards;
+  overflow: hidden;
+}
+
+@keyframes modal-close {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+.animate-modal-close {
+  animation: modal-close 0.15s ease-out forwards;
+}

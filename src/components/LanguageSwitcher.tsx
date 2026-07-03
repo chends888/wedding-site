@@ -10,7 +10,7 @@ export default function LanguageSwitcher({ lang, onSwitch }: Props) {
     <div className="absolute top-4 right-4">
       <button
         onClick={() => onSwitch(lang === 'pt' ? 'en' : 'pt')}
-        className="text-sm border rounded-lg px-3 py-1 hover:bg-gray-50"
+        className="text-sm border rounded-lg px-3 py-1 hover:bg-gray-50 btn-pop"
       >
         {lang === 'pt' ? '🇺🇸 EN' : '🇧🇷 PT'}
       </button>

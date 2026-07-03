@@ -26,12 +26,18 @@ const texts = {
 
 export default function LoginPage() {
   const [lang, setLang] = useState<'pt' | 'en'>('pt')
+  const [langKey, setLangKey] = useState(0)
   const [phone, setPhone] = useState('')
   const [hasError, setHasError] = useState(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const text = texts[lang]
+
+  function handleLangSwitch(newLang: 'pt' | 'en') {
+    setLang(newLang)
+    setLangKey((k) => k + 1)
+  }
 
   async function handleSubmit() {
     setHasError(false)
@@ -70,9 +76,9 @@ export default function LoginPage() {
     <main className="min-h-screen flex items-center justify-center p-4">
 
       {/* Language switcher */}
-      <LanguageSwitcher lang={lang} onSwitch={setLang} /> 
+      <LanguageSwitcher lang={lang} onSwitch={handleLangSwitch} />
 
-      <div className="w-full max-w-sm space-y-4">
+      <div key={langKey} className="animate-fade-switch w-full max-w-sm space-y-4">
         <h1 className="text-2xl font-semibold text-center">{text.title}</h1>
         <p className="text-center text-gray-500">{text.subtitle}</p>
 
@@ -90,7 +96,7 @@ export default function LoginPage() {
         <button
           onClick={handleSubmit}
           disabled={loading || !phone}
-          className="w-full bg-black text-white rounded-lg px-4 py-3 text-lg disabled:opacity-50"
+          className="w-full bg-black text-white rounded-lg px-4 py-3 text-lg disabled:opacity-50 btn-pop"
         >
           {loading ? text.loading : text.button}
         </button>

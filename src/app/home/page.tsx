@@ -88,7 +88,6 @@ const texts = {
     age2: '8 a 10 anos',
     age3: '11 anos ou mais',
     missingShoeSizeError: 'Por favor, selecione o número do sapato.',
-    giftsTitle: 'Lista de presentes',
     giftsSubtitle: 'Sua presença é o melhor presente. Mas se quiser nos presentear, aqui estão algumas sugestões:',
     pixKey: 'Chave PIX',
     copy: 'Copiar',
@@ -98,6 +97,14 @@ const texts = {
     hours: 'horas',
     minutes: 'minutos',
     seconds: 'segundos',
+    giftsTitle: 'Presentes',
+    experienceGifts: 'Experiências',
+    wishlists: 'Listas de presentes',
+    custom: 'Outro valor',
+    close: 'Fechar',
+    scanQr: 'Escaneie o QR code ou copie a chave PIX',
+    customMessage: 'Copie a chave PIX e faça a transferência pelo valor que desejar.',
+    wishlistMessage: 'Acesse a lista e escolha um presente:',
   },
   en: {
     welcome: (name: string) => `Hi, ${name}!`,
@@ -112,7 +119,6 @@ const texts = {
     age2: '8 to 10 years old',
     age3: '11 years old or older',
     missingShoeSizeError: 'Please select a shoe size.',
-    giftsTitle: 'Gift list',
     giftsSubtitle: 'Your presence is the best gift. But if you would like to give us something, here are some suggestions:',
     pixKey: 'PIX key',
     copy: 'Copy',
@@ -122,15 +128,55 @@ const texts = {
     hours: 'hours',
     minutes: 'minutes',
     seconds: 'seconds',
+    giftsTitle: 'Gifts',
+    experienceGifts: 'Experiences',
+    wishlists: 'Gift lists',
+    custom: 'Custom amount',
+    close: 'Close',
+    scanQr: 'Scan the QR code or copy the PIX key',
+    customMessage: 'Copy the PIX key and transfer any amount you wish.',
+    wishlistMessage: 'Visit the list and choose a gift:',
   },
 }
 
-const gifts = [
-  { id: '1', namePt: 'Jantar romântico', nameEn: 'Romantic dinner', value: 150 },
-  { id: '2', namePt: 'Jogo de panelas', nameEn: 'Cookware set', value: 300 },
-  { id: '3', namePt: 'Contribuição para lua de mel', nameEn: 'Honeymoon contribution', value: 500 },
+type GiftModal = {
+  qrCode: string | null
+  pixKey: string
+} | null
+
+const EXPERIENCE_GIFTS = [
+  {
+    id: 'honeymoon',
+    namePt: 'Contribua para nossa lua de mel',
+    nameEn: 'Assist us on our honeymoon',
+    descPt: 'Ajude a tornar nossa lua de mel inesquecível.',
+    descEn: 'Help make our honeymoon unforgettable.',
+  },
+  {
+    id: 'home',
+    namePt: 'Contribua para mobiliar nosso lar',
+    nameEn: 'Contribute to furnish our home',
+    descPt: 'Ajude a construir nosso cantinho.',
+    descEn: 'Help us build our home together.',
+  },
 ]
 
+const WISHLISTS = [
+  {
+    id: 'amazon',
+    name: 'Amazon',
+    url: 'https://amazon.com.br',
+    placeholder: true,
+  },
+  {
+    id: 'camicado',
+    name: 'Camicado',
+    url: 'https://camicado.com.br',
+    placeholder: true,
+  },
+]
+
+const VALUES = [50, 100, 200]
 const PIX_KEY = 'seu-pix@email.com'
 
 
@@ -140,6 +186,24 @@ export default function HomePage() {
   const [copied, setCopied] = useState(false)
   const router = useRouter()
   const autoSaveTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({})
+  const [modal, setModal] = useState<GiftModal>(null)
+  const [modalClosing, setModalClosing] = useState(false)
+  const [collapsing, setCollapsing] = useState<Record<string, boolean>>({})
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalContent, setModalContent] = useState<GiftModal>(null)
+
+  function openModal(data: NonNullable<GiftModal>) {
+    setModalContent(data)
+    setModalVisible(true)
+  }
+
+  function closeModal() {
+    setModalVisible(false)
+    setTimeout(() => setModalContent(null), 200)
+  }
+
+
+
 
   useEffect(() => {
     const stored = sessionStorage.getItem('guest')
@@ -246,6 +310,8 @@ export default function HomePage() {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const [langKey, setLangKey] = useState(0)
+
   function switchLanguage(newLang: 'pt' | 'en') {
     const stored = sessionStorage.getItem('guest')
     if (stored) {
@@ -253,6 +319,7 @@ export default function HomePage() {
       sessionStorage.setItem('guest', JSON.stringify({ ...g, language: newLang }))
     }
     setGuest((prev) => prev ? { ...prev, language: newLang } : prev)
+    setLangKey((k) => k + 1)
   }
 
   if (!guest) return null
@@ -261,7 +328,7 @@ export default function HomePage() {
   const currentLang = guest.language
 
   return (
-    <main className="min-h-screen p-6 max-w-lg mx-auto space-y-12">
+    <main key={langKey} className="animate-fade-switch min-h-screen p-6 max-w-lg mx-auto space-y-12">
 
       <LanguageSwitcher lang={guest.language} onSwitch={switchLanguage} />
 
@@ -310,15 +377,21 @@ export default function HomePage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => updateMember(member.id, { confirmed: true })}
-                    className={`px-3 py-1 rounded-lg text-sm ${
+                    className={`px-3 py-1 rounded-lg text-sm btn-pop ${
                       r.confirmed === true ? 'bg-green-500 text-white' : 'border hover:bg-gray-50'
                     }`}
                   >
                     {t.confirm}
                   </button>
                   <button
-                    onClick={() => updateMember(member.id, { confirmed: false })}
-                    className={`px-3 py-1 rounded-lg text-sm ${
+                    onClick={() => {
+                      setCollapsing((prev) => ({ ...prev, [member.id]: true }))
+                      setTimeout(() => {
+                        updateMember(member.id, { confirmed: false })
+                        setCollapsing((prev) => ({ ...prev, [member.id]: false }))
+                      }, 200)
+                    }}
+                    className={`px-3 py-1 rounded-lg text-sm btn-pop ${
                       r.confirmed === false ? 'bg-red-500 text-white' : 'border hover:bg-gray-50'
                     }`}
                   >
@@ -328,7 +401,7 @@ export default function HomePage() {
               </div>
 
               {r.confirmed === true && (
-                <div className="space-y-3 pt-1">
+                <div className={`space-y-3 pt-1 ${collapsing[member.id] ? 'animate-fade-out-up' : 'animate-fade-in-down'}`}>
                   {member.is_child && (
                     <div>
                       <label className="text-sm text-gray-500">{t.ageRange}</label>
@@ -380,29 +453,100 @@ export default function HomePage() {
       </section>
 
       {/* Gifts */}
-      <section className="space-y-4">
+      <section className="space-y-6">
         <h2 className="text-xl font-semibold">{t.giftsTitle}</h2>
-        <p className="text-gray-500 text-sm">{t.giftsSubtitle}</p>
+
+        {/* Experience gifts */}
         <div className="space-y-3">
-          {gifts.map((gift) => (
-            <div key={gift.id} className="border rounded-lg px-4 py-3 flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">{t.experienceGifts}</h3>
+          {EXPERIENCE_GIFTS.map((gift) => (
+            <div key={gift.id} className="border rounded-lg p-4 space-y-3">
               <div>
                 <p className="font-medium">{currentLang === 'pt' ? gift.namePt : gift.nameEn}</p>
-                <p className="text-sm text-gray-500">R$ {gift.value}</p>
+                <p className="text-sm text-gray-500">{currentLang === 'pt' ? gift.descPt : gift.descEn}</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {VALUES.map((value) => (
+                  <button
+                    key={value}
+                    onClick={() => openModal({
+                      qrCode: `/qr/${gift.id}-${value}.png`,
+                      pixKey: PIX_KEY,
+                    })}
+                    className="border rounded-lg px-4 py-2 text-sm hover:bg-gray-50 btn-pop"
+                  >
+                    R$ {value}
+                  </button>
+                ))}
+                <button
+                  onClick={() => openModal({ qrCode: null, pixKey: PIX_KEY })}
+                  className="border rounded-lg px-4 py-2 text-sm hover:bg-gray-50 btn-pop"
+                >
+                  {t.custom}
+                </button>
               </div>
             </div>
           ))}
         </div>
-        <div className="border rounded-lg px-4 py-3 space-y-2">
-          <p className="text-sm text-gray-500">{t.pixKey}</p>
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-sm">{PIX_KEY}</span>
-            <button onClick={copyPix} className="text-sm border rounded px-3 py-1 hover:bg-gray-50">
+
+        {/* Wishlists */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">{t.wishlists}</h3>
+          {WISHLISTS.map((list) => (
+            <div key={list.id} className="border rounded-lg px-4 py-3 flex items-center justify-between">
+              <span className="font-medium">{list.name}</span>
+              <a href={list.url} target="_blank" rel="noopener noreferrer" className="text-sm border rounded-lg px-3 py-1 hover:bg-gray-50 btn-pop">
+                {'→'}
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Modal */}
+      <div
+        className={`fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity duration-200 ${
+          modalVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={closeModal}
+      >
+        <div
+          className={`bg-white rounded-2xl p-6 w-full max-w-sm space-y-4 transition-all duration-200 ${
+            modalVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {modalContent?.qrCode ? (
+            <>
+              <p className="text-center text-sm text-gray-500">{t.scanQr}</p>
+              <img src={modalContent.qrCode} alt="QR Code" className="w-48 h-48 mx-auto" />
+            </>
+          ) : (
+            <p className="text-center text-sm text-gray-500">{t.customMessage}</p>
+          )}
+
+          <div className="border rounded-lg px-4 py-3 flex items-center justify-between">
+            <span className="font-mono text-sm">{modalContent?.pixKey}</span>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(modalContent?.pixKey || '')
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              }}
+              className="text-sm border rounded px-3 py-1 hover:bg-gray-50 btn-pop"
+            >
               {copied ? t.copied : t.copy}
             </button>
           </div>
+
+          <button
+            onClick={closeModal}
+            className="w-full border rounded-lg px-4 py-2 text-sm hover:bg-gray-50 btn-pop"
+          >
+            {t.close}
+          </button>
         </div>
-      </section>
+      </div>
 
     </main>
   )
