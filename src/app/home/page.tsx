@@ -345,7 +345,7 @@ export default function HomePage() {
             <img
               src="/assets/pikachu_run.gif"
               alt="Pikachu"
-              className="w-17 animate-float"
+              className="w-17"
               style={{ imageRendering: 'pixelated' }}
             />
             {[
