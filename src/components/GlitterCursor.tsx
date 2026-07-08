@@ -97,12 +97,18 @@ export default function GlitterCursor() {
       }, 300)
     }
 
+    let lastSparkleTime = 0
+
     function onMouseMove(e: MouseEvent) {
       if (viewportResizing) return
       const dx = e.clientX - lastMouseX
       const dy = e.clientY - lastMouseY
-      if (Math.sqrt(dx * dx + dy * dy) > 13) {
-        createSparkle(e.clientX, e.clientY)
+      if (Math.sqrt(dx * dx + dy * dy) > 1) {
+        const now = Date.now()
+        if (now - lastSparkleTime > 100) {  // sparkle every 30ms max
+          createSparkle(e.clientX, e.clientY)
+          lastSparkleTime = now
+        }
         lastMouseX = e.clientX
         lastMouseY = e.clientY
       }
