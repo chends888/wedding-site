@@ -3,19 +3,20 @@
 import { useEffect } from 'react'
 
 const COLORS = [
-  '#FF1493', // deep pink
-  '#FF69B4', // hot pink
-  '#FF0000', // red
-  '#FFD700', // gold yellow
-  '#FFF44F', // bright yellow
-  '#00FF7F', // spring green
-  '#00FA9A', // medium spring green
-  '#00ff2f', // lime green
-  '#00BFFF', // deep sky blue
-  '#1E90FF', // dodger blue
-  '#FFFFFF', // white
-  '#F0F0F0', // off white
+  '#FF1493',
+  '#FF69B4',
+  '#FF0000',
+  '#FFD700',
+  '#FFF44F',
+  '#00FF7F',
+  '#00FA9A',
+  '#00ff2f',
+  '#00BFFF',
+  '#1E90FF',
+  '#FFFFFF',
+  '#F0F0F0',
 ]
+
 function createSparkle(x: number, y: number) {
   const el = document.createElement('div')
   const size = Math.random() * 12 + 6
@@ -40,7 +41,6 @@ function createSparkle(x: number, y: number) {
     filter: drop-shadow(0 0 3px ${color}) drop-shadow(0 0 6px ${color});
   `
 
-  // Star shape using clip-path
   el.innerHTML = `
     <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <polygon 
@@ -86,6 +86,7 @@ export default function GlitterCursor() {
     let lastMouseY = 0
     let viewportResizing = false
     let resizeTimer: ReturnType<typeof setTimeout>
+    let idleInterval: ReturnType<typeof setInterval> | null = null
 
     function onViewportResize() {
       viewportResizing = true
@@ -96,27 +97,11 @@ export default function GlitterCursor() {
       }, 300)
     }
 
-    // Random sparkles when cursor is idle
-    let lastKnownX = 0
-    let lastKnownY = 0
-
-    window.addEventListener('mousemove', (e) => {
-      lastKnownX = e.clientX
-      lastKnownY = e.clientY
-    })
-
-    const idleInterval = setInterval(() => {
-      if (lastKnownX === 0 && lastKnownY === 0) return
-      const offsetX = (Math.random() - 0.5) * 40
-      const offsetY = (Math.random() - 0.5) * 40
-      createSparkle(lastKnownX + offsetX, lastKnownY + offsetY)
-    }, 100)
-
     function onMouseMove(e: MouseEvent) {
       if (viewportResizing) return
       const dx = e.clientX - lastMouseX
       const dy = e.clientY - lastMouseY
-      if (Math.sqrt(dx * dx + dy * dy) > 8) {
+      if (Math.sqrt(dx * dx + dy * dy) > 13) {
         createSparkle(e.clientX, e.clientY)
         lastMouseX = e.clientX
         lastMouseY = e.clientY
@@ -149,6 +134,16 @@ export default function GlitterCursor() {
       })
     }
 
+    const isMobile = window.matchMedia('(hover: none)').matches
+    if (!isMobile) {
+      idleInterval = setInterval(() => {
+        if (lastMouseX === 0 && lastMouseY === 0) return
+        const offsetX = (Math.random() - 0.5) * 40
+        const offsetY = (Math.random() - 0.5) * 40
+        createSparkle(lastMouseX + offsetX, lastMouseY + offsetY)
+      }, 100)
+    }
+
     window.visualViewport?.addEventListener('resize', onViewportResize)
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('touchmove', onTouchMove, { passive: true })
@@ -162,7 +157,7 @@ export default function GlitterCursor() {
       document.removeEventListener('touchend', onTouchEnd)
       document.removeEventListener('touchcancel', onTouchEnd)
       clearTimeout(resizeTimer)
-      clearInterval(idleInterval)
+      if (idleInterval) clearInterval(idleInterval)
       style.remove()
     }
   }, [])
