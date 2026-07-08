@@ -13,6 +13,7 @@ type Rsvp = {
   guest_id: string
   confirmed: boolean
   shoe_size: string | null
+  age_range: string | null
   updated_at: string
 }
 
@@ -22,6 +23,7 @@ type Row = {
   family: string
   confirmed: string
   shoe_size: string | null
+  age_range: string | null
   updated_at: string
 }
 
@@ -97,6 +99,7 @@ export default function AdminPage() {
         family: g.family_id ? (familyMap[g.family_id] || '-') : '-',
         confirmed: rsvp === undefined ? 'Pending' : rsvp.confirmed ? 'Yes' : 'No',
         shoe_size: rsvp?.shoe_size || null,
+        age_range: rsvp?.age_range || null,
         updated_at: rsvp?.updated_at ? new Date(rsvp.updated_at).toLocaleDateString() : '-',
       }
     })
@@ -131,6 +134,21 @@ export default function AdminPage() {
   const sortedSizes = Object.entries(sizeSummary).sort((a, b) =>
     a[0].localeCompare(b[0], undefined, { numeric: true })
   )
+
+  const AGE_RANGE_LABELS: Record<string, string> = {
+    '0-7': '7 or under',
+    '8-10': '8–10',
+    '11+': '11 or older',
+  }
+
+  const ageSummary = rows
+    .filter((r) => r.confirmed === 'Yes' && r.age_range)
+    .reduce((acc, r) => {
+      acc[r.age_range!] = (acc[r.age_range!] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+
+  const sortedAges = ['0-7', '8-10', '11+'].filter((r) => ageSummary[r])
 
   return (
     <main className="min-h-screen p-6 max-w-4xl mx-auto space-y-6">
@@ -190,6 +208,31 @@ export default function AdminPage() {
                   <tr className="font-semibold">
                     <td className="py-2 pr-8">Total</td>
                     <td className="py-2">{sortedSizes.reduce((acc, [, count]) => acc + count, 0)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+          {sortedAges.length > 0 && (
+            <div className="space-y-2">
+              <h2 className="text-sm font-semibold">Children by age range (confirmed guests)</h2>
+              <table className="text-sm border-collapse">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-2 pr-8">Age range</th>
+                    <th className="text-left py-2">Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedAges.map((range) => (
+                    <tr key={range} className="border-b">
+                      <td className="py-2 pr-8">{AGE_RANGE_LABELS[range]}</td>
+                      <td className="py-2">{ageSummary[range]}</td>
+                    </tr>
+                  ))}
+                  <tr className="font-semibold">
+                    <td className="py-2 pr-8">Total</td>
+                    <td className="py-2">{sortedAges.reduce((acc, r) => acc + ageSummary[r], 0)}</td>
                   </tr>
                 </tbody>
               </table>

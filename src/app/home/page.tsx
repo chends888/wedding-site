@@ -339,22 +339,28 @@ export default function HomePage() {
       </section>
 
       {/* Countdown */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-center">{t.countdown}</h2>
-        <div className="flex justify-center gap-4 text-center">
-          {[
-            { value: timeLeft.days, label: t.days },
-            { value: timeLeft.hours, label: t.hours },
-            { value: timeLeft.minutes, label: t.minutes },
-            { value: timeLeft.seconds, label: t.seconds },
-          ].map(({ value, label }) => (
-            <div key={label} className="flex flex-col items-center">
-              <span className="text-3xl font-bold">{String(value).padStart(2, '0')}</span>
-              <span className="text-xs text-gray-500">{label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section className="space-y-3">
+          <h2 className="text-xl font-semibold text-center">{t.countdown}</h2>
+          <div className="flex justify-center items-end gap-4 text-center">
+            <img
+              src="/assets/pikachu_run.gif"
+              alt="Pikachu"
+              className="w-17 animate-float"
+              style={{ imageRendering: 'pixelated' }}
+            />
+            {[
+              { value: timeLeft.days, label: t.days },
+              { value: timeLeft.hours, label: t.hours },
+              { value: timeLeft.minutes, label: t.minutes },
+              { value: timeLeft.seconds, label: t.seconds },
+            ].map(({ value, label }) => (
+              <div key={label} className="flex flex-col items-center">
+                <span className="text-3xl font-bold">{String(value).padStart(2, '0')}</span>
+                <span className="text-xs text-gray-500">{label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
 
       {/* RSVP */}
       <section className="space-y-4">

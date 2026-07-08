@@ -96,6 +96,22 @@ export default function GlitterCursor() {
       }, 300)
     }
 
+    // Random sparkles when cursor is idle
+    let lastKnownX = 0
+    let lastKnownY = 0
+
+    window.addEventListener('mousemove', (e) => {
+      lastKnownX = e.clientX
+      lastKnownY = e.clientY
+    })
+
+    const idleInterval = setInterval(() => {
+      if (lastKnownX === 0 && lastKnownY === 0) return
+      const offsetX = (Math.random() - 0.5) * 40
+      const offsetY = (Math.random() - 0.5) * 40
+      createSparkle(lastKnownX + offsetX, lastKnownY + offsetY)
+    }, 100)
+
     function onMouseMove(e: MouseEvent) {
       if (viewportResizing) return
       const dx = e.clientX - lastMouseX
@@ -146,6 +162,7 @@ export default function GlitterCursor() {
       document.removeEventListener('touchend', onTouchEnd)
       document.removeEventListener('touchcancel', onTouchEnd)
       clearTimeout(resizeTimer)
+      clearInterval(idleInterval)
       style.remove()
     }
   }, [])
