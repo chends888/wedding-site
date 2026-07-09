@@ -40,6 +40,20 @@ export default function WailmerCursor() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    function onTouchMove(e: TouchEvent) {
+      if (e.touches.length > 0) {
+        targetRef.current = {
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY,
+        }
+        movingRef.current = true
+        if (movingTimerRef.current) clearTimeout(movingTimerRef.current)
+        movingTimerRef.current = setTimeout(() => {
+          movingRef.current = false
+        }, 150)
+      }
+    }
+
     function onMouseMove(e: MouseEvent) {
       targetRef.current = { x: e.clientX, y: e.clientY }
       movingRef.current = true
@@ -116,11 +130,13 @@ export default function WailmerCursor() {
     }
 
     document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('touchmove', onTouchMove, { passive: true })
     window.addEventListener('resize', onResize)
     loop()
 
     return () => {
       document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('touchmove', onTouchMove)
       window.removeEventListener('resize', onResize)
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current)
       if (movingTimerRef.current) clearTimeout(movingTimerRef.current)
