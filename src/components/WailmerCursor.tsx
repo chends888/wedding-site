@@ -69,6 +69,7 @@ export default function WailmerCursor() {
     }
 
     function loop() {
+      if (!ctx || !canvas) return
       const prev = { ...posRef.current }
       posRef.current.x += (targetRef.current.x - posRef.current.x) * LERP_SPEED
       posRef.current.y += (targetRef.current.y - posRef.current.y) * LERP_SPEED
