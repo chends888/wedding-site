@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import SizeDropdown from '@/components/SizeDropdown'
 
 type Guest = {
   id: string
@@ -19,60 +20,31 @@ type MemberRsvp = {
 
 type RsvpState = Record<string, MemberRsvp>
 
-const ADULT_SIZES = [
-  { label: 'BR/EU 33 - CN 33 - AU 2 - 21cm', value: 'BR33' },
-  { label: 'BR/EU 34 - CN 34 - AU 3 - 21.5cm', value: 'BR34' },
-  { label: 'BR/EU 35 - CN 35 - AU 4 - 22cm', value: 'BR35' },
-  { label: 'BR/EU 36 - CN 36 - AU 5 - 23cm', value: 'BR36' },
-  { label: 'BR/EU 37 - CN 37 - AU 5.5 - 23.5cm', value: 'BR37' },
-  { label: 'BR/EU 38 - CN 38 - AU 6 - 24cm', value: 'BR38' },
-  { label: 'BR/EU 39 - CN 39 - AU 7 - 25cm', value: 'BR39' },
-  { label: 'BR/EU 40 - CN 40 - AU 7.5 - 25.5cm', value: 'BR40' },
-  { label: 'BR/EU 41 - CN 41 - AU 8 - 26cm', value: 'BR41' },
-  { label: 'BR/EU 42 - CN 42 - AU 9 - 27cm', value: 'BR42' },
-  { label: 'BR/EU 43 - CN 43 - AU 10 - 28cm', value: 'BR43' },
-  { label: 'BR/EU 44 - CN 44 - AU 11 - 29cm', value: 'BR44' },
-  { label: 'BR/EU 45 - CN 45 - AU 12 - 30cm', value: 'BR45' },
+
+type SizeSystem = 'BR' | 'EU' | 'US' | 'CN' | 'AU' | 'cm'
+
+const SIZE_TABLE = [
+  { value: 'BR35', BR: '35/36', EU: '37/38', US: '6W / 5M', CN: '35', AU: '4/5', cm: '23-24cm' },
+  { value: 'BR37', BR: '37/38', EU: '39/40', US: '7-8W / 6-7M', CN: '37', AU: '5.5/6', cm: '24-25cm' },
+  { value: 'BR39', BR: '39/40', EU: '41/42', US: '9-10W / 8M', CN: '39', AU: '7/7.5', cm: '25.5-26.5cm' },
+  { value: 'BR41', BR: '41/42', EU: '43/44', US: '11-12W / 9-10M', CN: '41', AU: '8/9', cm: '27-28cm' },
+  { value: 'BR43', BR: '43/44', EU: '45/46', US: '11-12M', CN: '43', AU: '10/11', cm: '28-29cm' },
+  { value: 'BR45', BR: '45/46', EU: '47/48', US: '13M', CN: '45', AU: '12', cm: '29-30cm' },
 ]
 
-const CHILDREN_SIZES = {
-  pt: [
-    { label: 'EU/BR/AU 17 - CN 17 - 10.5cm (~12-18 meses)', value: 'EU17' },
-    { label: 'EU/BR/AU 18 - CN 18 - 11cm (~18-24 meses)', value: 'EU18' },
-    { label: 'EU/BR/AU 19 - CN 19 - 11.5cm (~2 anos)', value: 'EU19' },
-    { label: 'EU/BR/AU 20 - CN 20 - 12cm (~2-3 anos)', value: 'EU20' },
-    { label: 'EU/BR/AU 21 - CN 21 - 13cm (~3 anos)', value: 'EU21' },
-    { label: 'EU/BR/AU 22 - CN 22 - 13.5cm (~3-4 anos)', value: 'EU22' },
-    { label: 'EU/BR/AU 23 - CN 23 - 14cm (~4 anos)', value: 'EU23' },
-    { label: 'EU/BR/AU 24 - CN 24 - 15cm (~4-5 anos)', value: 'EU24' },
-    { label: 'EU/BR/AU 25 - CN 25 - 15.5cm (~5 anos)', value: 'EU25' },
-    { label: 'EU/BR/AU 26 - CN 26 - 16cm (~5-6 anos)', value: 'EU26' },
-    { label: 'EU/BR/AU 27 - CN 27 - 17cm (~6 anos)', value: 'EU27' },
-    { label: 'EU/BR/AU 28 - CN 28 - 17.5cm (~6-7 anos)', value: 'EU28' },
-    { label: 'EU/BR/AU 29 - CN 29 - 18cm (~7 anos)', value: 'EU29' },
-    { label: 'EU/BR/AU 30 - CN 30 - 18.5cm (~7-8 anos)', value: 'EU30' },
-    { label: 'EU/BR/AU 31 - CN 31 - 19cm (~8 anos)', value: 'EU31' },
-    { label: 'EU/BR/AU 32 - CN 32 - 20cm (~9-10 anos)', value: 'EU32' },
-  ],
-  en: [
-    { label: 'EU/BR/AU 17 - CN 17 - 10.5cm (~12-18 months)', value: 'EU17' },
-    { label: 'EU/BR/AU 18 - CN 18 - 11cm (~18-24 months)', value: 'EU18' },
-    { label: 'EU/BR/AU 19 - CN 19 - 11.5cm (~2 years)', value: 'EU19' },
-    { label: 'EU/BR/AU 20 - CN 20 - 12cm (~2-3 years)', value: 'EU20' },
-    { label: 'EU/BR/AU 21 - CN 21 - 13cm (~3 years)', value: 'EU21' },
-    { label: 'EU/BR/AU 22 - CN 22 - 13.5cm (~3-4 years)', value: 'EU22' },
-    { label: 'EU/BR/AU 23 - CN 23 - 14cm (~4 years)', value: 'EU23' },
-    { label: 'EU/BR/AU 24 - CN 24 - 15cm (~4-5 years)', value: 'EU24' },
-    { label: 'EU/BR/AU 25 - CN 25 - 15.5cm (~5 years)', value: 'EU25' },
-    { label: 'EU/BR/AU 26 - CN 26 - 16cm (~5-6 years)', value: 'EU26' },
-    { label: 'EU/BR/AU 27 - CN 27 - 17cm (~6 years)', value: 'EU27' },
-    { label: 'EU/BR/AU 28 - CN 28 - 17.5cm (~6-7 years)', value: 'EU28' },
-    { label: 'EU/BR/AU 29 - CN 29 - 18cm (~7 years)', value: 'EU29' },
-    { label: 'EU/BR/AU 30 - CN 30 - 18.5cm (~7-8 years)', value: 'EU30' },
-    { label: 'EU/BR/AU 31 - CN 31 - 19cm (~8 years)', value: 'EU31' },
-    { label: 'EU/BR/AU 32 - CN 32 - 20cm (~9-10 years)', value: 'EU32' },
-  ],
-}
+const CHILDREN_SIZE_TABLE = [
+  { value: 'EU17', BR: '17/18', EU: '19/20', US: '4C', CN: '17', AU: '2', cm: '11.5-12.5cm' },
+  { value: 'EU19', BR: '19', EU: '20', US: '5C', CN: '19', AU: '3', cm: '12-13cm' },
+  { value: 'EU20', BR: '20', EU: '21', US: '6C', CN: '20', AU: '3.5', cm: '12.5-13.5cm' },
+  { value: 'EU21', BR: '21', EU: '22', US: '7C', CN: '21', AU: '4', cm: '13.5-14.5cm' },
+  { value: 'EU22', BR: '22', EU: '23', US: '8C', CN: '22', AU: '4.5', cm: '14-15cm' },
+  { value: 'EU23', BR: '23/24', EU: '25/26', US: '9C', CN: '23', AU: '5/6', cm: '15-16cm' },
+  { value: 'EU25', BR: '25/26', EU: '27/28', US: '10C', CN: '25', AU: '7', cm: '16-17cm' },
+  { value: 'EU27', BR: '27/28', EU: '29/30', US: '11-12C', CN: '27', AU: '8', cm: '17.5-18.5cm' },
+  { value: 'EU29', BR: '29/30', EU: '31/32', US: '13C-1Y', CN: '29', AU: '9', cm: '18.5-19.5cm' },
+  { value: 'EU31', BR: '31/32', EU: '33/34', US: '2Y', CN: '31', AU: '10', cm: '20-21cm' },
+  { value: 'EU33', BR: '33/34', EU: '35/36', US: '3-4Y', CN: '33', AU: '11', cm: '21.5-22.5cm' },
+]
 
 const texts = {
   pt: {
@@ -105,6 +77,7 @@ const texts = {
     scanQr: 'Escaneie o QR code ou copie a chave PIX',
     customMessage: 'Copie a chave PIX e faça a transferência pelo valor que desejar.',
     wishlistMessage: 'Acesse a lista e escolha um presente:',
+    sizeSystem: 'Tamanho da Havaianas em:',
   },
   en: {
     welcome: (name: string) => `Hi, ${name}!`,
@@ -136,6 +109,7 @@ const texts = {
     scanQr: 'Scan the QR code or copy the PIX key',
     customMessage: 'Copy the PIX key and transfer any amount you wish.',
     wishlistMessage: 'Visit the list and choose a gift:',
+    sizeSystem: 'Havaianas size in:',
   },
 }
 
@@ -191,6 +165,8 @@ export default function HomePage() {
   const [collapsing, setCollapsing] = useState<Record<string, boolean>>({})
   const [modalVisible, setModalVisible] = useState(false)
   const [modalContent, setModalContent] = useState<GiftModal>(null)
+  const [sizeSystem, setSizeSystem] = useState<SizeSystem>('BR')
+
 
   function openModal(data: NonNullable<GiftModal>) {
     setModalContent(data)
@@ -366,13 +342,26 @@ export default function HomePage() {
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{t.rsvpTitle}</h2>
 
+        {/* Size system selector */}
+        <div className="space-y-1">
+          <label className="text-sm text-gray-500">{t.sizeSystem}</label>
+          <div className="flex flex-wrap gap-2">
+            {(['BR', 'EU', 'US', 'CN', 'AU', 'cm'] as SizeSystem[]).map((sys) => (
+              <button
+                key={sys}
+                onClick={() => setSizeSystem(sys)}
+                className={`px-3 py-1 rounded-lg text-xs border btn-pop ${
+                  sizeSystem === sys ? 'bg-black text-white' : 'hover:bg-gray-50'
+                }`}
+              >
+                {sys}
+              </button>
+            ))}
+          </div>
+        </div>
         {guest.members.map((member) => {
           const r = rsvp[member.id]
           if (!r) return null
-
-          const sizeOptions = member.is_child && r.age_range !== '11+'
-            ? CHILDREN_SIZES[currentLang]
-            : ADULT_SIZES
 
           const showShoeSizeError = r.confirmed === true && !r.shoe_size
 
@@ -431,33 +420,36 @@ export default function HomePage() {
                     </div>
                   )}
 
-                  {(!member.is_child || r.age_range) && (
-                    <div>
-                      <label className="text-sm text-gray-500">{t.shoeSize}</label>
-                      <select
-                        value={r.shoe_size}
-                        onChange={(e) => updateMember(member.id, { shoe_size: e.target.value })}
-                        className="w-full border rounded-lg px-3 py-2 mt-1 bg-white text-black"
-                      >
-                        <option value="">{t.shoeSizePlaceholder}</option>
-                        {sizeOptions.map((s) => (
-                          <option key={s.value} value={s.value}>
-                            {s.label}
-                          </option>
-                        ))}
-                      </select>
-                      {showShoeSizeError && (
-                        <p className="text-red-500 text-sm mt-1">{t.missingShoeSizeError}</p>
-                      )}
-                    </div>
-                  )}
+                  <div className={`space-y-2 transition-all duration-200 ${
+                    (!member.is_child || r.age_range)
+                      ? 'opacity-100 max-h-96 overflow-visible'
+                      : 'opacity-0 max-h-0 overflow-hidden pointer-events-none'
+                  }`}>
+                    <label className="text-sm text-gray-500">{t.shoeSize}</label>
+
+                    <SizeDropdown
+                      value={r.shoe_size}
+                      onChange={(val) => updateMember(member.id, { shoe_size: val })}
+                      placeholder={t.shoeSizePlaceholder}
+                      options={(member.is_child && r.age_range !== '11+'
+                        ? CHILDREN_SIZE_TABLE
+                        : SIZE_TABLE
+                      ).map((s) => ({
+                        value: s.value,
+                        label: s[sizeSystem],
+                      }))}
+                    />
+
+                    {showShoeSizeError && (
+                      <p className="text-red-500 text-sm mt-1">{t.missingShoeSizeError}</p>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
           )
         })}
       </section>
-
       {/* Gifts */}
       <section className="space-y-6">
         <h2 className="text-xl font-semibold">{t.giftsTitle}</h2>
