@@ -82,7 +82,6 @@ const texts = {
     eventDate: '19 de junho de 2027 • 19h à 1h',
     eventLocation: 'Espaço Antakya',
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
-    directions: 'Como chegar',
 
   },
   en: {
@@ -120,7 +119,6 @@ const texts = {
     eventDate: 'June 19th, 2027 • 7PM to 1AM',
     eventLocation: 'Espaço Antakya',
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
-    directions: 'Get directions',
   },
 }
 
@@ -355,9 +353,17 @@ export default function HomePage() {
         <p className="text-2xl text-gray-500">{t.eventDate}</p>
         <p className="text-2xl font-medium">{t.eventLocation}</p>
         <p className="text-xl text-gray-500">{t.eventAddress}</p>
-        <a href="https://maps.google.com/?q=Espaco+Antakya+Rua+Vergueiro+1515+Sao+Paulo" target="_blank" rel="noopener noreferrer" className="inline-block text-sm border rounded-lg px-4 py-2 mt-1 hover:bg-gray-50 btn-pop">
-          {t.directions}
-        </a>
+        <div className="rounded-lg overflow-hidden border mt-2">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.7988001165277!2d-46.64274292572889!3d-23.575668578789994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce593cee87c9b7%3A0x9823b8d680d4ac66!2sEspaco%20Antakya!5e0!3m2!1sen!2sus!4v1784762474177!5m2!1sen!2sus"
+            width="100%"
+            height="250"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </div>
       </section>
 
       {/* RSVP */}
