@@ -7,7 +7,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 const texts = {
   pt: {
-    title: 'Bem-vindo',
+    title: 'Pamella & Lucas',
     subtitle: 'Digite seu telefone com código do país e DDD',
     placeholder: '5511999999999',
     button: 'Entrar',
@@ -15,7 +15,7 @@ const texts = {
     error: 'Número não encontrado. Verifique e tente novamente.',
   },
   en: {
-    title: 'Welcome',
+    title: 'Pamella & Lucas',
     subtitle: 'Enter your phone number with country code and area code',
     placeholder: '5511999999999',
     button: 'Continue',
@@ -79,7 +79,16 @@ export default function LoginPage() {
       <LanguageSwitcher lang={lang} onSwitch={handleLangSwitch} />
 
       <div key={langKey} className="animate-fade-switch w-full max-w-sm space-y-4">
-        <h1 className="text-2xl font-semibold text-center">{text.title}</h1>
+        <h1
+          style={{ fontFamily: "'Playfair Display', serif" }}
+          className="text-8xl italic text-center leading-tight"
+        >
+          Pamella
+          <br />
+          &amp;
+          <br />
+          Lucas
+        </h1>
         <p className="text-center text-gray-500">{text.subtitle}</p>
 
         <input

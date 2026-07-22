@@ -78,6 +78,12 @@ const texts = {
     customMessage: 'Copie a chave PIX e faça a transferência pelo valor que desejar.',
     wishlistMessage: 'Acesse a lista e escolha um presente:',
     sizeSystem: 'Tamanho da Havaianas em:',
+    eventTitle: 'Cerimônia & Recepção',
+    eventDate: '19 de junho de 2027 • 19h à 1h',
+    eventLocation: 'Espaço Antakya',
+    eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
+    directions: 'Como chegar',
+
   },
   en: {
     welcome: (name: string) => `Hi, ${name}!`,
@@ -110,6 +116,11 @@ const texts = {
     customMessage: 'Copy the PIX key and transfer any amount you wish.',
     wishlistMessage: 'Visit the list and choose a gift:',
     sizeSystem: 'Havaianas size in:',
+    eventTitle: 'Ceremony & Reception',
+    eventDate: 'June 19th, 2027 • 7PM to 1AM',
+    eventLocation: 'Espaço Antakya',
+    eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
+    directions: 'Get directions',
   },
 }
 
@@ -337,6 +348,17 @@ export default function HomePage() {
             ))}
           </div>
         </section>
+
+      {/* Event info */}
+      <section className="space-y-2 text-center">
+        <h2 className="text-3xl font-semibold">{t.eventTitle}</h2>
+        <p className="text-2xl text-gray-500">{t.eventDate}</p>
+        <p className="text-2xl font-medium">{t.eventLocation}</p>
+        <p className="text-xl text-gray-500">{t.eventAddress}</p>
+        <a href="https://maps.google.com/?q=Espaco+Antakya+Rua+Vergueiro+1515+Sao+Paulo" target="_blank" rel="noopener noreferrer" className="inline-block text-sm border rounded-lg px-4 py-2 mt-1 hover:bg-gray-50 btn-pop">
+          {t.directions}
+        </a>
+      </section>
 
       {/* RSVP */}
       <section className="space-y-4">
