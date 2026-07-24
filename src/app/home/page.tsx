@@ -49,7 +49,7 @@ const CHILDREN_SIZE_TABLE = [
 const texts = {
   pt: {
     welcome: (name: string) => `Olá, ${name}!`,
-    subtitle: 'Este é o seu convite para o nosso casamento. 💍',
+    subtitle: 'Convidam você para o nosso casamento. 💍',
     subtitle2: 'Ficaremos muito felizes em ter você conosco neste dia tão especial.',
     rsvpTitle: 'Confirmar presença',
     confirm: 'Confirmar',
@@ -87,7 +87,7 @@ const texts = {
   },
   en: {
     welcome: (name: string) => `Hi, ${name}!`,
-    subtitle: 'This is your invitation to our wedding. 💍',
+    subtitle: 'Invite you to our wedding. 💍',
     subtitle2: 'We would be so happy to have you with us on this special day.',
     rsvpTitle: 'RSVP',
     confirm: 'Confirm',
@@ -328,19 +328,36 @@ export default function HomePage() {
           </p>
           <div className="h-px w-12 bg-gray-400" />
         </div>
-        <h1
-          style={{ fontFamily: "'Playfair Display', serif" }}
-          className="text-5xl sm:text-7xl italic leading-tight"
-        >
-          <span className="hidden sm:inline whitespace-nowrap">Pamella & Lucas</span>
-          <span className="sm:hidden">
-            Pamella
-            <br />
-            &amp;
-            <br />
-            Lucas
-          </span>
-        </h1>
+
+        <div className="w-full">
+          {/* Parents */}
+          <div className="flex justify-between px-1 mb-8 text-sm text-gray-400">
+            <div className="text-left">
+              <p>Eliana Yun</p>
+              <p>Sergio Masuda</p>
+            </div>
+            <div className="text-right">
+              <p>Alice Chen</p>
+              <p>Duilio Alba</p>
+            </div>
+          </div>
+
+          {/* Names */}
+          <h1
+            style={{ fontFamily: "'Playfair Display', serif" }}
+            className="text-5xl sm:text-7xl italic leading-tight"
+          >
+            <span className="hidden sm:inline whitespace-nowrap">Pamella & Lucas</span>
+            <span className="sm:hidden">
+              Pamella
+              <br />
+              &amp;
+              <br />
+              Lucas
+            </span>
+          </h1>
+        </div>
+
         <div className="space-y-3">
           <p className="text-gray-500 text-lg">{t.subtitle}</p>
           <p className="text-gray-500">{t.subtitle2}</p>
