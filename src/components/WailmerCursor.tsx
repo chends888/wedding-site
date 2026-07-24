@@ -11,6 +11,8 @@ export default function WailmerCursor() {
   const movingRef = useRef(false)
   const movingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  const WAILMER_SIZE = 65
+
   const trailRef = useRef<{
     x: number; y: number;
     width: number; height: number;
@@ -18,7 +20,6 @@ export default function WailmerCursor() {
   }[]>([])
 
   useEffect(() => {
-    const WAILMER_SIZE = 80
     const LERP_SPEED = 0.08
     const Y_OFFSET = 40
 
@@ -152,8 +153,8 @@ export default function WailmerCursor() {
           position: 'fixed',
           top: 0,
           left: 0,
-          width: 80,
-          height: 80,
+          width: WAILMER_SIZE,
+          height: WAILMER_SIZE,
           pointerEvents: 'none',
           zIndex: 9999,
         }}
@@ -161,7 +162,7 @@ export default function WailmerCursor() {
         <img
           src="/assets/wailmer.png"
           alt="Wailmer"
-          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          style={{ width: '100%', height: '100%', objectFit: 'contain', imageRendering: 'pixelated' }}
         />
       </div>
     </>

@@ -49,7 +49,8 @@ const CHILDREN_SIZE_TABLE = [
 const texts = {
   pt: {
     welcome: (name: string) => `Olá, ${name}!`,
-    subtitle: 'Estamos felizes em ter você com a gente.',
+    subtitle: 'Este é o seu convite para o nosso casamento. 💍',
+    subtitle2: 'Ficaremos muito felizes em ter você conosco neste dia tão especial.',
     rsvpTitle: 'Confirmar presença',
     confirm: 'Confirmar',
     decline: 'Não vou',
@@ -86,7 +87,8 @@ const texts = {
   },
   en: {
     welcome: (name: string) => `Hi, ${name}!`,
-    subtitle: 'We are so happy to have you with us.',
+    subtitle: 'This is your invitation to our wedding. 💍',
+    subtitle2: 'We would be so happy to have you with us on this special day.',
     rsvpTitle: 'RSVP',
     confirm: 'Confirm',
     decline: 'Decline',
@@ -318,34 +320,56 @@ export default function HomePage() {
       <LanguageSwitcher lang={guest.language} onSwitch={switchLanguage} />
 
       {/* Welcome */}
-      <section className="text-center space-y-2 pt-8">
-        <h1 className="text-2xl font-semibold">{t.welcome(guest.name)}</h1>
-        <p className="text-gray-500">{t.subtitle}</p>
+      <section className="min-h-screen flex flex-col items-center justify-center text-center space-y-6 pt-8">
+        <div className="flex items-center justify-center gap-3">
+          <div className="h-px w-12 bg-gray-400" />
+          <p className="text-sm text-gray-400 tracking-widest">
+            {currentLang === 'pt' ? '19.06.2027' : '06.19.2027'}
+          </p>
+          <div className="h-px w-12 bg-gray-400" />
+        </div>
+        <h1
+          style={{ fontFamily: "'Playfair Display', serif" }}
+          className="text-5xl sm:text-7xl italic leading-tight"
+        >
+          <span className="hidden sm:inline whitespace-nowrap">Pamella & Lucas</span>
+          <span className="sm:hidden">
+            Pamella
+            <br />
+            &amp;
+            <br />
+            Lucas
+          </span>
+        </h1>
+        <div className="space-y-3">
+          <p className="text-gray-500 text-lg">{t.subtitle}</p>
+          <p className="text-gray-500">{t.subtitle2}</p>
+        </div>
       </section>
 
       {/* Countdown */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-semibold text-center">{t.countdown}</h2>
-          <div className="flex justify-center items-end gap-4 text-center">
-            <img
-              src="/assets/pikachu_run.gif"
-              alt="Pikachu"
-              className="w-17"
-              style={{ imageRendering: 'pixelated' }}
-            />
-            {[
-              { value: timeLeft.days, label: t.days },
-              { value: timeLeft.hours, label: t.hours },
-              { value: timeLeft.minutes, label: t.minutes },
-              { value: timeLeft.seconds, label: t.seconds },
-            ].map(({ value, label }) => (
-              <div key={label} className="flex flex-col items-center">
-                <span className="text-3xl font-bold">{String(value).padStart(2, '0')}</span>
-                <span className="text-xs text-gray-500">{label}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+      <section className="space-y-3 relative">
+        <h2 className="text-xl font-semibold text-center">{t.countdown}</h2>
+        <div className="flex justify-center gap-4 text-center">
+          {[
+            { value: timeLeft.days, label: t.days },
+            { value: timeLeft.hours, label: t.hours },
+            { value: timeLeft.minutes, label: t.minutes },
+            { value: timeLeft.seconds, label: t.seconds },
+          ].map(({ value, label }) => (
+            <div key={label} className="flex flex-col items-center">
+              <span className="text-3xl font-bold">{String(value).padStart(2, '0')}</span>
+              <span className="text-xs text-gray-500">{label}</span>
+            </div>
+          ))}
+        </div>
+        <img
+          src="/assets/pikachu_run.gif"
+          alt="Pikachu"
+          className="w-16 absolute -bottom-0 left-9"
+          style={{ imageRendering: 'pixelated' }}
+        />
+      </section>
 
       {/* Event info */}
       <section className="space-y-2 text-center">
