@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import SizeDropdown from '@/components/SizeDropdown'
+import BackgroundPhoto from '@/components/BackgroundPhoto'
+
 
 type Guest = {
   id: string
@@ -49,7 +51,7 @@ const CHILDREN_SIZE_TABLE = [
 const texts = {
   pt: {
     welcome: (name: string) => `Olá, ${name}!`,
-    subtitle: 'Convidam você para o nosso casamento. 💍',
+    subtitle: 'Convidam para a celebração de seu casamento. 💍',
     subtitle2: 'Ficaremos muito felizes em ter você conosco neste dia tão especial.',
     rsvpTitle: 'Confirmar presença',
     confirm: 'Confirmar',
@@ -87,7 +89,7 @@ const texts = {
   },
   en: {
     welcome: (name: string) => `Hi, ${name}!`,
-    subtitle: 'Invite you to our wedding. 💍',
+    subtitle: 'Invite you to celebrate their wedding. 💍',
     subtitle2: 'We would be so happy to have you with us on this special day.',
     rsvpTitle: 'RSVP',
     confirm: 'Confirm',
@@ -177,6 +179,8 @@ export default function HomePage() {
   const [modalVisible, setModalVisible] = useState(false)
   const [modalContent, setModalContent] = useState<GiftModal>(null)
   const [sizeSystem, setSizeSystem] = useState<SizeSystem>('BR')
+  const [photoIndex, setPhotoIndex] = useState(0)
+  const sectionRefs = useRef<(HTMLElement | null)[]>([])
 
 
   function openModal(data: NonNullable<GiftModal>) {
@@ -190,7 +194,31 @@ export default function HomePage() {
   }
 
 
+  useEffect(() => {
+    let debounceTimer: ReturnType<typeof setTimeout>
+    
+    const observers = sectionRefs.current.map((ref, i) => {
+      if (!ref) return null
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            clearTimeout(debounceTimer)
+            debounceTimer = setTimeout(() => {
+              setPhotoIndex(i % 3)
+            }, 100)
+          }
+        },
+        { threshold: 0.5, rootMargin: '-10% 0px -10% 0px' }
+      )
+      observer.observe(ref)
+      return observer
+    })
 
+    return () => {
+      observers.forEach((o) => o?.disconnect())
+      clearTimeout(debounceTimer)
+    }
+  }, [guest])
 
   useEffect(() => {
     const stored = sessionStorage.getItem('guest')
@@ -316,11 +344,11 @@ export default function HomePage() {
 
   return (
     <main key={langKey} className="animate-fade-switch min-h-screen p-6 max-w-lg mx-auto space-y-12">
-
+      <BackgroundPhoto />
       <LanguageSwitcher lang={guest.language} onSwitch={switchLanguage} />
 
       {/* Welcome */}
-      <section className="min-h-screen flex flex-col items-center justify-center text-center space-y-6 pt-8">
+      <section ref={(el) => { sectionRefs.current[0] = el }} className="min-h-screen flex flex-col items-center justify-center text-center space-y-6 pt-8">
         <div className="flex items-center justify-center gap-3">
           <div className="h-px w-12 bg-gray-400" />
           <p className="text-sm text-gray-400 tracking-widest">
@@ -329,34 +357,48 @@ export default function HomePage() {
           <div className="h-px w-12 bg-gray-400" />
         </div>
 
-        <div className="w-full">
-          {/* Parents */}
-          <div className="flex justify-between px-1 mb-8 text-sm text-gray-400">
-            <div className="text-left">
-              <p>Eliana Yun</p>
-              <p>Sergio Masuda</p>
-            </div>
-            <div className="text-right">
-              <p>Alice Chen</p>
-              <p>Duilio Alba</p>
-            </div>
-          </div>
+        <div className="w-full flex flex-col items-center">
+  <div className="relative">
+    {/* Mobile parents - above names */}
+    <div className="flex justify-between sm:hidden text-sm text-gray-400 mb-1 gap-16">
+      <div className="text-left">
+        <p>Eliana Yun</p>
+        <p>Sergio Masuda</p>
+      </div>
+      <div className="text-right">
+        <p>Alice Chen</p>
+        <p>Duilio Alba</p>
+      </div>
+    </div>
 
-          {/* Names */}
-          <h1
-            style={{ fontFamily: "'Playfair Display', serif" }}
-            className="text-5xl sm:text-7xl italic leading-tight"
-          >
-            <span className="hidden sm:inline whitespace-nowrap">Pamella & Lucas</span>
-            <span className="sm:hidden">
-              Pamella
-              <br />
-              &amp;
-              <br />
-              Lucas
-            </span>
-          </h1>
-        </div>
+    {/* Names */}
+    <h1
+      style={{ fontFamily: "'Playfair Display', serif" }}
+      className="text-5xl sm:text-7xl italic leading-tight text-center"
+    >
+      <span className="hidden sm:inline whitespace-nowrap">Pamella & Lucas</span>
+      <span className="sm:hidden text-center block">
+        Pamella
+        <br />
+        &amp;
+        <br />
+        Lucas
+      </span>
+    </h1>
+
+    {/* Desktop parents - absolutely positioned above each name */}
+    <div className="hidden sm:flex absolute -top-8 w-full justify-between text-sm text-gray-400">
+      <div className="text-left">
+        <p>Eliana Yun</p>
+        <p>Sergio Masuda</p>
+      </div>
+      <div className="text-right">
+        <p>Alice Chen</p>
+        <p>Duilio Alba</p>
+      </div>
+    </div>
+  </div>
+</div>
 
         <div className="space-y-3">
           <p className="text-gray-500 text-lg">{t.subtitle}</p>
@@ -365,31 +407,33 @@ export default function HomePage() {
       </section>
 
       {/* Countdown */}
-      <section className="space-y-3 relative">
-        <h2 className="text-xl font-semibold text-center">{t.countdown}</h2>
-        <div className="flex justify-center gap-4 text-center">
-          {[
-            { value: timeLeft.days, label: t.days },
-            { value: timeLeft.hours, label: t.hours },
-            { value: timeLeft.minutes, label: t.minutes },
-            { value: timeLeft.seconds, label: t.seconds },
-          ].map(({ value, label }) => (
-            <div key={label} className="flex flex-col items-center">
-              <span className="text-3xl font-bold">{String(value).padStart(2, '0')}</span>
-              <span className="text-xs text-gray-500">{label}</span>
-            </div>
-          ))}
+<section ref={(el) => { sectionRefs.current[1] = el }} className="space-y-3">
+  <h2 className="text-xl font-semibold text-center">{t.countdown}</h2>
+  <div className="relative flex justify-center max-w-sm mx-auto">
+    <img
+      src="/assets/pikachu_run.gif"
+      alt="Pikachu"
+      className="w-16 absolute left-0 bottom-0"
+      style={{ imageRendering: 'pixelated' }}
+    />
+    <div className="flex gap-4 text-center">
+      {[
+        { value: timeLeft.days, label: t.days },
+        { value: timeLeft.hours, label: t.hours },
+        { value: timeLeft.minutes, label: t.minutes },
+        { value: timeLeft.seconds, label: t.seconds },
+      ].map(({ value, label }) => (
+        <div key={label} className="flex flex-col items-center">
+          <span className="text-3xl font-bold">{String(value).padStart(2, '0')}</span>
+          <span className="text-xs text-gray-500">{label}</span>
         </div>
-        <img
-          src="/assets/pikachu_run.gif"
-          alt="Pikachu"
-          className="w-16 absolute -bottom-0 left-9"
-          style={{ imageRendering: 'pixelated' }}
-        />
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* Event info */}
-      <section className="space-y-2 text-center">
+      <section ref={(el) => { sectionRefs.current[2] = el }} className="space-y-2 text-center">
         <h2 className="text-3xl font-semibold">{t.eventTitle}</h2>
         <p className="text-2xl text-gray-500">{t.eventDate}</p>
         <p className="text-2xl font-medium">{t.eventLocation}</p>
@@ -408,7 +452,7 @@ export default function HomePage() {
       </section>
 
       {/* RSVP */}
-      <section className="space-y-4">
+      <section ref={(el) => { sectionRefs.current[3] = el }} className="space-y-4">
         <h2 className="text-xl font-semibold">{t.rsvpTitle}</h2>
 
         {/* Size system selector */}
@@ -520,7 +564,7 @@ export default function HomePage() {
         })}
       </section>
       {/* Gifts */}
-      <section className="space-y-6">
+      <section ref={(el) => { sectionRefs.current[4] = el }} className="space-y-6">
         <h2 className="text-xl font-semibold">{t.giftsTitle}</h2>
 
         {/* Experience gifts */}
