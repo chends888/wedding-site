@@ -11,37 +11,42 @@ const PHOTOS = [
 const INTERVAL = 6000
 
 export default function BackgroundPhoto() {
-  const [current, setCurrent] = useState(0)
-  const [next, setNext] = useState(1)
-  const [fading, setFading] = useState(false)
+  const [topIndex, setTopIndex] = useState(0)
+  const [bottomIndex, setBottomIndex] = useState(1)
+  const [topVisible, setTopVisible] = useState(true)
+
+  useEffect(() => {
+    PHOTOS.forEach((src) => {
+      const img = new Image()
+      img.src = src
+    })
+  }, [])
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setFading(true)
-      setTimeout(() => {
-        setCurrent((prev) => (prev + 1) % PHOTOS.length)
-        setNext((prev) => (prev + 1) % PHOTOS.length)
-        setFading(false)
-      }, 1000)
+      if (topVisible) {
+        setBottomIndex((topIndex + 1) % PHOTOS.length)
+        setTopVisible(false)
+      } else {
+        setTopIndex((bottomIndex + 1) % PHOTOS.length)
+        setTopVisible(true)
+      }
     }, INTERVAL)
-
     return () => clearInterval(timer)
-  }, [])
+  }, [topVisible, topIndex, bottomIndex])
 
   return (
-    <div className="fixed inset-0 -z-10">
-      {/* Next photo sits behind */}
+    <div className="fixed top-0 left-0 w-screen h-screen -z-10">
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${PHOTOS[next]})` }}
+        style={{ backgroundImage: `url(${PHOTOS[bottomIndex]})` }}
       />
-      {/* Current photo fades out on top */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `url(${PHOTOS[current]})`,
-          opacity: fading ? 0 : 1,
-          transition: 'opacity 1000ms ease-in-out',
+          backgroundImage: `url(${PHOTOS[topIndex]})`,
+          opacity: topVisible ? 1 : 0,
+          transition: 'opacity 1500ms ease-in-out',
         }}
       />
       <div className="absolute inset-0 bg-black/60" />
