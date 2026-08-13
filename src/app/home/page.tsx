@@ -52,7 +52,7 @@ const texts = {
   pt: {
     welcome: (name: string) => `Olá, ${name}!`,
     subtitle: 'Convidam para a celebração de seu casamento. 💍',
-    subtitle2: 'Ficaremos muito felizes em ter você conosco neste dia tão especial.',
+    subtitle2: 'Ficaremos muito felizes em ter você neste dia tão especial.',
     rsvpTitle: 'Confirmar presença',
     confirm: 'Confirmar',
     decline: 'Não vou',
@@ -348,63 +348,60 @@ export default function HomePage() {
       <LanguageSwitcher lang={guest.language} onSwitch={switchLanguage} />
 
       {/* Welcome */}
-      <section ref={(el) => { sectionRefs.current[0] = el }} className="min-h-screen flex flex-col items-center justify-center text-center space-y-6 pt-8">
-        <div className="flex items-center justify-center gap-3">
-          <div className="h-px w-12 bg-gray-400" />
-          <p className="text-sm text-gray-400 tracking-widest">
-            {currentLang === 'pt' ? '19.06.2027' : '06.19.2027'}
-          </p>
-          <div className="h-px w-12 bg-gray-400" />
+<section ref={(el) => { sectionRefs.current[0] = el }} className="min-h-screen flex flex-col items-center justify-center text-center space-y-6 -mt-12">
+  <div className="flex items-center justify-center gap-3">
+    <div className="h-px w-12 bg-gray-400" />
+    <p className="text-sm text-gray-400 tracking-widest">
+      {currentLang === 'pt' ? '19.06.2027' : '06.19.2027'}
+    </p>
+    <div className="h-px w-12 bg-gray-400" />
+  </div>
+
+  <div className="w-full flex flex-col items-center">
+    <div className="relative">
+      <div className="flex justify-between md:hidden text-sm text-gray-400 mb-1 gap-16">
+        <div className="text-left">
+          <p>Eliana Yun</p>
+          <p>Sergio Masuda</p>
         </div>
-
-        <div className="w-full flex flex-col items-center">
-  <div className="relative">
-    {/* Mobile parents - above names */}
-    <div className="flex justify-between sm:hidden text-sm text-gray-400 mb-1 gap-16">
-      <div className="text-left">
-        <p>Eliana Yun</p>
-        <p>Sergio Masuda</p>
+        <div className="text-right">
+          <p>Alice Chen</p>
+          <p>Duilio Alba</p>
+        </div>
       </div>
-      <div className="text-right">
-        <p>Alice Chen</p>
-        <p>Duilio Alba</p>
-      </div>
-    </div>
 
-    {/* Names */}
-    <h1
-      style={{ fontFamily: "'Playfair Display', serif" }}
-      className="text-5xl sm:text-7xl italic leading-tight text-center"
-    >
-      <span className="hidden sm:inline whitespace-nowrap">Pamella & Lucas</span>
-      <span className="sm:hidden text-center block">
-        Pamella
-        <br />
-        &amp;
-        <br />
-        Lucas
-      </span>
-    </h1>
+      <h1
+        style={{ fontFamily: "'Playfair Display', serif" }}
+        className="text-6xl md:text-8xl italic leading-tight text-center"
+      >
+        <span className="hidden md:inline whitespace-nowrap">Pamella & Lucas</span>
+        <span className="md:hidden text-center block">
+          Pamella
+          <br />
+          &amp;
+          <br />
+          Lucas
+        </span>
+      </h1>
 
-    {/* Desktop parents - absolutely positioned above each name */}
-    <div className="hidden sm:flex absolute -top-8 w-full justify-between text-sm text-gray-400">
-      <div className="text-left">
-        <p>Eliana Yun</p>
-        <p>Sergio Masuda</p>
-      </div>
-      <div className="text-right">
-        <p>Alice Chen</p>
-        <p>Duilio Alba</p>
+      <div className="hidden md:flex absolute -top-8 w-full justify-between text-sm text-gray-400">
+        <div className="text-left">
+          <p>Eliana Yun</p>
+          <p>Sergio Masuda</p>
+        </div>
+        <div className="text-right">
+          <p>Alice Chen</p>
+          <p>Duilio Alba</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-        <div className="space-y-3">
-          <p className="text-gray-500 text-lg">{t.subtitle}</p>
-          <p className="text-gray-500">{t.subtitle2}</p>
-        </div>
-      </section>
+  <div className="space-y-3 w-screen px-6 text-center">
+  <p className="text-gray-300 text-lg">{t.subtitle}</p>
+  <p className="text-gray-300">{t.subtitle2}</p>
+</div>
+</section>
 
       {/* Countdown */}
 <section ref={(el) => { sectionRefs.current[1] = el }} className="space-y-3">
