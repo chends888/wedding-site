@@ -49,7 +49,7 @@ export default function BackgroundPhoto() {
           transition: 'opacity 1500ms ease-in-out',
         }}
       />
-      <div className="absolute inset-0 bg-black/60" />
+      <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]" />
     </div>
   )
 }

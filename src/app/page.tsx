@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import BackgroundPhoto from '@/components/BackgroundPhoto'
 
 
 const texts = {
@@ -74,7 +75,7 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
-
+      <BackgroundPhoto />
       {/* Language switcher */}
       <LanguageSwitcher lang={lang} onSwitch={handleLangSwitch} />
 
