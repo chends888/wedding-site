@@ -17,7 +17,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Pamella & Lucas',
-  description: 'Wedding website',
+  description: 'Casamento de Pamella e Lucas - 19 de junho de 2027',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/manifest.json',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
