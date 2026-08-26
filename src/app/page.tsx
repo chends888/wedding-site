@@ -82,7 +82,7 @@ export default function LoginPage() {
       <div key={langKey} className="animate-fade-switch w-full max-w-sm space-y-4">
         <h1
           style={{ fontFamily: "'Playfair Display', serif" }}
-          className="text-8xl italic text-center leading-tight"
+          className="text-8xl italic text-center leading-tight text-shadow-lg text-stroke-lg"
         >
           Pamella
           <br />
@@ -90,7 +90,7 @@ export default function LoginPage() {
           <br />
           Lucas
         </h1>
-        <p className="text-center text-gray-500">{text.subtitle}</p>
+        <p className="text-center text-gray-200 text-shadow text-stroke">{text.subtitle}</p>
 
         <input
           type="tel"
@@ -98,15 +98,15 @@ export default function LoginPage() {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && !loading && !!phone && handleSubmit()}
-          className="w-full border rounded-lg px-4 py-3 text-lg bg-transparent text-white placeholder-gray-400 border-gray-400"
+          className="w-full border rounded-lg px-4 py-3 text-lg bg-transparent text-white placeholder-gray-400 border-gray-400 text-shadow text-stroke"
         />
 
-        {hasError && <p className="text-red-500 text-sm text-center">{text.error}</p>}
+        {hasError && <p className="text-red-500 text-sm text-center text-stroke bold-text text-shadow">{text.error}</p>}
 
         <button
           onClick={handleSubmit}
           disabled={loading || !phone}
-          className="w-full bg-white text-black rounded-lg px-4 py-3 text-lg disabled:opacity-50 btn-pop"
+          className="w-full bg-white rounded-lg px-4 py-3 text-lg disabled:opacity-50 btn-pop text-stroke bold-text"
         >
           {loading ? text.loading : text.button}
         </button>

@@ -22,7 +22,7 @@ export default function LanguageSwitcher({ lang, onSwitch }: Props) {
         {/* PT Label */}
         <span
           className={`relative z-10 w-16 text-center py-0.5 rounded-full text-sm text-stroke bold-text transition-colors duration-300 ${
-            lang === 'pt' ? 'text-black/80' : 'text-white hover:bg-white/10'
+            lang === 'pt' ? 'text-white' : 'text-white hover:bg-white/10'
           }`}
         >
           🇧🇷 PT
@@ -31,7 +31,7 @@ export default function LanguageSwitcher({ lang, onSwitch }: Props) {
         {/* EN Label */}
         <span
           className={`relative z-10 w-16 text-center py-0.5 rounded-full text-sm text-stroke bold-text transition-colors duration-300 ${
-            lang === 'en' ? 'text-black/80' : 'text-white hover:bg-white/10'
+            lang === 'en' ? 'text-white' : 'text-white hover:bg-white/10'
           }`}
         >
           🇺🇸 EN

@@ -412,7 +412,7 @@ export default function HomePage() {
                 key={sys}
                 onClick={() => setSizeSystem(sys)}
                 className={`px-3 py-1 rounded-lg text-sm border btn-pop text-stroke ${
-                  sizeSystem === sys ? 'bg-white text-black/80 border-white' : 'border-white/40 text-white bg-black/30 hover:bg-white/10'
+                  sizeSystem === sys ? 'bg-white text-white border-white' : 'border-white/40 text-white bg-black/30 hover:bg-white/10'
                 }`}
               >
                 {sys}

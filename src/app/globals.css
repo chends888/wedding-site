@@ -95,16 +95,50 @@ body {
   text-shadow: 0 1px 4px rgba(0, 0, 0, 1), 0 2px 4px rgba(0, 0, 0, 1), 0 4px 8px rgba(0, 0, 0, 1);
 }
 
+.text-stroke {
+  text-shadow: 
+    -1px -1px 0 rgba(0, 0, 0, 0.8),  
+     1px -1px 0 rgba(0, 0, 0, 0.8),
+    -1px  1px 0 rgba(0, 0, 0, 0.8),
+     1px  1px 0 rgba(0, 0, 0, 0.8),
+     0px -1px 0 rgba(0, 0, 0, 0.8),
+     0px  1px 0 rgba(0, 0, 0, 0.8),
+    -1px  0px 0 rgba(0, 0, 0, 0.8),
+     1px  0px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* COMBINED: No spaces between the classes! */
+.text-shadow.text-stroke {
+  text-shadow: 
+    -1px -1px 0 rgba(0, 0, 0, 0.3),  
+     1px -1px 0 rgba(0, 0, 0, 0.3),
+    -1px  1px 0 rgba(0, 0, 0, 0.3),
+     1px  1px 0 rgba(0, 0, 0, 0.3),
+     0px -1px 0 rgba(0, 0, 0, 0.3),
+     0px  1px 0 rgba(0, 0, 0, 0.3),
+    -1px  0px 0 rgba(0, 0, 0, 0.3),
+     1px  0px 0 rgba(0, 0, 0, 0.3),
+     0 1px 4px rgba(0, 0, 0, 1), 
+     0 2px 4px rgba(0, 0, 0, 1), 
+     0 4px 8px rgba(0, 0, 0, 1);
+}
+
 .text-shadow-lg {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-.text-stroke {
-  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.5);
-}
-
-.text-stroke-lg {
-  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.8);
+.text-shadow-lg.text-stroke-lg {
+  text-shadow: 
+    -2px -2px 0 rgba(0, 0, 0, 0.6),  
+     2px -2px 0 rgba(0, 0, 0, 0.6),
+    -2px  2px 0 rgba(0, 0, 0, 0.6),
+     2px  2px 0 rgba(0, 0, 0, 0.6),
+     0px -2px 0 rgba(0, 0, 0, 0.6),
+     0px  2px 0 rgba(0, 0, 0, 0.6),
+    -2px  0px 0 rgba(0, 0, 0, 0.6),
+     2px  0px 0 rgba(0, 0, 0, 0.6),
+     0 2px 8px rgba(0, 0, 0, 0.9), 
+     0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .bold-text {
