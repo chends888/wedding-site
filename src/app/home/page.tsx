@@ -6,7 +6,6 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import SizeDropdown from '@/components/SizeDropdown'
 import BackgroundPhoto from '@/components/BackgroundPhoto'
 
-
 type Guest = {
   id: string
   name: string
@@ -21,7 +20,6 @@ type MemberRsvp = {
 }
 
 type RsvpState = Record<string, MemberRsvp>
-
 
 type SizeSystem = 'BR' | 'EU' | 'US' | 'CN' | 'AU' | 'cm'
 
@@ -74,7 +72,8 @@ const texts = {
     seconds: 'segundos',
     giftsTitle: 'Presentes',
     experienceGifts: 'Experiências',
-    wishlists: 'Listas de presentes',
+    furnitureGifts: 'Móveis e decoração',
+    wishlists: 'Listas de produtos',
     custom: 'Outro valor',
     close: 'Fechar',
     scanQr: 'Escaneie o QR code ou copie a chave PIX',
@@ -85,7 +84,6 @@ const texts = {
     eventDate: '19 de junho de 2027 • 19h à 1h',
     eventLocation: 'Espaço Antakya',
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
-
   },
   en: {
     welcome: (name: string) => `Hi, ${name}!`,
@@ -112,7 +110,8 @@ const texts = {
     seconds: 'seconds',
     giftsTitle: 'Gifts',
     experienceGifts: 'Experiences',
-    wishlists: 'Gift lists',
+    furnitureGifts: 'Furniture and decoration',
+    wishlists: 'Product lists',
     custom: 'Custom amount',
     close: 'Close',
     scanQr: 'Scan the QR code or copy the PIX key',
@@ -139,33 +138,25 @@ const EXPERIENCE_GIFTS = [
     descPt: 'Ajude a tornar nossa lua de mel inesquecível.',
     descEn: 'Help make our honeymoon unforgettable.',
   },
+]
+
+const FURNITURE_GIFTS = [
   {
     id: 'home',
-    namePt: 'Contribua para mobiliar nosso lar',
-    nameEn: 'Contribute to furnish our home',
+    namePt: 'Contribua para mobiliar e decorar o nosso lar',
+    nameEn: 'Contribute to furnish and decorate our home',
     descPt: 'Ajude a construir nosso cantinho.',
     descEn: 'Help us build our home together.',
   },
 ]
 
 const WISHLISTS = [
-  {
-    id: 'amazon',
-    name: 'Amazon',
-    url: 'https://amazon.com.br',
-    placeholder: true,
-  },
-  {
-    id: 'camicado',
-    name: 'Camicado',
-    url: 'https://camicado.com.br',
-    placeholder: true,
-  },
+  { id: 'amazon', name: 'Amazon', url: 'https://amazon.com.br', placeholder: true },
+  { id: 'camicado', name: 'Camicado', url: 'https://camicado.com.br', placeholder: true },
 ]
 
 const VALUES = [50, 100, 200]
 const PIX_KEY = 'seu-pix@email.com'
-
 
 export default function HomePage() {
   const [guest, setGuest] = useState<Guest | null>(null)
@@ -173,15 +164,14 @@ export default function HomePage() {
   const [copied, setCopied] = useState(false)
   const router = useRouter()
   const autoSaveTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({})
-  const [modal, setModal] = useState<GiftModal>(null)
-  const [modalClosing, setModalClosing] = useState(false)
   const [collapsing, setCollapsing] = useState<Record<string, boolean>>({})
   const [modalVisible, setModalVisible] = useState(false)
   const [modalContent, setModalContent] = useState<GiftModal>(null)
   const [sizeSystem, setSizeSystem] = useState<SizeSystem>('BR')
   const [photoIndex, setPhotoIndex] = useState(0)
   const sectionRefs = useRef<(HTMLElement | null)[]>([])
-
+  const [langKey, setLangKey] = useState(0)
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 
   function openModal(data: NonNullable<GiftModal>) {
     setModalContent(data)
@@ -193,19 +183,15 @@ export default function HomePage() {
     setTimeout(() => setModalContent(null), 200)
   }
 
-
   useEffect(() => {
     let debounceTimer: ReturnType<typeof setTimeout>
-    
     const observers = sectionRefs.current.map((ref, i) => {
       if (!ref) return null
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
             clearTimeout(debounceTimer)
-            debounceTimer = setTimeout(() => {
-              setPhotoIndex(i % 3)
-            }, 100)
+            debounceTimer = setTimeout(() => setPhotoIndex(i % 3), 100)
           }
         },
         { threshold: 0.5, rootMargin: '-10% 0px -10% 0px' }
@@ -213,7 +199,6 @@ export default function HomePage() {
       observer.observe(ref)
       return observer
     })
-
     return () => {
       observers.forEach((o) => o?.disconnect())
       clearTimeout(debounceTimer)
@@ -222,37 +207,23 @@ export default function HomePage() {
 
   useEffect(() => {
     const stored = sessionStorage.getItem('guest')
-    if (!stored) {
-      router.push('/')
-      return
-    }
+    if (!stored) { router.push('/'); return }
     const g = JSON.parse(stored) as Guest
     setGuest(g)
     fetchRsvp(g)
   }, [router])
 
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (guest) autoSaveAll()
-    }
+    const handleBeforeUnload = () => { if (guest) autoSaveAll() }
     window.addEventListener('beforeunload', handleBeforeUnload)
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [guest, rsvp])
 
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
-
   useEffect(() => {
-    const weddingDate = new Date('2027-06-19T22:00:00Z') // 7PM UTC-3 = 22:00 UTC
-
+    const weddingDate = new Date('2027-06-19T22:00:00Z')
     function update() {
-      const now = new Date()
-      const diff = weddingDate.getTime() - now.getTime()
-
-      if (diff <= 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 })
-        return
-      }
-
+      const diff = weddingDate.getTime() - new Date().getTime()
+      if (diff <= 0) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 }); return }
       setTimeLeft({
         days: Math.floor(diff / (1000 * 60 * 60 * 24)),
         hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
@@ -260,7 +231,6 @@ export default function HomePage() {
         seconds: Math.floor((diff / 1000) % 60),
       })
     }
-
     update()
     const interval = setInterval(update, 1000)
     return () => clearInterval(interval)
@@ -297,18 +267,12 @@ export default function HomePage() {
   }
 
   function autoSaveAll() {
-    for (const [id, data] of Object.entries(rsvp)) {
-      saveMember(id, data)
-    }
+    for (const [id, data] of Object.entries(rsvp)) saveMember(id, data)
   }
 
   function scheduleAutoSave(guestId: string, data: MemberRsvp) {
-    if (autoSaveTimers.current[guestId]) {
-      clearTimeout(autoSaveTimers.current[guestId])
-    }
-    autoSaveTimers.current[guestId] = setTimeout(() => {
-      saveMember(guestId, data)
-    }, 1000)
+    if (autoSaveTimers.current[guestId]) clearTimeout(autoSaveTimers.current[guestId])
+    autoSaveTimers.current[guestId] = setTimeout(() => saveMember(guestId, data), 1000)
   }
 
   function updateMember(guestId: string, updates: Partial<MemberRsvp>) {
@@ -318,14 +282,6 @@ export default function HomePage() {
       return { ...prev, [guestId]: updated }
     })
   }
-
-  function copyPix() {
-    navigator.clipboard.writeText(PIX_KEY)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
-  const [langKey, setLangKey] = useState(0)
 
   function switchLanguage(newLang: 'pt' | 'en') {
     const stored = sessionStorage.getItem('guest')
@@ -343,99 +299,95 @@ export default function HomePage() {
   const currentLang = guest.language
 
   return (
-    <main key={langKey} className="animate-fade-switch min-h-screen p-6 max-w-lg mx-auto space-y-12">
+    <main key={langKey} className="animate-fade-switch min-h-screen p-6 max-w-lg mx-auto space-y-12 text-white">
       <BackgroundPhoto />
       <LanguageSwitcher lang={guest.language} onSwitch={switchLanguage} />
 
       {/* Welcome */}
-<section ref={(el) => { sectionRefs.current[0] = el }} className="min-h-screen flex flex-col items-center justify-center text-center space-y-6 -mt-12">
-  <div className="flex items-center justify-center gap-3">
-    <div className="h-px w-12 bg-gray-400" />
-    <p className="text-sm text-gray-400 tracking-widest">
-      {currentLang === 'pt' ? '19.06.2027' : '06.19.2027'}
-    </p>
-    <div className="h-px w-12 bg-gray-400" />
-  </div>
-
-  <div className="w-full flex flex-col items-center">
-    <div className="relative">
-      <div className="flex justify-between md:hidden text-sm text-gray-400 mb-1 gap-16">
-        <div className="text-left">
-          <p>Eliana Yun</p>
-          <p>Sergio Masuda</p>
+      <section ref={(el) => { sectionRefs.current[0] = el }} className="min-h-screen flex flex-col items-center justify-center text-center space-y-6 -mt-12">
+        <div className="flex items-center justify-center gap-3">
+          <div className="h-px w-12 bg-gray-400 shadow-[0_1px_2px_0_rgba(0,0,0,1)] shadow-[0_2px_4px_0_rgba(0,0,0,1)]" />
+          <p className="font-medium text-white tracking-widest text-shadow text-stroke bold-text">
+            {currentLang === 'pt' ? '19.06.2027' : '06.19.2027'}
+          </p>
+          <div className="h-px w-12 bg-gray-400 shadow-[0_1px_2px_0_rgba(0,0,0,1)] shadow-[0_2px_4px_0_rgba(0,0,0,1)]" />
         </div>
-        <div className="text-right">
-          <p>Alice Chen</p>
-          <p>Duilio Alba</p>
-        </div>
-      </div>
 
-      <h1
-        style={{ fontFamily: "'Playfair Display', serif" }}
-        className="text-6xl md:text-8xl italic leading-tight text-center"
-      >
-        <span className="hidden md:inline whitespace-nowrap">Pamella & Lucas</span>
-        <span className="md:hidden text-center block">
-          Pamella
-          <br />
-          &amp;
-          <br />
-          Lucas
-        </span>
-      </h1>
+        <div className="w-full flex flex-col items-center">
+          <div className="relative">
+            <div className="flex justify-between md:hidden font-medium text-white mb-1 gap-16 text-shadow text-stroke bold-text">
+              <div className="text-left">
+                <p>Eliana Yun</p>
+                <p>Sergio Masuda</p>
+              </div>
+              <div className="text-right">
+                <p>Alice Chen</p>
+                <p>Duilio Alba</p>
+              </div>
+            </div>
 
-      <div className="hidden md:flex absolute -top-8 w-full justify-between text-sm text-gray-400">
-        <div className="text-left">
-          <p>Eliana Yun</p>
-          <p>Sergio Masuda</p>
-        </div>
-        <div className="text-right">
-          <p>Alice Chen</p>
-          <p>Duilio Alba</p>
-        </div>
-      </div>
-    </div>
-  </div>
+            <h1
+              style={{ fontFamily: "'Playfair Display', serif" }}
+              className="text-6xl md:text-8xl italic leading-tight text-center text-white text-shadow-lg text-stroke-lg"
+            >
+              <span className="hidden md:inline whitespace-nowrap">Pamella & Lucas</span>
+              <span className="md:hidden text-center block">
+                Pamella<br />&amp;<br />Lucas
+              </span>
+            </h1>
 
-  <div className="space-y-3 w-screen px-6 text-center">
-  <p className="text-gray-300 text-lg">{t.subtitle}</p>
-  <p className="text-gray-300">{t.subtitle2}</p>
-</div>
-</section>
+            <div className="hidden md:flex absolute -top-8 w-full justify-between font-medium text-white text-shadow text-stroke bold-text">
+              <div className="text-left">
+                <p>Eliana Yun</p>
+                <p>Sergio Masuda</p>
+              </div>
+              <div className="text-right">
+                <p>Alice Chen</p>
+                <p>Duilio Alba</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3 w-screen px-6 text-center">
+          <p className="text-gray-200 text-2xl text-shadow text-stroke">{t.subtitle}</p>
+          <p className="text-gray-200 text-xl text-shadow text-stroke">{t.subtitle2}</p>
+        </div>
+      </section>
 
       {/* Countdown */}
-<section ref={(el) => { sectionRefs.current[1] = el }} className="space-y-3">
-  <h2 className="text-xl font-semibold text-center">{t.countdown}</h2>
-  <div className="relative flex justify-center max-w-sm mx-auto">
-    <img
-      src="/assets/pikachu_run.gif"
-      alt="Pikachu"
-      className="w-16 absolute left-0 bottom-0"
-      style={{ imageRendering: 'pixelated' }}
-    />
-    <div className="flex gap-4 text-center">
-      {[
-        { value: timeLeft.days, label: t.days },
-        { value: timeLeft.hours, label: t.hours },
-        { value: timeLeft.minutes, label: t.minutes },
-        { value: timeLeft.seconds, label: t.seconds },
-      ].map(({ value, label }) => (
-        <div key={label} className="flex flex-col items-center">
-          <span className="text-3xl font-bold">{String(value).padStart(2, '0')}</span>
-          <span className="text-xs text-gray-500">{label}</span>
+      <section ref={(el) => { sectionRefs.current[1] = el }} className="space-y-3">
+        <h2 className="text-4xl font-semibold text-center text-white text-shadow text-stroke">{t.countdown}</h2>
+        <div className="relative flex justify-center max-w-sm mx-auto">
+          <img
+            src="/assets/pikachu_run.gif"
+            alt="Pikachu"
+            className="w-16 absolute left-0 bottom-0"
+            style={{ imageRendering: 'pixelated' }}
+          />
+          <div className="flex gap-4 text-center bold-text">
+            {[
+              { value: timeLeft.days, label: t.days },
+              { value: timeLeft.hours, label: t.hours },
+              { value: timeLeft.minutes, label: t.minutes },
+              { value: timeLeft.seconds, label: t.seconds },
+            ].map(({ value, label }) => (
+              <div key={label} className="flex flex-col items-center">
+                <span className="text-3xl font-bold text-white text-shadow text-stroke">{String(value).padStart(2, '0')}</span>
+                <span className="text-xs text-gray-300 text-shadow text-stroke">{label}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* Event info */}
       <section ref={(el) => { sectionRefs.current[2] = el }} className="space-y-2 text-center">
-        <h2 className="text-3xl font-semibold">{t.eventTitle}</h2>
-        <p className="text-2xl text-gray-500">{t.eventDate}</p>
-        <p className="text-2xl font-medium">{t.eventLocation}</p>
-        <p className="text-xl text-gray-500">{t.eventAddress}</p>
-        <div className="rounded-lg overflow-hidden border mt-2">
+        <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.eventTitle}</h2>
+        <p className="text-2xl text-gray-300 text-shadow text-stroke">{t.eventDate}</p>
+        <p className="text-2xl font-medium text-white text-shadow text-stroke">{t.eventLocation}</p>
+        <p className="text-xl text-gray-300 text-shadow text-stroke">{t.eventAddress}</p>
+        <div className="rounded-lg overflow-hidden border border-white/30 mt-2">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.7988001165277!2d-46.64274292572889!3d-23.575668578789994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce593cee87c9b7%3A0x9823b8d680d4ac66!2sEspaco%20Antakya!5e0!3m2!1sen!2sus!4v1784762474177!5m2!1sen!2sus"
             width="100%"
@@ -450,18 +402,17 @@ export default function HomePage() {
 
       {/* RSVP */}
       <section ref={(el) => { sectionRefs.current[3] = el }} className="space-y-4">
-        <h2 className="text-xl font-semibold">{t.rsvpTitle}</h2>
+        <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.rsvpTitle}</h2>
 
-        {/* Size system selector */}
         <div className="space-y-1">
-          <label className="text-sm text-gray-500">{t.sizeSystem}</label>
-          <div className="flex flex-wrap gap-2">
+          <label className="text-xl text-gray-300 text-shadow text-stroke bold-text">{t.sizeSystem}</label>
+          <div className="flex flex-wrap gap-2 bold-text">
             {(['BR', 'EU', 'US', 'CN', 'AU', 'cm'] as SizeSystem[]).map((sys) => (
               <button
                 key={sys}
                 onClick={() => setSizeSystem(sys)}
-                className={`px-3 py-1 rounded-lg text-xs border btn-pop ${
-                  sizeSystem === sys ? 'bg-black text-white' : 'hover:bg-gray-50'
+                className={`px-3 py-1 rounded-lg text-sm border btn-pop text-stroke ${
+                  sizeSystem === sys ? 'bg-white text-black/80 border-white' : 'border-white/40 text-white bg-black/30 hover:bg-white/10'
                 }`}
               >
                 {sys}
@@ -469,21 +420,21 @@ export default function HomePage() {
             ))}
           </div>
         </div>
+
         {guest.members.map((member) => {
           const r = rsvp[member.id]
           if (!r) return null
-
           const showShoeSizeError = r.confirmed === true && !r.shoe_size
 
           return (
-            <div key={member.id} className="border rounded-lg p-4 space-y-3">
+            <div key={member.id} className="border border-white/30 rounded-lg p-4 space-y-3 bg-black/30">
               <div className="flex items-center justify-between">
-                <span className="font-medium">{member.name}</span>
+                <span className="font-medium text-white text-stroke bold-text">{member.name}</span>
                 <div className="flex gap-2">
                   <button
                     onClick={() => updateMember(member.id, { confirmed: true })}
-                    className={`px-3 py-1 rounded-lg text-sm btn-pop ${
-                      r.confirmed === true ? 'bg-green-500 text-white' : 'border hover:bg-gray-50'
+                    className={`px-3 py-1 rounded-lg text-sm btn-pop text-stroke bold-text ${
+                      r.confirmed === true ? 'bg-green-500 text-white' : 'border border-white/40 text-white hover:bg-white/10'
                     }`}
                   >
                     {t.confirm}
@@ -496,8 +447,8 @@ export default function HomePage() {
                         setCollapsing((prev) => ({ ...prev, [member.id]: false }))
                       }, 200)
                     }}
-                    className={`px-3 py-1 rounded-lg text-sm btn-pop ${
-                      r.confirmed === false ? 'bg-red-500 text-white' : 'border hover:bg-gray-50'
+                    className={`px-3 py-1 rounded-lg text-sm btn-pop text-stroke bold-text ${
+                      r.confirmed === false ? 'bg-red-500 text-white' : 'border border-white/40 text-white hover:bg-white/10'
                     }`}
                   >
                     {t.decline}
@@ -509,19 +460,16 @@ export default function HomePage() {
                 <div className={`space-y-3 pt-1 ${collapsing[member.id] ? 'animate-fade-out-up' : 'animate-fade-in-down'}`}>
                   {member.is_child && (
                     <div>
-                      <label className="text-sm text-gray-500">{t.ageRange}</label>
+                      <label className="text-medium text-gray-300 text-stroke bold-text">{t.ageRange}</label>
                       <div className="flex flex-col gap-2 mt-1">
                         {(['0-7', '8-10', '11+'] as const).map((range, i) => (
-                          <label key={range} className="flex items-center gap-2 text-sm">
+                          <label key={range} className="flex items-center gap-2 text-sm text-white text-stroke bold-text">
                             <input
                               type="radio"
                               name={`age-${member.id}`}
                               value={range}
                               checked={r.age_range === range}
-                              onChange={() => updateMember(member.id, {
-                                age_range: range,
-                                shoe_size: '',
-                              })}
+                              onChange={() => updateMember(member.id, { age_range: range, shoe_size: '' })}
                             />
                             {[t.age1, t.age2, t.age3][i]}
                           </label>
@@ -535,8 +483,7 @@ export default function HomePage() {
                       ? 'opacity-100 max-h-96 overflow-visible'
                       : 'opacity-0 max-h-0 overflow-hidden pointer-events-none'
                   }`}>
-                    <label className="text-sm text-gray-500">{t.shoeSize}</label>
-
+                    <label className="text-medium text-gray-300 text-stroke bold-text">{t.shoeSize}</label>
                     <SizeDropdown
                       value={r.shoe_size}
                       onChange={(val) => updateMember(member.id, { shoe_size: val })}
@@ -544,14 +491,10 @@ export default function HomePage() {
                       options={(member.is_child && r.age_range !== '11+'
                         ? CHILDREN_SIZE_TABLE
                         : SIZE_TABLE
-                      ).map((s) => ({
-                        value: s.value,
-                        label: s[sizeSystem],
-                      }))}
+                      ).map((s) => ({ value: s.value, label: s[sizeSystem] }))}
                     />
-
                     {showShoeSizeError && (
-                      <p className="text-red-500 text-sm mt-1">{t.missingShoeSizeError}</p>
+                      <p className="text-red-400 text-sm mt-1 text-stroke bold-text">{t.missingShoeSizeError}</p>
                     )}
                   </div>
                 </div>
@@ -560,35 +503,58 @@ export default function HomePage() {
           )
         })}
       </section>
+
       {/* Gifts */}
       <section ref={(el) => { sectionRefs.current[4] = el }} className="space-y-6">
-        <h2 className="text-xl font-semibold">{t.giftsTitle}</h2>
+        <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.giftsTitle}</h2>
 
-        {/* Experience gifts */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">{t.experienceGifts}</h3>
+          <h3 className="text-xl font-semibold text-white uppercase tracking-wide text-shadow text-stroke">{t.experienceGifts}</h3>
           {EXPERIENCE_GIFTS.map((gift) => (
-            <div key={gift.id} className="border rounded-lg p-4 space-y-3">
+            <div key={gift.id} className="border border-white/30 rounded-lg p-4 space-y-3 bg-black/30">
               <div>
-                <p className="font-medium">{currentLang === 'pt' ? gift.namePt : gift.nameEn}</p>
-                <p className="text-sm text-gray-500">{currentLang === 'pt' ? gift.descPt : gift.descEn}</p>
+                <p className="font-medium text-white text-stroke bold-text">{currentLang === 'pt' ? gift.namePt : gift.nameEn}</p>
+                <p className="text-sm text-gray-300 text-stroke bold-text">{currentLang === 'pt' ? gift.descPt : gift.descEn}</p>
               </div>
               <div className="flex flex-wrap gap-2">
                 {VALUES.map((value) => (
                   <button
                     key={value}
-                    onClick={() => openModal({
-                      qrCode: `/qr/${gift.id}-${value}.png`,
-                      pixKey: PIX_KEY,
-                    })}
-                    className="border rounded-lg px-4 py-2 text-sm hover:bg-gray-50 btn-pop"
+                    onClick={() => openModal({ qrCode: `/qr/${gift.id}-${value}.png`, pixKey: PIX_KEY })}
+                    className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/10 btn-pop text-stroke bold-text"
                   >
                     R$ {value}
                   </button>
                 ))}
                 <button
                   onClick={() => openModal({ qrCode: null, pixKey: PIX_KEY })}
-                  className="border rounded-lg px-4 py-2 text-sm hover:bg-gray-50 btn-pop"
+                  className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/10 btn-pop text-stroke bold-text"
+                >
+                  {t.custom}
+                </button>
+              </div>
+            </div>
+          ))}
+          <h3 className="text-xl font-semibold text-white uppercase tracking-wide text-shadow text-stroke bold-text">{t.furnitureGifts}</h3>
+          {FURNITURE_GIFTS.map((gift) => (
+            <div key={gift.id} className="border border-white/30 rounded-lg p-4 space-y-3 bg-black/30">
+              <div>
+                <p className="font-medium text-white text-stroke bold-text">{currentLang === 'pt' ? gift.namePt : gift.nameEn}</p>
+                <p className="text-sm text-gray-300 text-stroke bold-text">{currentLang === 'pt' ? gift.descPt : gift.descEn}</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {VALUES.map((value) => (
+                  <button
+                    key={value}
+                    onClick={() => openModal({ qrCode: `/qr/${gift.id}-${value}.png`, pixKey: PIX_KEY })}
+                    className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/10 btn-pop text-stroke bold-text"
+                  >
+                    R$ {value}
+                  </button>
+                ))}
+                <button
+                  onClick={() => openModal({ qrCode: null, pixKey: PIX_KEY })}
+                  className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/10 btn-pop text-stroke bold-text"
                 >
                   {t.custom}
                 </button>
@@ -597,13 +563,12 @@ export default function HomePage() {
           ))}
         </div>
 
-        {/* Wishlists */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">{t.wishlists}</h3>
+          <h3 className="text-xl bold-text text-white uppercase tracking-wide text-shadow text-stroke bold-text">{t.wishlists}</h3>
           {WISHLISTS.map((list) => (
-            <div key={list.id} className="border rounded-lg px-4 py-3 flex items-center justify-between">
-              <span className="font-medium">{list.name}</span>
-              <a href={list.url} target="_blank" rel="noopener noreferrer" className="text-sm border rounded-lg px-3 py-1 hover:bg-gray-50 btn-pop">
+            <div key={list.id} className="border border-white/30 rounded-lg px-4 py-3 flex items-center justify-between bg-black/30">
+              <span className="font-medium text-white text-stroke bold-text">{list.name}</span>
+              <a href={list.url} target="_blank" rel="noopener noreferrer" className="text-sm border border-white/40 text-white rounded-lg px-3 py-1 hover:bg-white/10 btn-pop text-stroke">
                 {'→'}
               </a>
             </div>
@@ -619,7 +584,7 @@ export default function HomePage() {
         onClick={closeModal}
       >
         <div
-          className={`bg-white rounded-2xl p-6 w-full max-w-sm space-y-4 transition-all duration-200 ${
+          className={`bg-white text-black rounded-2xl p-6 w-full max-w-sm space-y-4 transition-all duration-200 ${
             modalVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -634,14 +599,14 @@ export default function HomePage() {
           )}
 
           <div className="border rounded-lg px-4 py-3 flex items-center justify-between">
-            <span className="font-mono text-sm">{modalContent?.pixKey}</span>
+            <span className="font-mono text-sm text-black">{modalContent?.pixKey}</span>
             <button
               onClick={() => {
                 navigator.clipboard.writeText(modalContent?.pixKey || '')
                 setCopied(true)
                 setTimeout(() => setCopied(false), 2000)
               }}
-              className="text-sm border rounded px-3 py-1 hover:bg-gray-50 btn-pop"
+              className="text-sm border rounded px-3 py-1 hover:bg-gray-50 btn-pop text-black"
             >
               {copied ? t.copied : t.copy}
             </button>
@@ -649,13 +614,12 @@ export default function HomePage() {
 
           <button
             onClick={closeModal}
-            className="w-full border rounded-lg px-4 py-2 text-sm hover:bg-gray-50 btn-pop"
+            className="w-full border rounded-lg px-4 py-2 text-sm hover:bg-gray-50 btn-pop text-black"
           >
             {t.close}
           </button>
         </div>
       </div>
-
     </main>
   )
 }

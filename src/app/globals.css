@@ -90,3 +90,23 @@ body {
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
+
+.text-shadow {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 1), 0 2px 4px rgba(0, 0, 0, 1), 0 4px 8px rgba(0, 0, 0, 1);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.text-stroke {
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.5);
+}
+
+.text-stroke-lg {
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.8);
+}
+
+.bold-text {
+  font-weight: bold;
+}

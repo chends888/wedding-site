@@ -74,7 +74,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="h-screen overflow-hidden flex items-center justify-center p-4">
+    <main className="h-screen overflow-hidden flex items-center justify-center p-4 text-white">
       <BackgroundPhoto />
       {/* Language switcher */}
       <LanguageSwitcher lang={lang} onSwitch={handleLangSwitch} />
@@ -98,7 +98,7 @@ export default function LoginPage() {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && !loading && !!phone && handleSubmit()}
-          className="w-full border rounded-lg px-4 py-3 text-lg"
+          className="w-full border rounded-lg px-4 py-3 text-lg bg-transparent text-white placeholder-gray-400 border-gray-400"
         />
 
         {hasError && <p className="text-red-500 text-sm text-center">{text.error}</p>}
@@ -106,7 +106,7 @@ export default function LoginPage() {
         <button
           onClick={handleSubmit}
           disabled={loading || !phone}
-          className="w-full bg-black text-white rounded-lg px-4 py-3 text-lg disabled:opacity-50 btn-pop"
+          className="w-full bg-white text-black rounded-lg px-4 py-3 text-lg disabled:opacity-50 btn-pop"
         >
           {loading ? text.loading : text.button}
         </button>

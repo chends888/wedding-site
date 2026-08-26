@@ -10,16 +10,30 @@ export default function LanguageSwitcher({ lang, onSwitch }: Props) {
     <div className="absolute top-4 right-4">
       <button
         onClick={() => onSwitch(lang === 'pt' ? 'en' : 'pt')}
-        className="flex items-center gap-1 border rounded-full px-1 py-1 btn-pop"
+        className="relative flex items-center p-1 border border-white/40 rounded-full btn-pop bg-black/20"
       >
-        <span className={`px-2 py-0.5 rounded-full text-xs font-medium transition-all duration-200 ${
-          lang === 'pt' ? 'bg-white text-black' : 'text-gray-400'
-        }`}>
+        {/* Sliding Highlight Pill */}
+        <div
+          className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full transition-transform duration-300 ease-out ${
+            lang === 'pt' ? 'translate-x-0 left-1' : 'translate-x-full left-1'
+          }`}
+        />
+
+        {/* PT Label */}
+        <span
+          className={`relative z-10 w-16 text-center py-0.5 rounded-full text-sm text-stroke bold-text transition-colors duration-300 ${
+            lang === 'pt' ? 'text-black/80' : 'text-white hover:bg-white/10'
+          }`}
+        >
           🇧🇷 PT
         </span>
-        <span className={`px-2 py-0.5 rounded-full text-xs font-medium transition-all duration-200 ${
-          lang === 'en' ? 'bg-white text-black' : 'text-gray-400'
-        }`}>
+
+        {/* EN Label */}
+        <span
+          className={`relative z-10 w-16 text-center py-0.5 rounded-full text-sm text-stroke bold-text transition-colors duration-300 ${
+            lang === 'en' ? 'text-black/80' : 'text-white hover:bg-white/10'
+          }`}
+        >
           🇺🇸 EN
         </span>
       </button>
