@@ -98,15 +98,14 @@ export default function LoginPage() {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && !loading && !!phone && handleSubmit()}
-          className="w-full border rounded-lg px-4 py-3 text-lg bg-transparent text-white placeholder-gray-400 border-gray-400 text-shadow text-stroke"
-        />
+          className="w-full border rounded-lg px-4 py-3 text-lg bg-transparent text-white placeholder-gray-400 border-white text-shadow text-stroke shadow-md shadow-black/50"        />
 
         {hasError && <p className="text-red-500 text-sm text-center text-stroke bold-text text-shadow">{text.error}</p>}
 
         <button
           onClick={handleSubmit}
           disabled={loading || !phone}
-          className="w-full bg-white rounded-lg px-4 py-3 text-lg disabled:opacity-50 btn-pop text-stroke bold-text"
+          className="w-full bg-white rounded-lg px-4 py-3 text-lg disabled:opacity-50 btn-pop text-stroke bold-text shadow-lg shadow-black/50"
         >
           {loading ? text.loading : text.button}
         </button>

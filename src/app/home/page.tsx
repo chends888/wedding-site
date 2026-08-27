@@ -349,14 +349,43 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="space-y-3 w-screen px-6 text-center">
-          <p className="text-gray-200 text-2xl text-shadow text-stroke">{t.subtitle}</p>
-          <p className="text-gray-200 text-xl text-shadow text-stroke">{t.subtitle2}</p>
-        </div>
+        <div className="space-y-3 w-screen px-6 text-center relative">
+  <p className="text-gray-200 text-2xl text-shadow text-stroke">{t.subtitle}</p>
+  <p className="text-gray-200 text-xl text-shadow text-stroke">{t.subtitle2}</p>
+  
+  {/* Scroll Indicator anchored to the text block */}
+{/* Scroll Indicator anchored to the text block */}
+{/* Scroll Indicator anchored to the text block */}
+<div className="absolute top-full left-1/2 -translate-x-1/2 mt-12 animate-bounce">
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    fill="none" 
+    viewBox="0 0 24 24" 
+    className="w-10 h-10 overflow-visible"
+  >
+    {/* Define the native SVG shadow filter */}
+    <defs>
+      <filter id="smooth-shadow" x="-50%" y="-50%" width="200%" height="300%">
+        <feDropShadow dx="0" dy="2" stdDeviation="1.5" floodColor="#000000" floodOpacity="0.6"/>
+      </filter>
+    </defs>
+    
+    {/* The Arrow (using the filter) */}
+    <path 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      d="M19.5 8.25l-7.5 7.5-7.5-7.5" 
+      stroke="white" 
+      strokeWidth={2.5} 
+      filter="url(#smooth-shadow)"
+    />
+  </svg>
+</div>
+</div>
       </section>
 
       {/* Countdown */}
-      <section ref={(el) => { sectionRefs.current[1] = el }} className="space-y-3">
+      <section ref={(el) => { sectionRefs.current[1] = el }} className="space-y-3 mt-32">
         <h2 className="text-4xl font-semibold text-center text-white text-shadow text-stroke">{t.countdown}</h2>
         <div className="relative flex justify-center max-w-sm mx-auto">
           <img
@@ -382,7 +411,7 @@ export default function HomePage() {
       </section>
 
       {/* Event info */}
-      <section ref={(el) => { sectionRefs.current[2] = el }} className="space-y-2 text-center">
+      <section ref={(el) => { sectionRefs.current[2] = el }} className="space-y-2 text-center mt-60">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.eventTitle}</h2>
         <p className="text-2xl text-gray-300 text-shadow text-stroke">{t.eventDate}</p>
         <p className="text-2xl font-medium text-white text-shadow text-stroke">{t.eventLocation}</p>
@@ -401,7 +430,7 @@ export default function HomePage() {
       </section>
 
       {/* RSVP */}
-      <section ref={(el) => { sectionRefs.current[3] = el }} className="space-y-4">
+      <section ref={(el) => { sectionRefs.current[3] = el }} className="space-y-4 mt-60">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.rsvpTitle}</h2>
 
         <div className="space-y-1">
@@ -505,7 +534,7 @@ export default function HomePage() {
       </section>
 
       {/* Gifts */}
-      <section ref={(el) => { sectionRefs.current[4] = el }} className="space-y-6">
+      <section ref={(el) => { sectionRefs.current[4] = el }} className="space-y-6 mt-60">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.giftsTitle}</h2>
 
         <div className="space-y-3">
