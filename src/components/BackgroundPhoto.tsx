@@ -6,9 +6,10 @@ const PHOTOS = [
   '/assets/photos/photo1.jpg',
   '/assets/photos/photo2.jpg',
   '/assets/photos/photo3.jpg',
+  '/assets/photos/photo4.jpg',
 ]
 
-const INTERVAL = 6000
+const INTERVAL = 5000
 
 export default function BackgroundPhoto() {
   const [topIndex, setTopIndex] = useState(0)
