@@ -84,6 +84,12 @@ const texts = {
     eventDate: '19 de junho de 2027 • 19h à 1h',
     eventLocation: 'Espaço Antakya',
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
+    faqTitle: 'Perguntas frequentes',
+    faqs: [
+      { q: 'Qual é o dress code?', a: 'Traje esporte fino. Proibido vermelho e branco e afins.' },
+      { q: 'Tem estacionamento?', a: 'Sim, há estacionamento incluso no local.' },
+      { q: 'Posso levar acompanhante?', a: 'Por favor, confirme os acompanhantes no RSVP.' },
+    ],
   },
   en: {
     welcome: (name: string) => `Hi, ${name}!`,
@@ -122,6 +128,12 @@ const texts = {
     eventDate: 'June 19th, 2027 • 7PM to 1AM',
     eventLocation: 'Espaço Antakya',
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
+    faqTitle: 'Frequently asked questions',
+    faqs: [
+      { q: 'What is the dress code?', a: 'Smart casual. Avoid red, white and related colors.' },
+      { q: 'Is there parking?', a: 'Yes, there is free parking available at the venue.' },
+      { q: 'Can I bring a plus one?', a: 'Please confirm your plus ones in the RSVP.' },
+    ],
   },
 }
 
@@ -172,6 +184,7 @@ export default function HomePage() {
   const sectionRefs = useRef<(HTMLElement | null)[]>([])
   const [langKey, setLangKey] = useState(0)
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   function openModal(data: NonNullable<GiftModal>) {
     setModalContent(data)
@@ -595,12 +608,10 @@ export default function HomePage() {
         <div className="space-y-3">
           <h3 className="text-xl bold-text text-white uppercase tracking-wide text-shadow text-stroke bold-text">{t.wishlists}</h3>
           {WISHLISTS.map((list) => (
-            <div key={list.id} className="border border-white/30 rounded-lg px-4 py-3 flex items-center justify-between bg-black/30">
+            <a key={list.id} href={list.url} target="_blank" rel="noopener noreferrer" className="border border-white/30 rounded-lg px-4 py-3 flex items-center justify-between bg-black/30 hover:bg-black/40 transition-colors btn-pop">
               <span className="font-medium text-white text-stroke bold-text">{list.name}</span>
-              <a href={list.url} target="_blank" rel="noopener noreferrer" className="text-sm border border-white/40 text-white rounded-lg px-3 py-1 hover:bg-white/10 btn-pop text-stroke">
-                {'→'}
-              </a>
-            </div>
+              <span className="text-white/60 text-stroke">{'→'}</span>
+            </a>
           ))}
         </div>
       </section>
@@ -649,6 +660,29 @@ export default function HomePage() {
           </button>
         </div>
       </div>
+
+      {/* FAQ */}
+      <section ref={(el) => { sectionRefs.current[5] = el }} className="space-y-4 mt-60">
+        <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.faqTitle}</h2>
+        {t.faqs.map((faq, i) => (
+          <div key={i} className="border border-white/30 rounded-lg bg-black/30 overflow-hidden">
+            <button
+              onClick={() => setOpenFaq(openFaq === i ? null : i)}
+              className="w-full flex items-center justify-between px-4 py-3 text-left text-white btn-pop"
+            >
+              <span className="font-medium text-white text-stroke bold-text">{faq.q}</span>
+              <span className={`transition-transform duration-200 text-white/80 ${openFaq === i ? 'rotate-180' : ''}`}>
+                ▾
+              </span>
+            </button>
+            <div className={`transition-all duration-300 overflow-hidden ${
+              openFaq === i ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+            }`}>
+              <p className="px-4 pb-4 text-sm text-gray-300 text-stroke bold-text">{faq.a}</p>
+            </div>
+          </div>
+        ))}
+      </section>
     </main>
   )
 }

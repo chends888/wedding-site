@@ -39,7 +39,7 @@ export default function SizeDropdown({ value, onChange, options, placeholder }: 
         <span className={selected ? 'text-gray-300 text-stroke bold-text' : 'text-gray-300 text-stroke bold-text'}>
           {selected ? selected.label : placeholder}
         </span>
-        <span className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}>
+        <span className={`transition-transform duration-300 text-white/80 ${open ? 'rotate-180' : ''}`}>
           ▾
         </span>
       </button>
