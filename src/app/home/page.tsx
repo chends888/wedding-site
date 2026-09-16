@@ -331,7 +331,7 @@ export default function HomePage() {
             <div className="flex justify-between md:hidden font-medium text-white mb-1 gap-16 text-shadow text-stroke bold-text">
               <div className="text-left">
                 <p>Yun Eliana Masuda</p>
-                <p>Sergio Masuda</p>
+                <p>Sergio Tomio Masuda</p>
               </div>
               <div className="text-right">
                 <p>Alice Chen</p>
@@ -352,7 +352,7 @@ export default function HomePage() {
             <div className="hidden md:flex absolute -top-8 w-full justify-between font-medium text-white text-shadow text-stroke bold-text">
               <div className="text-left">
                 <p>Yun Eliana Masuda</p>
-                <p>Sergio Masuda</p>
+                <p>Sergio Tomio Masuda</p>
               </div>
               <div className="text-right">
                 <p>Alice Chen</p>
