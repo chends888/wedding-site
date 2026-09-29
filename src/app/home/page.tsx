@@ -332,8 +332,8 @@ export default function HomePage() {
           <div className="relative">
             <div className="flex justify-between md:hidden font-medium text-white mb-1 gap-16 text-shadow text-stroke bold-text">
               <div className="text-left">
-                <p>Eliana Yun</p>
-                <p>Sergio Masuda</p>
+                <p>Yun Eliana Masuda</p>
+                <p>Sergio Tomio Masuda</p>
               </div>
               <div className="text-right">
                 <p>Alice Chen</p>
@@ -353,8 +353,8 @@ export default function HomePage() {
 
             <div className="hidden md:flex absolute -top-8 w-full justify-between font-medium text-white text-shadow text-stroke bold-text">
               <div className="text-left">
-                <p>Eliana Yun</p>
-                <p>Sergio Masuda</p>
+                <p>Yun Eliana Masuda</p>
+                <p>Sergio Tomio Masuda</p>
               </div>
               <div className="text-right">
                 <p>Alice Chen</p>
@@ -611,7 +611,7 @@ export default function HomePage() {
           {WISHLISTS.map((list) => (
             <a key={list.id} href={list.url} target="_blank" rel="noopener noreferrer" className="border border-white/30 rounded-lg px-4 py-3 flex items-center justify-between bg-black/30 hover:bg-black/40 transition-colors btn-pop">
               <span className="font-medium text-white text-stroke bold-text">{list.name}</span>
-              <span className="text-white/60 text-stroke">{'→'}</span>
+              <span className="text-white/80 text-stroke">{'→'}</span>
             </a>
           ))}
         </div>
