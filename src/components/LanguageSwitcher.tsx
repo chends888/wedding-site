@@ -7,7 +7,7 @@ type Props = {
 
 export default function LanguageSwitcher({ lang, onSwitch }: Props) {
   return (
-    <div className="absolute top-4 right-4">
+    <div className="flex justify-end w-screen -ml-[calc(50vw-50%)] mb-[80] px-[1rem]">
       <button
         onClick={() => onSwitch(lang === 'pt' ? 'en' : 'pt')}
         className="relative flex items-center p-1 border border-white/40 rounded-full btn-pop bg-black/20"

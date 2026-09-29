@@ -73,6 +73,7 @@ const texts = {
     minutes: 'minutos',
     seconds: 'segundos',
     giftsTitle: 'Presentes',
+    giftsComingSoon: 'Em breve...',
     experienceGifts: 'Experiências',
     furnitureGifts: 'Móveis e decoração',
     wishlists: 'Listas de produtos',
@@ -87,7 +88,10 @@ const texts = {
     eventLocation: 'Espaço Antakya',
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
     dresscode: 'Regras de vestimenta',
-    dresscodeDesc: 'Traje cocktail. Evite branco, bege e vermelho. Aqui estão alguns exemplos:',
+    dresscodeDesc: 'Traje cocktail🍸',
+    dresscodeFem: '👗 Feminino — Vestidos midi, longos ou macacão social. PROIBIDO branco, off-white, baby yellow e vermelho.',
+    dresscodeMan: '👔 Masculino — Terno, blazer com calça e camisa social, gravata opcional.',
+    dresscodeInsp:'Aqui estão algumas inspirações:',
     faqTitle: 'Perguntas frequentes',
     faqs: [
       { q: 'Tem estacionamento?', a: 'Sim, há estacionamento incluso no local.' },
@@ -117,6 +121,7 @@ const texts = {
     minutes: 'minutes',
     seconds: 'seconds',
     giftsTitle: 'Gifts',
+    giftsComingSoon: 'Coming soon...',
     experienceGifts: 'Experiences',
     furnitureGifts: 'Furniture and decoration',
     wishlists: 'Product lists',
@@ -132,7 +137,10 @@ const texts = {
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
     faqTitle: 'Frequently asked questions',
     dresscode: 'Dress Code',
-    dresscodeDesc: 'Cocktail attire. Please avoid white, beige and red. Here are some examples:',
+    dresscodeDesc: 'Cocktail attire🍸',
+    dresscodeFem: '👗 Feminine — Midi dresses, floor-length gowns or elegant suits. PROHIBITED COLORS: white, off-white, baby yellow and red.',
+    dresscodeMan: '👔 Masculine — Suit, blazer with trousers and dress shirt, optional tie.',
+    dresscodeInsp:'Here are some inspirations:',
     faqs: [
       { q: 'Is there parking?', a: 'Yes, there is free parking available at the venue.' },
     ],
@@ -369,8 +377,7 @@ export default function HomePage() {
         <p className="text-gray-200 text-xl text-shadow text-stroke">{t.subtitle2}</p>
         
         {/* Scroll Indicator anchored to the text block */}
-        {/* Scroll Indicator anchored to the text block */}
-        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-12 animate-bounce">
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 sm:mt-12 animate-bounce">
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             fill="none" 
@@ -550,6 +557,12 @@ export default function HomePage() {
       {/* Gifts */}
       <section ref={(el) => { sectionRefs.current[4] = el }} className="space-y-6 mt-40 mb-40">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.giftsTitle}</h2>
+        <p className="text-xl text-gray-300 text-stroke bold-text">{t.giftsComingSoon}</p>
+
+        <div className="rounded-lg overflow-hidden mt-2">
+          <img src="/assets/coming-soon.png" alt="Coming Soon" className="object-contain w-100 h-100 mx-auto" />
+        </div>
+        {/*
 
         <div className="space-y-3">
           <h3 className="text-xl font-semibold text-white uppercase tracking-wide text-shadow text-stroke">{t.experienceGifts}</h3>
@@ -615,6 +628,7 @@ export default function HomePage() {
             </a>
           ))}
         </div>
+        */}
       </section>
       
       <Divider />
@@ -668,13 +682,12 @@ export default function HomePage() {
       {/* Dress Code */}
       <section ref={(el) => { sectionRefs.current[5] = el }} className="space-y-4 mt-40 mb-40">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.dresscode}</h2>
-        <p className="text-gray-300 text-stroke bold-text">{t.dresscodeDesc}</p>
-        <div className="rounded-lg overflow-hidden border border-white/30">
-          <img
-            src="/assets/dress-code.png"
-            alt="Dress code"
-            className="w-full object-contain"
-          />
+        <p className="text-xl text-gray-300 text-stroke bold-text">{t.dresscodeDesc}</p>
+        <p className="text-gray-300 text-stroke bold-text">{t.dresscodeFem}</p>
+        <p className="text-gray-300 text-stroke bold-text">{t.dresscodeMan}</p>
+        <p className="text-gray-300 text-stroke bold-text">{t.dresscodeInsp}</p>
+        <div className="rounded-lg overflow-hidden border border-white/30 mt-2">
+          <img src="/assets/dress-code.png" alt="Dress code" className="w-full object-contain" />
         </div>
       </section>
 
