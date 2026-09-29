@@ -408,10 +408,10 @@ export default function HomePage() {
           <img
             src="/assets/pikachu_run.gif"
             alt="Pikachu"
-            className="w-16 absolute left-0 bottom-0"
+            className="w-13 sm:w-16 absolute left-5 sm:left-2 bottom-0"
             style={{ imageRendering: 'pixelated' }}
           />
-          <div className="flex gap-4 text-center bold-text">
+          <div className="flex gap-4 text-center">
             {[
               { value: timeLeft.days, label: t.days },
               { value: timeLeft.hours, label: t.hours },
