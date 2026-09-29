@@ -141,6 +141,14 @@ body {
      0 0 20px rgba(0, 0, 0, 0.5);
 }
 
+.line-shadow {
+  box-shadow:
+  0 1px 4px rgba(0, 0, 0, 1),
+  0 2px 8px rgba(0, 0, 0, 1),
+  0 4px 12px rgba(0, 0, 0, 1),
+  0 0 8px rgba(0, 0, 0, 1);
+}
+
 .bold-text {
   font-weight: bold;
 }

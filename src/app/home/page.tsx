@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import SizeDropdown from '@/components/SizeDropdown'
 import BackgroundPhoto from '@/components/BackgroundPhoto'
+import MetricDropdown from '@/components/MetricDropdown'
+import Divider from '@/components/Divider'
 
 type Guest = {
   id: string
@@ -54,13 +56,13 @@ const texts = {
     rsvpTitle: 'Confirmar presença',
     confirm: 'Confirmar',
     decline: 'Não vou',
-    shoeSize: 'Número do sapato',
-    shoeSizePlaceholder: 'Selecione o número',
+    shoeSize: 'Numeração de chinelo🩴:',
+    shoeSizePlaceholder: 'Selecione a numeração do calçado',
     ageRange: 'Faixa etária',
     age1: '7 anos ou menos',
     age2: '8 a 10 anos',
     age3: '11 anos ou mais',
-    missingShoeSizeError: 'Por favor, selecione o número do sapato.',
+    missingShoeSizeError: 'Por favor selecione o número do calçado.',
     giftsSubtitle: 'Sua presença é o melhor presente. Mas se quiser nos presentear, aqui estão algumas sugestões:',
     pixKey: 'Chave PIX',
     copy: 'Copiar',
@@ -79,16 +81,16 @@ const texts = {
     scanQr: 'Escaneie o QR code ou copie a chave PIX',
     customMessage: 'Copie a chave PIX e faça a transferência pelo valor que desejar.',
     wishlistMessage: 'Acesse a lista e escolha um presente:',
-    sizeSystem: 'Tamanho da Havaianas em:',
+    sizeSystem: 'Numeração da Havaianas em:',
     eventTitle: 'Cerimônia & Recepção',
     eventDate: '19 de junho de 2027 • 19h à 1h',
     eventLocation: 'Espaço Antakya',
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
+    dresscode: 'Regras de vestimenta',
+    dresscodeDesc: 'Traje cocktail. Evite branco, bege e vermelho. Aqui estão alguns exemplos:',
     faqTitle: 'Perguntas frequentes',
     faqs: [
-      { q: 'Qual é o dress code?', a: 'Traje esporte fino. Proibido vermelho e branco e afins.' },
       { q: 'Tem estacionamento?', a: 'Sim, há estacionamento incluso no local.' },
-      { q: 'Posso levar acompanhante?', a: 'Por favor, confirme os acompanhantes no RSVP.' },
     ],
   },
   en: {
@@ -98,8 +100,8 @@ const texts = {
     rsvpTitle: 'RSVP',
     confirm: 'Confirm',
     decline: 'Decline',
-    shoeSize: 'Shoe size',
-    shoeSizePlaceholder: 'Select size',
+    shoeSize: 'Flip-flop shoe size🩴:',
+    shoeSizePlaceholder: 'Select shoe size',
     ageRange: 'Age range',
     age1: '7 years old or under',
     age2: '8 to 10 years old',
@@ -129,10 +131,10 @@ const texts = {
     eventLocation: 'Espaço Antakya',
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
     faqTitle: 'Frequently asked questions',
+    dresscode: 'Dress Code',
+    dresscodeDesc: 'Cocktail attire. Please avoid white, beige and red. Here are some examples:',
     faqs: [
-      { q: 'What is the dress code?', a: 'Smart casual. Avoid red, white and related colors.' },
       { q: 'Is there parking?', a: 'Yes, there is free parking available at the venue.' },
-      { q: 'Can I bring a plus one?', a: 'Please confirm your plus ones in the RSVP.' },
     ],
   },
 }
@@ -319,11 +321,11 @@ export default function HomePage() {
       {/* Welcome */}
       <section ref={(el) => { sectionRefs.current[0] = el }} className="min-h-screen flex flex-col items-center justify-center text-center space-y-6 -mt-12">
         <div className="flex items-center justify-center gap-3">
-          <div className="h-px w-12 bg-gray-400 shadow-[0_1px_2px_0_rgba(0,0,0,1)] shadow-[0_2px_4px_0_rgba(0,0,0,1)]" />
+          <div className="h-px w-12 bg-white shadow-[0_1px_2px_0_rgba(0,0,0,1)] shadow-[0_2px_4px_0_rgba(0,0,0,1)]" />
           <p className="font-medium text-white tracking-widest text-shadow text-stroke bold-text">
             {currentLang === 'pt' ? '19.06.2027' : '06.19.2027'}
           </p>
-          <div className="h-px w-12 bg-gray-400 shadow-[0_1px_2px_0_rgba(0,0,0,1)] shadow-[0_2px_4px_0_rgba(0,0,0,1)]" />
+          <div className="h-px w-12 bg-white shadow-[0_1px_2px_0_rgba(0,0,0,1)] shadow-[0_2px_4px_0_rgba(0,0,0,1)]" />
         </div>
 
         <div className="w-full flex flex-col items-center">
@@ -363,42 +365,44 @@ export default function HomePage() {
         </div>
 
         <div className="space-y-3 w-screen px-6 text-center relative">
-  <p className="text-gray-200 text-2xl text-shadow text-stroke">{t.subtitle}</p>
-  <p className="text-gray-200 text-xl text-shadow text-stroke">{t.subtitle2}</p>
-  
-  {/* Scroll Indicator anchored to the text block */}
-{/* Scroll Indicator anchored to the text block */}
-{/* Scroll Indicator anchored to the text block */}
-<div className="absolute top-full left-1/2 -translate-x-1/2 mt-12 animate-bounce">
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    fill="none" 
-    viewBox="0 0 24 24" 
-    className="w-10 h-10 overflow-visible"
-  >
-    {/* Define the native SVG shadow filter */}
-    <defs>
-      <filter id="smooth-shadow" x="-50%" y="-50%" width="200%" height="300%">
-        <feDropShadow dx="0" dy="2" stdDeviation="1.5" floodColor="#000000" floodOpacity="0.6"/>
-      </filter>
-    </defs>
-    
-    {/* The Arrow (using the filter) */}
-    <path 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      d="M19.5 8.25l-7.5 7.5-7.5-7.5" 
-      stroke="white" 
-      strokeWidth={2.5} 
-      filter="url(#smooth-shadow)"
-    />
-  </svg>
-</div>
-</div>
+        <p className="text-gray-200 text-2xl text-shadow text-stroke">{t.subtitle}</p>
+        <p className="text-gray-200 text-xl text-shadow text-stroke">{t.subtitle2}</p>
+        
+        {/* Scroll Indicator anchored to the text block */}
+        {/* Scroll Indicator anchored to the text block */}
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-12 animate-bounce">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            className="w-10 h-10 overflow-visible"
+          >
+            {/* Define the native SVG shadow filter */}
+            <defs>
+              <filter id="smooth-shadow" x="-50%" y="-50%" width="200%" height="300%">
+                <feDropShadow dx="0" dy="2" stdDeviation="1.5" floodColor="#000000" floodOpacity="0.6"/>
+              </filter>
+            </defs>
+            
+            {/* The Arrow (using the filter) */}
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              d="M19.5 8.25l-7.5 7.5-7.5-7.5" 
+              stroke="white" 
+              strokeWidth={2.5} 
+              filter="url(#smooth-shadow)"
+            />
+          </svg>
+        </div>
+      </div>
       </section>
 
+      <Divider />
+
+
       {/* Countdown */}
-      <section ref={(el) => { sectionRefs.current[1] = el }} className="space-y-3 mt-32">
+      <section ref={(el) => { sectionRefs.current[1] = el }} className="space-y-3 mt-40 mb-40">
         <h2 className="text-4xl font-semibold text-center text-white text-shadow text-stroke">{t.countdown}</h2>
         <div className="relative flex justify-center max-w-sm mx-auto">
           <img
@@ -423,8 +427,10 @@ export default function HomePage() {
         </div>
       </section>
 
+      <Divider />
+
       {/* Event info */}
-      <section ref={(el) => { sectionRefs.current[2] = el }} className="space-y-2 text-center mt-60">
+      <section ref={(el) => { sectionRefs.current[2] = el }} className="space-y-2 text-center mt-40 mb-40">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.eventTitle}</h2>
         <p className="text-2xl text-gray-300 text-shadow text-stroke">{t.eventDate}</p>
         <p className="text-2xl font-medium text-white text-shadow text-stroke">{t.eventLocation}</p>
@@ -442,26 +448,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* RSVP */}
-      <section ref={(el) => { sectionRefs.current[3] = el }} className="space-y-4 mt-60">
-        <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.rsvpTitle}</h2>
+      <Divider />
 
-        <div className="space-y-1">
-          <label className="text-xl text-gray-300 text-shadow text-stroke bold-text">{t.sizeSystem}</label>
-          <div className="flex flex-wrap gap-2 bold-text">
-            {(['BR', 'EU', 'US', 'CN', 'AU', 'cm'] as SizeSystem[]).map((sys) => (
-              <button
-                key={sys}
-                onClick={() => setSizeSystem(sys)}
-                className={`px-3 py-1 rounded-lg text-sm border btn-pop text-stroke ${
-                  sizeSystem === sys ? 'bg-white text-white border-white' : 'border-white/40 text-white bg-black/30 hover:bg-white/10'
-                }`}
-              >
-                {sys}
-              </button>
-            ))}
-          </div>
-        </div>
+      {/* RSVP */}
+      <section ref={(el) => { sectionRefs.current[3] = el }} className="space-y-4 mt-40 mb-40">
+        <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.rsvpTitle}</h2>
 
         {guest.members.map((member) => {
           const r = rsvp[member.id]
@@ -526,15 +517,23 @@ export default function HomePage() {
                       : 'opacity-0 max-h-0 overflow-hidden pointer-events-none'
                   }`}>
                     <label className="text-medium text-gray-300 text-stroke bold-text">{t.shoeSize}</label>
-                    <SizeDropdown
-                      value={r.shoe_size}
-                      onChange={(val) => updateMember(member.id, { shoe_size: val })}
-                      placeholder={t.shoeSizePlaceholder}
-                      options={(member.is_child && r.age_range !== '11+'
-                        ? CHILDREN_SIZE_TABLE
-                        : SIZE_TABLE
-                      ).map((s) => ({ value: s.value, label: s[sizeSystem] }))}
-                    />
+                    <div className="flex gap-2">
+                      {/* Size system dropdown */}
+                      <MetricDropdown value={sizeSystem} onChange={setSizeSystem} />
+                      {/* Size dropdown */}
+                      <div className="flex-1">
+                        <SizeDropdown
+                          value={r.shoe_size}
+                          onChange={(val) => updateMember(member.id, { shoe_size: val })}
+                          placeholder={t.shoeSizePlaceholder}
+                          options={(member.is_child && r.age_range !== '11+'
+                            ? CHILDREN_SIZE_TABLE
+                            : SIZE_TABLE
+                          ).map((s) => ({ value: s.value, label: s[sizeSystem] }))}
+                        />
+                      </div>
+                    </div>
+
                     {showShoeSizeError && (
                       <p className="text-red-400 text-sm mt-1 text-stroke bold-text">{t.missingShoeSizeError}</p>
                     )}
@@ -546,8 +545,10 @@ export default function HomePage() {
         })}
       </section>
 
+      <Divider />
+
       {/* Gifts */}
-      <section ref={(el) => { sectionRefs.current[4] = el }} className="space-y-6 mt-60">
+      <section ref={(el) => { sectionRefs.current[4] = el }} className="space-y-6 mt-40 mb-40">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.giftsTitle}</h2>
 
         <div className="space-y-3">
@@ -615,6 +616,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+      
+      <Divider />
 
       {/* Modal */}
       <div
@@ -661,8 +664,24 @@ export default function HomePage() {
         </div>
       </div>
 
+
+      {/* Dress Code */}
+      <section ref={(el) => { sectionRefs.current[5] = el }} className="space-y-4 mt-40 mb-40">
+        <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.dresscode}</h2>
+        <p className="text-gray-300 text-stroke bold-text">{t.dresscodeDesc}</p>
+        <div className="rounded-lg overflow-hidden border border-white/30">
+          <img
+            src="/assets/dress-code.png"
+            alt="Dress code"
+            className="w-full object-contain"
+          />
+        </div>
+      </section>
+
+      <Divider />
+
       {/* FAQ */}
-      <section ref={(el) => { sectionRefs.current[5] = el }} className="space-y-4 mt-60">
+      <section ref={(el) => { sectionRefs.current[6] = el }} className="space-y-4 mt-40 mb-40">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.faqTitle}</h2>
         {t.faqs.map((faq, i) => (
           <div key={i} className="border border-white/30 rounded-lg bg-black/30 overflow-hidden">
