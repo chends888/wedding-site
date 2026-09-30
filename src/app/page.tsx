@@ -74,7 +74,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="h-screen overflow-hidden flex items-center justify-center p-4 text-white">
+    <main className="animate-fade-switch min-h-screen p-6 max-w-lg mx-auto space-y-12 text-white">
       <BackgroundPhoto />
       {/* Language switcher */}
       <LanguageSwitcher lang={lang} onSwitch={handleLangSwitch} />
