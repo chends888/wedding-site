@@ -89,8 +89,9 @@ const texts = {
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
     dresscode: 'Regras de vestimenta',
     dresscodeDesc: 'Traje cocktail🍸',
-    dresscodeFem: '👗 Feminino — Vestidos midi, longos ou macacão social. PROIBIDO branco, off-white, baby yellow e vermelho.',
-    dresscodeMan: '👔 Masculino — Terno, blazer com calça e camisa social, gravata opcional.',
+    dresscodeColors: 'PROIBIDO branco, off-white, baby yellow e vermelho.',
+    dresscodeFem: '👗 Feminino — Vestidos midi, longos ou macacão social. Saltos de qualquer tipo ou sapatilhas.',
+    dresscodeMan: '👔 Masculino — Terno, blazer com calça e camisa social, gravata opcional. Sapato social ou mocassin.',
     dresscodeInsp:'Aqui estão algumas inspirações:',
     faqTitle: 'Perguntas frequentes',
     faqs: [
@@ -138,8 +139,9 @@ const texts = {
     faqTitle: 'Frequently asked questions',
     dresscode: 'Dress Code',
     dresscodeDesc: 'Cocktail attire🍸',
-    dresscodeFem: '👗 Feminine — Midi dresses, floor-length gowns or elegant suits. PROHIBITED COLORS: white, off-white, baby yellow and red.',
-    dresscodeMan: '👔 Masculine — Suit, blazer with trousers and dress shirt, optional tie.',
+    dresscodeColors: 'PROHIBITED COLORS: white, off-white, baby yellow and red.',
+    dresscodeFem: '👗 Feminine — Midi dresses, floor-length gowns or elegant suits. Heels of any type or flats.',
+    dresscodeMan: '👔 Masculine — Suit, blazer with trousers and dress shirt, optional tie. Dress shoes or moccasin.',
     dresscodeInsp:'Here are some inspirations:',
     faqs: [
       { q: 'Is there parking?', a: 'Yes, there is free parking available at the venue.' },
@@ -683,6 +685,25 @@ export default function HomePage() {
       <section ref={(el) => { sectionRefs.current[5] = el }} className="space-y-4 mt-40 mb-40">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.dresscode}</h2>
         <p className="text-xl text-gray-300 text-stroke bold-text">{t.dresscodeDesc}</p>
+        <p className="text-stroke bold-text">
+          {currentLang === 'pt' ? 'Cores Proibidas: ' : 'Prohibited Colors: '}
+          <span style={{ color: '#ffffff', backgroundColor: '#ffffff' }}>
+            {currentLang === 'pt' ? '\u00A0BRANCO ' : '\u00A0WHITE '}
+          </span>  
+          {currentLang === 'pt' ? ', ' : ', '}
+          <span style={{ color: '#f5f0dc', backgroundColor: '#f5f0dc' }}>
+            {currentLang === 'pt' ? '\u00A0OFF WHITE ' : '\u00A0OFF WHITE '}
+          </span>          
+          {', '}
+          <span style={{ color: '#fffacd', backgroundColor: '#fffacd' }}>
+            {currentLang === 'pt' ? '\u00A0AMARELO BEBÊ ' : '\u00A0BABY YELLOW '}
+          </span> 
+          {currentLang === 'pt' ? ' e ' : ' and '}
+          <span style={{ color: 'red', backgroundColor: 'red' }}>
+            {currentLang === 'pt' ? '\u00A0VERMELHO ' : '\u00A0RED '}
+          </span>
+          {'.'}
+        </p>
         <p className="text-gray-300 text-stroke bold-text">{t.dresscodeFem}</p>
         <p className="text-gray-300 text-stroke bold-text">{t.dresscodeMan}</p>
         <p className="text-gray-300 text-stroke bold-text">{t.dresscodeInsp}</p>
