@@ -76,10 +76,9 @@ export default function LoginPage() {
   return (
     <main className="animate-fade-switch min-h-screen p-6 max-w-lg mx-auto space-y-12 text-white">
       <BackgroundPhoto />
-      {/* Language switcher */}
       <LanguageSwitcher lang={lang} onSwitch={handleLangSwitch} />
 
-      <div key={langKey} className="animate-fade-switch w-full max-w-sm space-y-4">
+      <div key={langKey} className="animate-fade-switch w-full max-w-sm mx-auto space-y-4">
         <h1
           style={{ fontFamily: "'Playfair Display', serif" }}
           className="text-8xl italic text-center leading-tight text-shadow-lg text-stroke-lg"
