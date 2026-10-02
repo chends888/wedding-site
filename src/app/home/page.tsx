@@ -52,7 +52,7 @@ const texts = {
   pt: {
     welcome: (name: string) => `Olá, ${name}!`,
     subtitle: 'Convidam para a celebração de seu casamento. 💍',
-    subtitle2: 'Ficaremos muito felizes em ter você neste dia tão especial.',
+    subtitle2: 'Ficaremos muito felizes com a sua presença neste dia tão especial.',
     rsvpTitle: 'Confirmar presença',
     confirm: 'Confirmar',
     decline: 'Não vou',
@@ -419,31 +419,48 @@ export default function HomePage() {
       <Divider />
 
 
-      {/* Countdown */}
-      <section ref={(el) => { sectionRefs.current[1] = el }} className="space-y-3 mt-40 mb-40">
-        <h2 className="text-4xl font-semibold text-center text-white text-shadow text-stroke">{t.countdown}</h2>
-        <div className="relative flex justify-center max-w-sm mx-auto">
-          <img
-            src="/assets/pikachu_run.gif"
-            alt="Pikachu"
-            className="w-13 sm:w-16 absolute left-5 sm:left-2 bottom-0"
-            style={{ imageRendering: 'pixelated' }}
-          />
-          <div className="flex gap-4 text-center">
-            {[
-              { value: timeLeft.days, label: t.days },
-              { value: timeLeft.hours, label: t.hours },
-              { value: timeLeft.minutes, label: t.minutes },
-              { value: timeLeft.seconds, label: t.seconds },
-            ].map(({ value, label }) => (
-              <div key={label} className="flex flex-col items-center">
-                <span className="text-3xl font-bold text-white text-shadow text-stroke">{String(value).padStart(2, '0')}</span>
-                <span className="text-xs text-gray-300 text-shadow text-stroke">{label}</span>
-              </div>
-            ))}
-          </div>
+{/* Countdown */}
+<section ref={(el) => { sectionRefs.current[1] = el }} className="space-y-3 mt-40 mb-40">
+  <h2 className="text-4xl font-semibold text-center text-white text-shadow text-stroke">
+    {t.countdown}
+  </h2>
+  
+  {/* The main flex wrapper for centering */}
+  <div className="flex justify-center w-full">
+    
+    {/* 1. We make the timer wrapper relative so Pikachu anchors tightly to the text */}
+    <div className="relative flex gap-4 text-center items-end">
+      
+      {/* 2. Pikachu is locked to the left side of the countdown numbers */}
+      {/* Adjust "pr-2" to tweak your exact pixel distance from the text */}
+      <div className="absolute right-full bottom-2 flex items-center pr-1">
+        <img
+          src="/assets/pikachu_run.gif"
+          alt="Pikachu"
+          className="w-16 min-w-16 max-w-none"
+          style={{ imageRendering: 'pixelated' }}
+        />
+      </div>
+
+      {/* 4. The actual countdown structure */}
+      {[
+        { value: timeLeft.days, label: t.days },
+        { value: timeLeft.hours, label: t.hours },
+        { value: timeLeft.minutes, label: t.minutes },
+        { value: timeLeft.seconds, label: t.seconds },
+      ].map(({ value, label }) => (
+        <div key={label} className="flex flex-col items-center">
+          <span className="text-3xl font-bold text-white text-shadow text-stroke">
+            {String(value).padStart(2, '0')}
+          </span>
+          <span className="text-xs text-gray-300 text-shadow text-stroke">
+            {label}
+          </span>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
       <Divider />
 
