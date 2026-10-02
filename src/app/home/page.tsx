@@ -26,6 +26,7 @@ type RsvpState = Record<string, MemberRsvp>
 type SizeSystem = 'BR' | 'EU' | 'US' | 'CN' | 'AU' | 'cm'
 
 const SIZE_TABLE = [
+  { value: 'BR33', BR: '33/34', EU: '35/36', US: '5W', CN: '33', AU: '3', cm: '21.5-22.5cm' },
   { value: 'BR35', BR: '35/36', EU: '37/38', US: '6W / 5M', CN: '35', AU: '4/5', cm: '23-24cm' },
   { value: 'BR37', BR: '37/38', EU: '39/40', US: '7-8W / 6-7M', CN: '37', AU: '5.5/6', cm: '24-25cm' },
   { value: 'BR39', BR: '39/40', EU: '41/42', US: '9-10W / 8M', CN: '39', AU: '7/7.5', cm: '25.5-26.5cm' },
@@ -55,6 +56,7 @@ const texts = {
     subtitle2: 'Ficaremos muito felizes com a sua presença neste dia tão especial.',
     rsvpTitle: 'Confirmar presença',
     confirm: 'Confirmar',
+    confirmed: 'Confirmado!',
     decline: 'Não vou',
     shoeSize: 'Numeração de chinelo🩴:',
     shoeSizePlaceholder: 'Selecione a numeração do calçado',
@@ -109,6 +111,7 @@ const texts = {
     subtitle2: 'We would be so happy to have you with us on this special day.',
     rsvpTitle: 'RSVP',
     confirm: 'Confirm',
+    confirmed: 'Confirmed!',
     decline: 'Decline',
     shoeSize: 'Flip-flop shoe size🩴:',
     shoeSizePlaceholder: 'Select shoe size',
@@ -505,7 +508,7 @@ export default function HomePage() {
                       r.confirmed === true ? 'bg-green-500 text-white' : 'border border-white/40 text-white hover:bg-white/10'
                     }`}
                   >
-                    {t.confirm}
+                    {r.confirmed === true ? (t.confirmed || 'Confirmed') : t.confirm}
                   </button>
                   <button
                     onClick={() => {
