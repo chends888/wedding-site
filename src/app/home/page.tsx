@@ -7,6 +7,8 @@ import SizeDropdown from '@/components/SizeDropdown'
 import BackgroundPhoto from '@/components/BackgroundPhoto'
 import MetricDropdown from '@/components/MetricDropdown'
 import Divider from '@/components/Divider'
+import PokeballBurst from '@/components/PokeballBurst'
+
 
 type Guest = {
   id: string
@@ -56,7 +58,7 @@ const texts = {
     subtitle2: 'Ficaremos muito felizes com a sua presença neste dia tão especial.',
     rsvpTitle: 'Confirmar presença',
     confirm: 'Confirmar',
-    confirmed: 'Confirmado!',
+    confirmed: 'Confirmado ✓',
     decline: 'Não vou',
     shoeSize: 'Numeração de chinelo🩴:',
     shoeSizePlaceholder: 'Selecione a numeração do calçado',
@@ -111,7 +113,7 @@ const texts = {
     subtitle2: 'We would be so happy to have you with us on this special day.',
     rsvpTitle: 'RSVP',
     confirm: 'Confirm',
-    confirmed: 'Confirmed!',
+    confirmed: 'Confirmed ✓',
     decline: 'Decline',
     shoeSize: 'Flip-flop shoe size🩴:',
     shoeSizePlaceholder: 'Select shoe size',
@@ -209,6 +211,8 @@ export default function HomePage() {
   const [langKey, setLangKey] = useState(0)
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [burstTrigger, setBurstTrigger] = useState(false)
+  const [burstOrigin, setBurstOrigin] = useState({ x: 0, y: 0 })
 
   function openModal(data: NonNullable<GiftModal>) {
     setModalContent(data)
@@ -503,12 +507,18 @@ export default function HomePage() {
                 <span className="font-medium text-white text-stroke bold-text">{member.name}</span>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => updateMember(member.id, { confirmed: true })}
+                    onClick={(e) => {
+                      const rect = (e.target as HTMLElement).getBoundingClientRect()
+                      setBurstOrigin({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
+                      setBurstTrigger(false)
+                      setTimeout(() => setBurstTrigger(true), 10)
+                      updateMember(member.id, { confirmed: true })
+                    }}
                     className={`px-3 py-1 rounded-lg text-sm btn-pop text-stroke bold-text ${
                       r.confirmed === true ? 'bg-green-500 text-white' : 'border border-white/40 text-white hover:bg-white/10'
                     }`}
                   >
-                    {r.confirmed === true ? (t.confirmed || 'Confirmed') : t.confirm}
+                    {r.confirmed === true ? t.confirmed : t.confirm}
                   </button>
                   <button
                     onClick={() => {
@@ -765,6 +775,7 @@ export default function HomePage() {
           </div>
         ))}
       </section>
+      <PokeballBurst trigger={burstTrigger} originX={burstOrigin.x} originY={burstOrigin.y} />
     </main>
   )
 }

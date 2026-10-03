@@ -152,3 +152,15 @@ body {
 .bold-text {
   font-weight: bold;
 }
+
+
+@keyframes pokeball-fly {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--rot)) scale(0.3);
+  }
+}
