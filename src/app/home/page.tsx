@@ -101,7 +101,7 @@ const texts = {
     faqs: [
       { q: 'Tem estacionamento?', a: 'Sim, há estacionamento incluso no local.' },
       { q: 'Existem hotéis perto do local?', a: 'Sim, existem várias opções, aqui estão algumas sugestões:\n- Ibis é uma opção mais econômica bem ao lado do local do evento (Rua Vergueiro, 1571);\n- TRYP by Wyndham é uma opção intermediária (Rua Afonso de Freitas, 148);\n- Laghetto Stilo Hotel 5 estrelas (Rua Coronel Oscar Porto, 836).' },
-      { q: 'Como é o transporte público?', a: 'O Espaço Antakya está ao lado da estação de metro Paraíso (Linha 1 Azul).' },
+      { q: 'Como é o transporte público?', a: 'O Espaço Antakya está ao lado da estação de metrô Paraíso (Linha 1 Azul).' },
       { q: 'E outros tipos de transporte?', a: 'Uber e 99 estão amplamente disponíveis na região.' },
       { q: 'O que devo esperar do tempo?', a: "Temperaturas por volta de 15°C/59°F durante o evento, porém tudo ocorrerá em local fechado e climatizado." },
 
