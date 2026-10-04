@@ -100,7 +100,7 @@ const texts = {
     faqTitle: 'Perguntas frequentes',
     faqs: [
       { q: 'Tem estacionamento?', a: 'Sim, há estacionamento incluso no local.' },
-      { q: 'Existem hotéis perto do local?', a: 'Sim, tem um Ibis ao lado do local do evento.' },
+      { q: 'Existem hotéis perto do local?', a: 'Sim, existem várias opções, aqui estão algumas sugestões:\n- Ibis é uma opção mais econômica bem ao lado do local do evento (Rua Vergueiro, 1571);\n- TRYP by Wyndham é uma opção intermediária (Rua Afonso de Freitas, 148);\n- Laghetto Stilo Hotel 5 estrelas (Rua Coronel Oscar Porto, 836).' },
       { q: 'Como é o transporte público?', a: 'O Espaço Antakya está ao lado da estação de metro Paraíso (Linha 1 Azul).' },
       { q: 'E outros tipos de transporte?', a: 'Uber e 99 estão amplamente disponíveis na região.' },
       { q: 'O que devo esperar do tempo?', a: "Temperaturas por volta de 15°C/59°F durante o evento, porém tudo ocorrerá em local fechado e climatizado." },
@@ -155,7 +155,7 @@ const texts = {
     dresscodeInsp:'Here are some inspirations:',
     faqs: [
       { q: 'Is there on-site parking?', a: 'Yes, there is free parking available at the venue.' },
-      { q: 'Is there accommodation nearby?', a: 'Yes, there is a Ibis Hotel next to the event location.' },
+      { q: 'Is there accommodation nearby?', a: 'Yes, there are several options, here are some suggestions:\n- Ibis Hotel is a budget option right next to the event location (Rua Vergueiro, 1571);\n- TRYP by Whyndham intermediate option (Rua Afonso Freitas, 148);\n- Laghetto Stilo 5-star Hotel (Rua Coronel Oscar Porto, 836).' },
       { q: 'How is public transportation?', a: 'There is easy access to subway station Paraíso (Line 1 Blue) next to Antakya.' },
       { q: 'What are other types of transportation?', a: 'Uber and 99 are widely available.' },
       { q: 'What should I expect for the weather?', a: "Tempratures around 15°C/59°F. The event will take place indoors, so don't worry about bringing thick jackets." },
@@ -770,7 +770,7 @@ export default function HomePage() {
             <div className={`transition-all duration-300 overflow-hidden ${
               openFaq === i ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
             }`}>
-              <p className="px-4 pb-4 text-sm text-gray-300 text-stroke bold-text">{faq.a}</p>
+              <p className="px-4 pb-4 text-sm text-gray-300 text-stroke bold-text whitespace-pre-line">{faq.a}</p>
             </div>
           </div>
         ))}
