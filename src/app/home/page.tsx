@@ -338,7 +338,7 @@ export default function HomePage() {
   const currentLang = guest.language
 
   return (
-    <main key={langKey} className="animate-fade-switch min-h-screen p-6 max-w-lg mx-auto space-y-12 text-white">
+    <main className="animate-fade-switch min-h-screen p-6 max-w-lg mx-auto space-y-12 text-white">
       <BackgroundPhoto />
       <LanguageSwitcher lang={guest.language} onSwitch={switchLanguage} />
 
