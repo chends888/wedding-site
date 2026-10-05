@@ -58,7 +58,7 @@ const texts = {
     subtitle2: 'Ficaremos muito felizes com a sua presença neste dia tão especial.',
     rsvpTitle: 'Confirmar presença',
     confirm: 'Confirmar',
-    confirmed: 'Confirmado ✓',
+    confirmed: 'Confirmado✓',
     decline: 'Não vou',
     shoeSize: 'Numeração de chinelo🩴:',
     shoeSizePlaceholder: 'Selecione a numeração do calçado',
@@ -112,7 +112,7 @@ const texts = {
     subtitle2: 'We would be so happy to have you with us on this special day.',
     rsvpTitle: 'RSVP',
     confirm: 'Confirm',
-    confirmed: 'Confirmed ✓',
+    confirmed: 'Confirmed✓',
     decline: 'Decline',
     shoeSize: 'Flip-flop shoe size🩴:',
     shoeSizePlaceholder: 'Select shoe size',
@@ -523,9 +523,16 @@ export default function HomePage() {
 
           return (
             <div key={member.id} className="border border-white/30 rounded-lg p-4 space-y-3 bg-black/40">
-              <div className="flex items-center justify-between">
-                <span className="font-medium text-white text-stroke bold-text">{member.name}</span>
-                <div className="flex gap-2">
+              {/* MODIFIED: Changed from 'flex items-center justify-between' to a vertical column block */}
+              <div className="flex flex-col gap-3">
+                {/* The name now sits safely on its own line and will wrap naturally if ultra-long */}
+                <span className="font-medium text-white text-stroke bold-text text-lg">
+                  {member.name}
+                </span>
+                
+                {/* The buttons sit perfectly on the line below the name */}
+                {/* Grid layout stretches them equally to fit nicely across the card */}
+                <div className="grid grid-cols-2 gap-2 w-full sm:max-w-xs">
                   <button
                     onClick={(e) => {
                       const rect = (e.target as HTMLElement).getBoundingClientRect()
@@ -534,7 +541,7 @@ export default function HomePage() {
                       setTimeout(() => setBurstTrigger(true), 10)
                       updateMember(member.id, { confirmed: true })
                     }}
-                    className={`px-3 py-1 rounded-lg text-md btn-pop text-stroke bold-text ${
+                    className={`px-3 py-2 rounded-lg text-md btn-pop text-stroke bold-text text-center ${
                       r.confirmed === true ? 'bg-green-500 text-white' : 'border border-white/40 text-white hover:bg-white/20'
                     }`}
                   >
@@ -548,7 +555,7 @@ export default function HomePage() {
                         setCollapsing((prev) => ({ ...prev, [member.id]: false }))
                       }, 200)
                     }}
-                    className={`px-3 py-1 rounded-lg text-md btn-pop text-stroke bold-text ${
+                    className={`px-3 py-2 rounded-lg text-md btn-pop text-stroke bold-text text-center ${
                       r.confirmed === false ? 'bg-red-500 text-white' : 'border border-white/40 text-white hover:bg-white/20'
                     }`}
                   >
@@ -564,7 +571,7 @@ export default function HomePage() {
                       <label className="text-medium text-gray-300 text-stroke bold-text">{t.ageRange}</label>
                       <div className="flex flex-col gap-2 mt-1">
                         {(['0-7', '8-10', '11+'] as const).map((range, i) => (
-                          <label key={range} className="flex items-center gap-2 text-md text-white text-stroke bold-text">
+                          <label key={range} className="flex items-center gap-2 text-sm text-white text-stroke bold-text">
                             <input
                               type="radio"
                               name={`age-${member.id}`}
@@ -754,7 +761,7 @@ export default function HomePage() {
     <div className="flex items-center">
       <span 
         className="px-2 py-0.5 rounded text-black font-semibold"
-        style={{ color: '#000000', backgroundColor: '#ffffff' }}
+        style={{ color: '#ffffff', backgroundColor: '#ffffff' }}
       >
         {currentLang === 'pt' ? 'BRANCO' : 'WHITE'}
       </span>
@@ -764,7 +771,7 @@ export default function HomePage() {
     <div className="flex items-center">
       <span 
         className="px-2 py-0.5 rounded text-black font-semibold"
-        style={{ color: '#000000', backgroundColor: '#f5f0dc' }}
+        style={{ color: '#f5f0dc', backgroundColor: '#f5f0dc' }}
       >
         {currentLang === 'pt' ? 'OFF WHITE' : 'OFF WHITE'}
       </span>
@@ -774,7 +781,7 @@ export default function HomePage() {
     <div className="flex items-center">
       <span 
         className="px-2 py-0.5 rounded text-black font-semibold"
-        style={{ color: '#000000', backgroundColor: '#fffacd' }}
+        style={{ color: '#fffacd', backgroundColor: '#fffacd' }}
       >
         {currentLang === 'pt' ? 'AMARELO BEBÊ' : 'BABY YELLOW'}
       </span>
@@ -784,7 +791,7 @@ export default function HomePage() {
     <div className="flex items-center">
       <span 
         className="px-2 py-0.5 rounded text-white font-semibold"
-        style={{ color: '#ffffff', backgroundColor: 'red' }}
+        style={{ color: 'red', backgroundColor: 'red' }}
       >
         {currentLang === 'pt' ? 'VERMELHO' : 'RED'}
       </span>
@@ -792,7 +799,7 @@ export default function HomePage() {
   </div>
 </div>
 
-        <p className="text-gray-300 text-stroke bold-text">{t.dresscodeFem}</p>
+        <p className="text-gray-300 text-stroke bold-text mt-5">{t.dresscodeFem}</p>
         <p className="text-gray-300 text-stroke bold-text">{t.dresscodeMan}</p>
         <p className="text-gray-300 text-stroke bold-text">{t.dresscodeInsp}</p>
         <div className="rounded-lg overflow-hidden border border-white/30 mt-2">
@@ -817,7 +824,7 @@ export default function HomePage() {
               </span>
             </button>
             <div className={`transition-all duration-300 overflow-hidden ${
-              openFaq === i ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+              openFaq === i ? 'max-h-300 opacity-100' : 'max-h-0 opacity-0'
             }`}>
               <div className="px-4 pb-4 text-md text-gray-300 text-stroke bold-text space-y-3">
                 {faq.a.split('\n\n').map((block, bi) => (
