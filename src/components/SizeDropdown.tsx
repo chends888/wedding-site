@@ -34,7 +34,7 @@ export default function SizeDropdown({ value, onChange, options, placeholder }: 
     <div ref={ref} className="relative w-full">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full border rounded-lg px-3 py-2 bg-black/15 text-white text-left flex items-center justify-between btn-pop"
+        className="w-full border rounded-lg px-3 py-2 bg-black/15 text-white text-left flex items-center justify-between btn-pop hover:bg-white/20"
       >
         <span className={selected ? 'text-gray-300 text-stroke bold-text' : 'text-gray-300 text-stroke bold-text'}>
           {selected ? selected.label : placeholder}

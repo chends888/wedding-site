@@ -477,7 +477,7 @@ export default function HomePage() {
         <p className="text-2xl text-gray-300 text-shadow text-stroke">{t.eventDate}</p>
         <p className="text-2xl font-medium text-white text-shadow text-stroke">{t.eventLocation}</p>
         <p className="text-xl text-gray-300 text-shadow text-stroke">{t.eventAddress}</p>
-        <div className="rounded-lg overflow-hidden border border-white/30 mt-2">
+        <div className="rounded-lg overflow-hidden border border-white/30 mt-2 mb-10">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.7988001165277!2d-46.64274292572889!3d-23.575668578789994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce593cee87c9b7%3A0x9823b8d680d4ac66!2sEspaco%20Antakya!5e0!3m2!1sen!2sus!4v1784762474177!5m2!1sen!2sus"
             width="100%"
@@ -488,6 +488,17 @@ export default function HomePage() {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
+        <a
+          href="https://www.waze.com/live-map/directions/br/sp/espaco-antakya?to=place.ChIJt8mH7jxZzpQRZqzUgNa4I5g"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 border border-white/30 rounded-lg px-4 py-3 bg-black/40 hover:bg-white/20 transition-colors btn-pop mt-2"
+        >
+          <svg viewBox="0 0 24 32" className="w-10 h-10" fill="#05C8F7">
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 3.313 1.343 6.313 3.515 8.485l-.01 3.516 3.516-.01C9.192 25.328 10.57 26 12 26c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.08 0-2.11-.22-3.05-.61l-2.45.007.007-2.45A9.956 9.956 0 0 1 2 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm-3-11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm6 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm1.5 3.5c0 2.485-2.015 4-4.5 4s-4.5-1.515-4.5-4h9z"/>
+          </svg>
+          <span className="text-xl text-white text-stroke bold-text">Waze</span>
+        </a>
       </section>
 
       <Divider />
@@ -502,7 +513,7 @@ export default function HomePage() {
           const showShoeSizeError = r.confirmed === true && !r.shoe_size
 
           return (
-            <div key={member.id} className="border border-white/30 rounded-lg p-4 space-y-3 bg-black/30">
+            <div key={member.id} className="border border-white/30 rounded-lg p-4 space-y-3 bg-black/40">
               <div className="flex items-center justify-between">
                 <span className="font-medium text-white text-stroke bold-text">{member.name}</span>
                 <div className="flex gap-2">
@@ -515,7 +526,7 @@ export default function HomePage() {
                       updateMember(member.id, { confirmed: true })
                     }}
                     className={`px-3 py-1 rounded-lg text-sm btn-pop text-stroke bold-text ${
-                      r.confirmed === true ? 'bg-green-500 text-white' : 'border border-white/40 text-white hover:bg-white/10'
+                      r.confirmed === true ? 'bg-green-500 text-white' : 'border border-white/40 text-white hover:bg-white/20'
                     }`}
                   >
                     {r.confirmed === true ? t.confirmed : t.confirm}
@@ -529,7 +540,7 @@ export default function HomePage() {
                       }, 200)
                     }}
                     className={`px-3 py-1 rounded-lg text-sm btn-pop text-stroke bold-text ${
-                      r.confirmed === false ? 'bg-red-500 text-white' : 'border border-white/40 text-white hover:bg-white/10'
+                      r.confirmed === false ? 'bg-red-500 text-white' : 'border border-white/40 text-white hover:bg-white/20'
                     }`}
                   >
                     {t.decline}
@@ -608,7 +619,7 @@ export default function HomePage() {
         <div className="space-y-3">
           <h3 className="text-xl font-semibold text-white uppercase tracking-wide text-shadow text-stroke">{t.experienceGifts}</h3>
           {EXPERIENCE_GIFTS.map((gift) => (
-            <div key={gift.id} className="border border-white/30 rounded-lg p-4 space-y-3 bg-black/30">
+            <div key={gift.id} className="border border-white/30 rounded-lg p-4 space-y-3 bg-black/40">
               <div>
                 <p className="font-medium text-white text-stroke bold-text">{currentLang === 'pt' ? gift.namePt : gift.nameEn}</p>
                 <p className="text-sm text-gray-300 text-stroke bold-text">{currentLang === 'pt' ? gift.descPt : gift.descEn}</p>
@@ -618,14 +629,14 @@ export default function HomePage() {
                   <button
                     key={value}
                     onClick={() => openModal({ qrCode: `/qr/${gift.id}-${value}.png`, pixKey: PIX_KEY })}
-                    className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/10 btn-pop text-stroke bold-text"
+                    className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/20 btn-pop text-stroke bold-text"
                   >
                     R$ {value}
                   </button>
                 ))}
                 <button
                   onClick={() => openModal({ qrCode: null, pixKey: PIX_KEY })}
-                  className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/10 btn-pop text-stroke bold-text"
+                  className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/20 btn-pop text-stroke bold-text"
                 >
                   {t.custom}
                 </button>
@@ -634,7 +645,7 @@ export default function HomePage() {
           ))}
           <h3 className="text-xl font-semibold text-white uppercase tracking-wide text-shadow text-stroke bold-text">{t.furnitureGifts}</h3>
           {FURNITURE_GIFTS.map((gift) => (
-            <div key={gift.id} className="border border-white/30 rounded-lg p-4 space-y-3 bg-black/30">
+            <div key={gift.id} className="border border-white/30 rounded-lg p-4 space-y-3 bg-black/40">
               <div>
                 <p className="font-medium text-white text-stroke bold-text">{currentLang === 'pt' ? gift.namePt : gift.nameEn}</p>
                 <p className="text-sm text-gray-300 text-stroke bold-text">{currentLang === 'pt' ? gift.descPt : gift.descEn}</p>
@@ -644,14 +655,14 @@ export default function HomePage() {
                   <button
                     key={value}
                     onClick={() => openModal({ qrCode: `/qr/${gift.id}-${value}.png`, pixKey: PIX_KEY })}
-                    className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/10 btn-pop text-stroke bold-text"
+                    className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/20 btn-pop text-stroke bold-text"
                   >
                     R$ {value}
                   </button>
                 ))}
                 <button
                   onClick={() => openModal({ qrCode: null, pixKey: PIX_KEY })}
-                  className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/10 btn-pop text-stroke bold-text"
+                  className="border border-white/40 text-white rounded-lg px-4 py-2 text-sm hover:bg-white/20 btn-pop text-stroke bold-text"
                 >
                   {t.custom}
                 </button>
@@ -663,7 +674,7 @@ export default function HomePage() {
         <div className="space-y-3">
           <h3 className="text-xl bold-text text-white uppercase tracking-wide text-shadow text-stroke bold-text">{t.wishlists}</h3>
           {WISHLISTS.map((list) => (
-            <a key={list.id} href={list.url} target="_blank" rel="noopener noreferrer" className="border border-white/30 rounded-lg px-4 py-3 flex items-center justify-between bg-black/30 hover:bg-black/40 transition-colors btn-pop">
+            <a key={list.id} href={list.url} target="_blank" rel="noopener noreferrer" className="border border-white/30 rounded-lg px-4 py-3 flex items-center justify-between bg-black/40 hover:bg-black/40 transition-colors btn-pop">
               <span className="font-medium text-white text-stroke bold-text">{list.name}</span>
               <span className="text-white/80 text-stroke">{'→'}</span>
             </a>
@@ -757,7 +768,7 @@ export default function HomePage() {
       <section ref={(el) => { sectionRefs.current[6] = el }} className="space-y-4 mt-40 mb-40">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.faqTitle}</h2>
         {t.faqs.map((faq, i) => (
-          <div key={i} className="border border-white/30 rounded-lg bg-black/30 overflow-hidden">
+          <div key={i} className="border border-white/30 rounded-lg bg-black/40 hover:bg-white/10 overflow-hidden">
             <button
               onClick={() => setOpenFaq(openFaq === i ? null : i)}
               className="w-full flex items-center justify-between px-4 py-3 text-left text-white btn-pop"
