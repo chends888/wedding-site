@@ -29,7 +29,7 @@ export default function MetricDropdown({ value, onChange }: Props) {
     <div ref={ref} className="relative w-24 flex-shrink-0">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full border rounded-lg px-3 py-2 text-white text-left flex items-center justify-between btn-pop hover:bg-white/20"
+        className="w-full border rounded-lg px-3 py-2 text-white text-left flex items-center justify-between btn-pop hover:bg-white/10"
       >
         <span className="text-gray-300 text-stroke bold-text">{value}</span>
         <span className={`transition-transform duration-300 text-white/80 ${open ? 'rotate-180' : ''}`}>

@@ -93,14 +93,13 @@ const texts = {
     eventAddress: 'Rua Vergueiro 1515, Paraíso, São Paulo, Brasil',
     dresscode: 'Regras de vestimenta',
     dresscodeDesc: 'Traje cocktail🍸',
-    dresscodeColors: 'PROIBIDO branco, off-white, baby yellow e vermelho.',
     dresscodeFem: '👗 Feminino — Vestidos midi, longos ou macacão social. Saltos de qualquer tipo ou sapatilhas.',
     dresscodeMan: '👔 Masculino — Terno: blazer com calça e camisa social, gravata opcional. Sapato social ou mocassin.',
     dresscodeInsp:'Aqui estão algumas inspirações:',
     faqTitle: 'Perguntas frequentes',
     faqs: [
       { q: 'Tem estacionamento?', a: 'Sim, há estacionamento incluso no local.' },
-      { q: 'Existem hotéis perto do local?', a: 'Sim, existem várias opções, aqui estão algumas sugestões:\n- Ibis é uma opção mais econômica bem ao lado do local do evento (Rua Vergueiro, 1571);\n- TRYP by Wyndham é uma opção intermediária (Rua Afonso de Freitas, 148);\n- Laghetto Stilo Hotel 5 estrelas (Rua Coronel Oscar Porto, 836).' },
+      { q: 'Existem hotéis perto do local?',   a: 'Sim, existem várias opções próximas ao local:\n\nIbis Budget São Paulo Paraíso ★★\nRua Vergueiro, 1571 (distância: 50m)\n+55 11 5085-5699\nall.accor.com/hotel/3531/index.en.shtml\n\nTRYP by Wyndham São Paulo Paulista ★★★★\nRua Afonso de Freitas, 148 (distância: 550m)\n+55 11 3059-0999\nwyndhamhotels.com/tryp/sao-paulo-brazil/tryp-sao-paulo-paulista/overview\n\nLaghetto Stilo Ibirapuera ★★★★★\nRua Coronel Oscar Porto, 836 (distância 750m)\n+55 11 3050-9601\nlaghettohoteis.com.br/hoteis/sao-paulo' },
       { q: 'Como é o transporte público?', a: 'O Espaço Antakya está ao lado da estação de metrô Paraíso (Linha 1 Azul).' },
       { q: 'E outros tipos de transporte?', a: 'Uber e 99 estão amplamente disponíveis na região.' },
       { q: 'O que devo esperar do tempo?', a: "Temperaturas por volta de 15°C/59°F durante o evento, porém tudo ocorrerá em local fechado e climatizado." },
@@ -149,13 +148,12 @@ const texts = {
     faqTitle: 'Frequently asked questions',
     dresscode: 'Dress Code',
     dresscodeDesc: 'Cocktail attire🍸',
-    dresscodeColors: 'PROHIBITED COLORS: white, off-white, baby yellow and red.',
     dresscodeFem: '👗 Feminine — Midi dresses, floor-length gowns or elegant suits. Heels of any type or flats.',
     dresscodeMan: '👔 Masculine — Suit: blazer with trousers and dress shirt, optional tie. Dress shoes or moccasin.',
     dresscodeInsp:'Here are some inspirations:',
     faqs: [
       { q: 'Is there on-site parking?', a: 'Yes, there is free parking available at the venue.' },
-      { q: 'Is there accommodation nearby?', a: 'Yes, there are several options, here are some suggestions:\n- Ibis Hotel is a budget option right next to the event location (Rua Vergueiro, 1571);\n- TRYP by Whyndham intermediate option (Rua Afonso Freitas, 148);\n- Laghetto Stilo 5-star Hotel (Rua Coronel Oscar Porto, 836).' },
+      { q: 'Is there accommodation nearby?',   a: 'Yes, there are several options nearby:\n\nIbis Styles São Paulo Paraíso ★★\nRua Vergueiro, 1571 (distance: 50m)\n+55 11 5085-5699\nall.accor.com/hotel/3531/index.en.shtml\n\nTRYP by Wyndham São Paulo Paulista ★★★★\nRua Afonso de Freitas, 148 (distance: 550m)\n+55 11 3059-0999\nwyndhamhotels.com/tryp/sao-paulo-brazil/tryp-sao-paulo-paulista/overview\n\nLaghetto Stilo Ibirapuera ★★★★★\nRua Coronel Oscar Porto, 836 (distance 750m)\n+55 11 3050-9601\nlaghettohoteis.com.br/hoteis/sao-paulo' },
       { q: 'How is public transportation?', a: 'There is easy access to subway station Paraíso (Line 1 Blue) next to Antakya.' },
       { q: 'What are other types of transportation?', a: 'Uber and 99 are widely available.' },
       { q: 'What should I expect for the weather?', a: "Tempratures around 15°C/59°F. The event will take place indoors, so don't worry about bringing thick jackets." },
@@ -476,6 +474,17 @@ export default function HomePage() {
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.eventTitle}</h2>
         <p className="text-2xl text-gray-300 text-shadow text-stroke">{t.eventDate}</p>
         <p className="text-2xl font-medium text-white text-shadow text-stroke">{t.eventLocation}</p>
+        <a
+          href="https://www.instagram.com/espacoantakya/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 border border-white/30 rounded-lg px-4 py-3 bg-black/40 hover:bg-white/10 transition-colors btn-pop mt-2"
+        >
+          <svg viewBox="0 0 24 24" className="w-6 h-6" fill="white">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+          </svg>
+          <span className="text-white text-stroke bold-text">@espacoantakya</span>
+        </a>
         <p className="text-xl text-gray-300 text-shadow text-stroke">{t.eventAddress}</p>
         <div className="rounded-lg overflow-hidden border border-white/30 mt-2 mb-10">
           <iframe
@@ -525,7 +534,7 @@ export default function HomePage() {
                       setTimeout(() => setBurstTrigger(true), 10)
                       updateMember(member.id, { confirmed: true })
                     }}
-                    className={`px-3 py-1 rounded-lg text-sm btn-pop text-stroke bold-text ${
+                    className={`px-3 py-1 rounded-lg text-md btn-pop text-stroke bold-text ${
                       r.confirmed === true ? 'bg-green-500 text-white' : 'border border-white/40 text-white hover:bg-white/20'
                     }`}
                   >
@@ -539,7 +548,7 @@ export default function HomePage() {
                         setCollapsing((prev) => ({ ...prev, [member.id]: false }))
                       }, 200)
                     }}
-                    className={`px-3 py-1 rounded-lg text-sm btn-pop text-stroke bold-text ${
+                    className={`px-3 py-1 rounded-lg text-md btn-pop text-stroke bold-text ${
                       r.confirmed === false ? 'bg-red-500 text-white' : 'border border-white/40 text-white hover:bg-white/20'
                     }`}
                   >
@@ -555,7 +564,7 @@ export default function HomePage() {
                       <label className="text-medium text-gray-300 text-stroke bold-text">{t.ageRange}</label>
                       <div className="flex flex-col gap-2 mt-1">
                         {(['0-7', '8-10', '11+'] as const).map((range, i) => (
-                          <label key={range} className="flex items-center gap-2 text-sm text-white text-stroke bold-text">
+                          <label key={range} className="flex items-center gap-2 text-md text-white text-stroke bold-text">
                             <input
                               type="radio"
                               name={`age-${member.id}`}
@@ -594,7 +603,7 @@ export default function HomePage() {
                     </div>
 
                     {showShoeSizeError && (
-                      <p className="text-red-400 text-sm mt-1 text-stroke bold-text">{t.missingShoeSizeError}</p>
+                      <p className="text-red-400 text-md mt-1 text-stroke bold-text">{t.missingShoeSizeError}</p>
                     )}
                   </div>
                 </div>
@@ -735,25 +744,54 @@ export default function HomePage() {
       <section ref={(el) => { sectionRefs.current[5] = el }} className="space-y-4 mt-40 mb-40">
         <h2 className="text-4xl font-semibold text-white text-shadow text-stroke">{t.dresscode}</h2>
         <p className="text-xl text-gray-300 text-stroke bold-text">{t.dresscodeDesc}</p>
-        <p className="text-stroke bold-text">
-          {currentLang === 'pt' ? 'Cores Proibidas: ' : 'Prohibited Colors: '}
-          <span style={{ color: '#ffffff', backgroundColor: '#ffffff' }}>
-            {currentLang === 'pt' ? '\u00A0BRANCO ' : '\u00A0WHITE '}
-          </span>  
-          {currentLang === 'pt' ? ', ' : ', '}
-          <span style={{ color: '#f5f0dc', backgroundColor: '#f5f0dc' }}>
-            {currentLang === 'pt' ? '\u00A0OFF WHITE ' : '\u00A0OFF WHITE '}
-          </span>          
-          {', '}
-          <span style={{ color: '#fffacd', backgroundColor: '#fffacd' }}>
-            {currentLang === 'pt' ? '\u00A0AMARELO BEBÊ ' : '\u00A0BABY YELLOW '}
-          </span> 
-          {currentLang === 'pt' ? ' e ' : ' and '}
-          <span style={{ color: 'red', backgroundColor: 'red' }}>
-            {currentLang === 'pt' ? '\u00A0VERMELHO ' : '\u00A0RED '}
-          </span>
-          {'.'}
-        </p>
+        <div className="text-stroke bold-text flex flex-col gap-2">
+  {/* The header label */}
+  <p>{currentLang === 'pt' ? 'Cores Proibidas:' : 'Prohibited Colors:'}</p>
+  
+  {/* The color list - each item takes up a full new line */}
+  <div className="flex flex-col gap-1.5 pl-4">
+    {/* White */}
+    <div className="flex items-center">
+      <span 
+        className="px-2 py-0.5 rounded text-black font-semibold"
+        style={{ color: '#000000', backgroundColor: '#ffffff' }}
+      >
+        {currentLang === 'pt' ? 'BRANCO' : 'WHITE'}
+      </span>
+    </div>
+
+    {/* Off White */}
+    <div className="flex items-center">
+      <span 
+        className="px-2 py-0.5 rounded text-black font-semibold"
+        style={{ color: '#000000', backgroundColor: '#f5f0dc' }}
+      >
+        {currentLang === 'pt' ? 'OFF WHITE' : 'OFF WHITE'}
+      </span>
+    </div>
+
+    {/* Baby Yellow */}
+    <div className="flex items-center">
+      <span 
+        className="px-2 py-0.5 rounded text-black font-semibold"
+        style={{ color: '#000000', backgroundColor: '#fffacd' }}
+      >
+        {currentLang === 'pt' ? 'AMARELO BEBÊ' : 'BABY YELLOW'}
+      </span>
+    </div>
+
+    {/* Red */}
+    <div className="flex items-center">
+      <span 
+        className="px-2 py-0.5 rounded text-white font-semibold"
+        style={{ color: '#ffffff', backgroundColor: 'red' }}
+      >
+        {currentLang === 'pt' ? 'VERMELHO' : 'RED'}
+      </span>
+    </div>
+  </div>
+</div>
+
         <p className="text-gray-300 text-stroke bold-text">{t.dresscodeFem}</p>
         <p className="text-gray-300 text-stroke bold-text">{t.dresscodeMan}</p>
         <p className="text-gray-300 text-stroke bold-text">{t.dresscodeInsp}</p>
@@ -773,15 +811,25 @@ export default function HomePage() {
               onClick={() => setOpenFaq(openFaq === i ? null : i)}
               className="w-full flex items-center justify-between px-4 py-3 text-left text-white btn-pop"
             >
-              <span className="font-medium text-white text-stroke bold-text">{faq.q}</span>
+              <span className="text-xl text-white text-stroke bold-text">{faq.q}</span>
               <span className={`transition-transform duration-200 text-white/80 ${openFaq === i ? 'rotate-180' : ''}`}>
                 ▾
               </span>
             </button>
             <div className={`transition-all duration-300 overflow-hidden ${
-              openFaq === i ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+              openFaq === i ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
             }`}>
-              <p className="px-4 pb-4 text-sm text-gray-300 text-stroke bold-text whitespace-pre-line">{faq.a}</p>
+              <div className="px-4 pb-4 text-md text-gray-300 text-stroke bold-text space-y-3">
+                {faq.a.split('\n\n').map((block, bi) => (
+                  <div key={bi}>
+                    {block.split('\n').map((line, li) => (
+                      <p key={li} className={li === 0 ? 'font-semibold text-white' : 'text-gray-300'}>
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ))}
