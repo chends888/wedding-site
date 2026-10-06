@@ -498,7 +498,7 @@ export default function HomePage() {
           />
         </div>
         <a
-          href="https://www.waze.com/live-map/directions/br/sp/espaco-antakya?to=place.ChIJt8mH7jxZzpQRZqzUgNa4I5g"
+          href="waze://?ll=40.761043,-73.980545&navigate=yes"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 border border-white/30 rounded-lg px-4 py-3 bg-black/40 hover:bg-white/20 transition-colors btn-pop mt-2"
