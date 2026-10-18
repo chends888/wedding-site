@@ -787,6 +787,16 @@ export default function HomePage() {
       </span>
     </div>
 
+    {/* Baby BLue */}
+    <div className="flex items-center">
+      <span 
+        className="px-2 py-0.5 rounded text-black font-semibold"
+        style={{ color: '#c6f4ff', backgroundColor: '#c6f4ff' }}
+      >
+        {currentLang === 'pt' ? 'AZUL BEBÊ' : 'BABY BLUE'}
+      </span>
+    </div>
+
     {/* Red */}
     <div className="flex items-center">
       <span 
