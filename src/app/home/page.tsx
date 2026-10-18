@@ -812,8 +812,12 @@ export default function HomePage() {
         <p className="text-gray-300 text-stroke bold-text mt-5">{t.dresscodeFem}</p>
         <p className="text-gray-300 text-stroke bold-text">{t.dresscodeMan}</p>
         <p className="text-gray-300 text-stroke bold-text">{t.dresscodeInsp}</p>
-        <div className="rounded-lg overflow-hidden border border-white/30 mt-2">
-          <img src="/assets/dress-code.png" alt="Dress code" className="w-full object-contain" />
+        <div className="rounded-lg overflow-hidden mt-2">
+          <img
+            src={currentLang === 'pt' ? '/assets/dress-code-pt.png' : '/assets/dress-code-eng.png'}
+            alt="Dress code"
+            className="w-full object-contain"
+          />
         </div>
       </section>
 
