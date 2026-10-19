@@ -100,7 +100,7 @@ const texts = {
     faqs: [
       { q: 'Tem estacionamento?', a: 'Sim, há estacionamento incluso no local.' },
       { q: 'Existem hotéis perto do local?',   a: 'Sim, existem várias opções próximas ao local:\n\nIbis Budget São Paulo Paraíso ★★\nRua Vergueiro, 1571 (distância: 50m)\n+55 11 5085-5699\nall.accor.com/hotel/3531/index.en.shtml\n\nTRYP by Wyndham São Paulo Paulista ★★★★\nRua Afonso de Freitas, 148 (distância: 550m)\n+55 11 3059-0999\nwyndhamhotels.com/tryp/sao-paulo-brazil/tryp-sao-paulo-paulista/overview\n\nLaghetto Stilo Ibirapuera ★★★★★\nRua Coronel Oscar Porto, 836 (distância 750m)\n+55 11 3050-9601\nlaghettohoteis.com.br/hoteis/sao-paulo' },
-      { q: 'Como é o transporte público?', a: 'O Espaço Antakya está ao lado da estação de metrô Paraíso (Linha 1 Azul).' },
+      { q: 'Como é o transporte público?', a: 'O Espaço Antakya está ao lado da estação de metrô Paraíso Linha 1 Azul (50m).' },
       { q: 'E outros tipos de transporte?', a: 'Uber e 99 estão amplamente disponíveis na região.' },
       { q: 'O que devo esperar do tempo?', a: "Temperaturas por volta de 15°C/59°F durante o evento, porém tudo ocorrerá em local fechado e climatizado." },
 
@@ -154,7 +154,7 @@ const texts = {
     faqs: [
       { q: 'Is there on-site parking?', a: 'Yes, there is free parking available at the venue.' },
       { q: 'Is there accommodation nearby?',   a: 'Yes, there are several options nearby:\n\nIbis Styles São Paulo Paraíso ★★\nRua Vergueiro, 1571 (distance: 50m)\n+55 11 5085-5699\nall.accor.com/hotel/3531/index.en.shtml\n\nTRYP by Wyndham São Paulo Paulista ★★★★\nRua Afonso de Freitas, 148 (distance: 550m)\n+55 11 3059-0999\nwyndhamhotels.com/tryp/sao-paulo-brazil/tryp-sao-paulo-paulista/overview\n\nLaghetto Stilo Ibirapuera ★★★★★\nRua Coronel Oscar Porto, 836 (distance 750m)\n+55 11 3050-9601\nlaghettohoteis.com.br/hoteis/sao-paulo' },
-      { q: 'How is public transportation?', a: 'There is easy access to subway station Paraíso (Line 1 Blue) next to Antakya.' },
+      { q: 'How is public transportation?', a: 'There is easy access to subway station Paraíso (Line 1 Blue) next to Antakya (50m).' },
       { q: 'What are other types of transportation?', a: 'Uber and 99 are widely available.' },
       { q: 'What should I expect for the weather?', a: "Tempratures around 15°C/59°F. The event will take place indoors, so don't worry about bringing thick jackets." },
     ],
