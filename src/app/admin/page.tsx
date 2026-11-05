@@ -163,6 +163,7 @@ export default function AdminPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleLoad()}
+            autoFocus
             className="w-full border rounded-lg px-4 py-3"
           />
           {error && <p className="text-red-500 text-sm">{error}</p>}
