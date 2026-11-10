@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { brShoeSizeLabel } from '@/lib/shoe-sizes'
+import { brShoeSizeLabel, compareShoeSizeCounts, summarizeShoeSizes, type ShoeSizeSortColumn } from '@/lib/shoe-sizes'
 
 type Guest = {
   id: string
@@ -36,6 +36,8 @@ export default function AdminPage() {
   const [loaded, setLoaded] = useState(false)
   const [sortCol, setSortCol] = useState<keyof Row>('name')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
+  const [sizeSortCol, setSizeSortCol] = useState<ShoeSizeSortColumn>('size')
+  const [sizeSortDir, setSizeSortDir] = useState<'asc' | 'desc'>('asc')
   const passwordRef = useRef<HTMLInputElement>(null)
 
   function toggleSort(col: keyof Row) {
@@ -44,6 +46,15 @@ export default function AdminPage() {
     } else {
       setSortCol(col)
       setSortDir('asc')
+    }
+  }
+
+  function toggleSizeSort(col: ShoeSizeSortColumn) {
+    if (sizeSortCol === col) {
+      setSizeSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+    } else {
+      setSizeSortCol(col)
+      setSizeSortDir('asc')
     }
   }
 
@@ -111,15 +122,20 @@ export default function AdminPage() {
   const confirmed = rows.filter((r) => r.confirmed === 'Yes').length
   const declined = rows.filter((r) => r.confirmed === 'No').length
   const pending = rows.filter((r) => r.confirmed === 'Pending').length
-  const sizeSummary = rows
-    .filter((r) => r.confirmed === 'Yes' && r.shoe_size)
-    .reduce((acc, r) => {
-      acc[r.shoe_size!] = (acc[r.shoe_size!] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
-
-  const sortedSizes = Object.entries(sizeSummary).sort((a, b) =>
-    a[0].localeCompare(b[0], undefined, { numeric: true })
+  const sizeRows = summarizeShoeSizes(
+    rows.filter((r) => r.confirmed === 'Yes' && r.shoe_size).map((r) => r.shoe_size!),
+  )
+  const sortedSizes = [...sizeRows].sort((a, b) =>
+    compareShoeSizeCounts(a, b, sizeSortCol, sizeSortDir),
+  )
+  const sizeTotals = sortedSizes.reduce(
+    (acc, row) => ({
+      child: acc.child + row.child,
+      female: acc.female + row.female,
+      male: acc.male + row.male,
+      total: acc.total + row.total,
+    }),
+    { child: 0, female: 0, male: 0, total: 0 },
   )
 
   const AGE_RANGE_LABELS: Record<string, string> = {
@@ -179,26 +195,50 @@ export default function AdminPage() {
           {sortedSizes.length > 0 && (
             <div className="space-y-2">
               <h2 className="text-sm font-semibold">Flip-flop size summary (confirmed guests)</h2>
-              <table className="text-sm border-collapse">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-2 pr-8">Size</th>
-                    <th className="text-left py-2">Count</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {sortedSizes.map(([size, count]) => (
-                    <tr key={size} className="border-b">
-                      <td className="py-2 pr-8">{brShoeSizeLabel(size)}</td>
-                      <td className="py-2">{count}</td>
+              <div className="overflow-x-auto">
+                <table className="text-sm border-collapse">
+                  <thead>
+                    <tr className="border-b">
+                      {([
+                        ['size', 'Size'],
+                        ['child', 'Child shoes'],
+                        ['female', 'Female'],
+                        ['male', 'Male'],
+                        ['total', 'Total'],
+                      ] as [ShoeSizeSortColumn, string][]).map(([col, label]) => (
+                        <th
+                          key={col}
+                          className="text-left py-2 pr-8 cursor-pointer hover:text-gray-400 select-none whitespace-nowrap"
+                          onClick={() => toggleSizeSort(col)}
+                        >
+                          {label}{' '}
+                          <span className="inline-block w-3 text-xs">
+                            {sizeSortCol === col ? (sizeSortDir === 'asc' ? '↑' : '↓') : ''}
+                          </span>
+                        </th>
+                      ))}
                     </tr>
-                  ))}
-                  <tr className="font-semibold">
-                    <td className="py-2 pr-8">Total</td>
-                    <td className="py-2">{sortedSizes.reduce((acc, [, count]) => acc + count, 0)}</td>
-                  </tr>
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {sortedSizes.map((row) => (
+                      <tr key={row.code} className="border-b">
+                        <td className="py-2 pr-8">{brShoeSizeLabel(row.code)}</td>
+                        <td className="py-2 pr-8">{row.child}</td>
+                        <td className="py-2 pr-8">{row.female}</td>
+                        <td className="py-2 pr-8">{row.male}</td>
+                        <td className="py-2">{row.total}</td>
+                      </tr>
+                    ))}
+                    <tr className="font-semibold">
+                      <td className="py-2 pr-8">Total</td>
+                      <td className="py-2 pr-8">{sizeTotals.child}</td>
+                      <td className="py-2 pr-8">{sizeTotals.female}</td>
+                      <td className="py-2 pr-8">{sizeTotals.male}</td>
+                      <td className="py-2">{sizeTotals.total}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
           {sortedAges.length > 0 && (
