@@ -63,3 +63,101 @@ export function brShoeSizeLabel(code: string): string {
   if (region) return `BR ${region[1]}`
   return code
 }
+
+export type ShoeSizeBucket = 'child' | 'female' | 'male'
+
+export type ShoeSizeSortColumn = 'size' | ShoeSizeBucket | 'total'
+
+export type ShoeSizeCounts = {
+  code: string
+  child: number
+  female: number
+  male: number
+  total: number
+}
+
+const US_WOMEN = /\d+\s*W/
+const US_MEN = /\d+\s*M/
+const REGION_SIZE_CODE = /^(EU|BR)(\d+)$/
+
+/**
+ * Which summary columns a stored size code belongs to.
+ *
+ * RSVPs do not record gender. One stored code is the whole split:
+ * - Kids sizes are CHILDREN_SIZE_TABLE and are stored with an EU prefix
+ *   (EU17 … EU33). Those count as child shoes. EU33 is the kids BR 33/34.
+ * - Adult sizes are SIZE_TABLE, stored with a BR prefix. The US label on that
+ *   chart is the gender marker: W is female, M is male. BR33 is women-only
+ *   (5W). BR43 and BR45 are men-only. BR35–BR41 list both (for example
+ *   "6W / 5M"), so that guest counts in female and in male.
+ * - Legacy EU/BR integers that are labeled in admin but not offered on the
+ *   form follow the same chart. Any other EU code is a child shoe. A BR
+ *   number is matched against the adult BR ranges (33/34, 35/36, …).
+ *
+ * Total is always the number of guests. For a size that is both women's and
+ * men's, female + male is larger than total.
+ */
+export function shoeSizeBuckets(code: string): ShoeSizeBucket[] {
+  if (CHILDREN_SIZE_TABLE.some((size) => size.value === code)) return ['child']
+
+  const adult = SIZE_TABLE.find((size) => size.value === code)
+  if (adult) return bucketsFromUsLabel(adult.US)
+
+  const region = REGION_SIZE_CODE.exec(code)
+  if (!region) return []
+
+  const [, system, digits] = region
+  if (system === 'EU') return ['child']
+
+  const brNumber = Number(digits)
+  const match = SIZE_TABLE.find((size) => brRangeIncludes(size.BR, brNumber))
+  return match ? bucketsFromUsLabel(match.US) : []
+}
+
+function bucketsFromUsLabel(us: string): Array<'female' | 'male'> {
+  const buckets: Array<'female' | 'male'> = []
+  if (US_WOMEN.test(us)) buckets.push('female')
+  if (US_MEN.test(us)) buckets.push('male')
+  return buckets
+}
+
+function brRangeIncludes(brLabel: string, brNumber: number): boolean {
+  return [...brLabel.matchAll(/\d+/g)].some((match) => Number(match[0]) === brNumber)
+}
+
+export function summarizeShoeSizes(codes: string[]): ShoeSizeCounts[] {
+  const byCode = new Map<string, ShoeSizeCounts>()
+
+  for (const code of codes) {
+    if (!code) continue
+    let row = byCode.get(code)
+    if (!row) {
+      row = { code, child: 0, female: 0, male: 0, total: 0 }
+      byCode.set(code, row)
+    }
+    row.total += 1
+    for (const bucket of shoeSizeBuckets(code)) row[bucket] += 1
+  }
+
+  return [...byCode.values()].sort((a, b) => compareShoeSizeCounts(a, b, 'size', 'asc'))
+}
+
+export function compareShoeSizeCounts(
+  a: ShoeSizeCounts,
+  b: ShoeSizeCounts,
+  column: ShoeSizeSortColumn,
+  direction: 'asc' | 'desc',
+): number {
+  const sign = direction === 'asc' ? 1 : -1
+  if (column === 'size') {
+    const byNumber = brShoeSizeSortValue(a.code) - brShoeSizeSortValue(b.code)
+    if (byNumber !== 0) return sign * byNumber
+    return sign * a.code.localeCompare(b.code)
+  }
+  return sign * (a[column] - b[column])
+}
+
+function brShoeSizeSortValue(code: string): number {
+  const match = /BR\s*(\d+)/.exec(brShoeSizeLabel(code))
+  return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER
+}
