@@ -8,6 +8,7 @@ import BackgroundPhoto from '@/components/BackgroundPhoto'
 import MetricDropdown from '@/components/MetricDropdown'
 import Divider from '@/components/Divider'
 import PokeballBurst from '@/components/PokeballBurst'
+import { CHILDREN_SIZE_TABLE, SIZE_TABLE, type SizeSystem } from '@/lib/shoe-sizes'
 
 
 type Guest = {
@@ -24,32 +25,6 @@ type MemberRsvp = {
 }
 
 type RsvpState = Record<string, MemberRsvp>
-
-type SizeSystem = 'BR' | 'EU' | 'US' | 'CN' | 'AU' | 'cm'
-
-const SIZE_TABLE = [
-  { value: 'BR33', BR: '33/34', EU: '35/36', US: '5W', CN: '33', AU: '3', cm: '21.5-22.5cm' },
-  { value: 'BR35', BR: '35/36', EU: '37/38', US: '6W / 5M', CN: '35', AU: '4/5', cm: '23-24cm' },
-  { value: 'BR37', BR: '37/38', EU: '39/40', US: '7-8W / 6-7M', CN: '37', AU: '5.5/6', cm: '24-25cm' },
-  { value: 'BR39', BR: '39/40', EU: '41/42', US: '9-10W / 8M', CN: '39', AU: '7/7.5', cm: '25.5-26.5cm' },
-  { value: 'BR41', BR: '41/42', EU: '43/44', US: '11-12W / 9-10M', CN: '41', AU: '8/9', cm: '27-28cm' },
-  { value: 'BR43', BR: '43/44', EU: '45/46', US: '11-12M', CN: '43', AU: '10/11', cm: '28-29cm' },
-  { value: 'BR45', BR: '45/46', EU: '47/48', US: '13M', CN: '45', AU: '12', cm: '29-30cm' },
-]
-
-const CHILDREN_SIZE_TABLE = [
-  { value: 'EU17', BR: '17/18', EU: '19/20', US: '4C', CN: '17', AU: '2', cm: '11.5-12.5cm' },
-  { value: 'EU19', BR: '19', EU: '20', US: '5C', CN: '19', AU: '3', cm: '12-13cm' },
-  { value: 'EU20', BR: '20', EU: '21', US: '6C', CN: '20', AU: '3.5', cm: '12.5-13.5cm' },
-  { value: 'EU21', BR: '21', EU: '22', US: '7C', CN: '21', AU: '4', cm: '13.5-14.5cm' },
-  { value: 'EU22', BR: '22', EU: '23', US: '8C', CN: '22', AU: '4.5', cm: '14-15cm' },
-  { value: 'EU23', BR: '23/24', EU: '25/26', US: '9C', CN: '23', AU: '5/6', cm: '15-16cm' },
-  { value: 'EU25', BR: '25/26', EU: '27/28', US: '10C', CN: '25', AU: '7', cm: '16-17cm' },
-  { value: 'EU27', BR: '27/28', EU: '29/30', US: '11-12C', CN: '27', AU: '8', cm: '17.5-18.5cm' },
-  { value: 'EU29', BR: '29/30', EU: '31/32', US: '13C-1Y', CN: '29', AU: '9', cm: '18.5-19.5cm' },
-  { value: 'EU31', BR: '31/32', EU: '33/34', US: '2Y', CN: '31', AU: '10', cm: '20-21cm' },
-  { value: 'EU33', BR: '33/34', EU: '35/36', US: '3-4Y', CN: '33', AU: '11', cm: '21.5-22.5cm' },
-]
 
 const texts = {
   pt: {

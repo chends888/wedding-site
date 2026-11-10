@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { brShoeSizeLabel } from '@/lib/shoe-sizes'
 
 type Guest = {
   id: string
@@ -25,20 +26,6 @@ type Row = {
   shoe_size: string | null
   age_range: string | null
   updated_at: string
-}
-
-const SIZE_LABELS: Record<string, string> = {
-  'EU17': 'BR 17', 'EU18': 'BR 18', 'EU19': 'BR 19',
-  'EU20': 'BR 20', 'EU21': 'BR 21', 'EU22': 'BR 22',
-  'EU23': 'BR 23', 'EU24': 'BR 24', 'EU25': 'BR 25',
-  'EU26': 'BR 26', 'EU27': 'BR 27', 'EU28': 'BR 28',
-  'EU29': 'BR 29', 'EU30': 'BR 30', 'EU31': 'BR 31',
-  'EU32': 'BR 32',
-  'BR33': 'BR 33', 'BR34': 'BR 34', 'BR35': 'BR 35',
-  'BR36': 'BR 36', 'BR37': 'BR 37', 'BR38': 'BR 38',
-  'BR39': 'BR 39', 'BR40': 'BR 40', 'BR41': 'BR 41',
-  'BR42': 'BR 42', 'BR43': 'BR 43', 'BR44': 'BR 44',
-  'BR45': 'BR 45',
 }
 
 export default function AdminPage() {
@@ -111,7 +98,7 @@ export default function AdminPage() {
 
   function exportCsv() {
     const headers = ['Name', 'Phone', 'Family', 'Confirmed', 'Shoe Size', 'Updated at']
-    const csvRows = [headers, ...rows.map((r) => [r.name, r.phone, r.family, r.confirmed, r.shoe_size || '-', r.updated_at])]
+    const csvRows = [headers, ...rows.map((r) => [r.name, r.phone, r.family, r.confirmed, r.shoe_size ? brShoeSizeLabel(r.shoe_size) : '-', r.updated_at])]
     const csv = csvRows.map((r) => r.join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
@@ -202,7 +189,7 @@ export default function AdminPage() {
                 <tbody>
                   {sortedSizes.map(([size, count]) => (
                     <tr key={size} className="border-b">
-                      <td className="py-2 pr-8">{SIZE_LABELS[size] || size}</td>
+                      <td className="py-2 pr-8">{brShoeSizeLabel(size)}</td>
                       <td className="py-2">{count}</td>
                     </tr>
                   ))}
@@ -273,7 +260,7 @@ export default function AdminPage() {
                         {row.confirmed}
                       </span>
                     </td>
-                    <td className="py-2 pr-4">{row.shoe_size ? (SIZE_LABELS[row.shoe_size] || row.shoe_size) : '-'}</td>
+                    <td className="py-2 pr-4">{row.shoe_size ? brShoeSizeLabel(row.shoe_size) : '-'}</td>
                     <td className="py-2">{row.updated_at}</td>
                   </tr>
                 ))}
